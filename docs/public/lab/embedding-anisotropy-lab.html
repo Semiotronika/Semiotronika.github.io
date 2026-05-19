@@ -362,6 +362,9 @@
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.78fr);
+      grid-template-areas:
+        "visual side"
+        "controls controls";
       gap: 18px;
       align-items: stretch;
     }
@@ -377,6 +380,7 @@
     }
 
     .visual {
+      grid-area: visual;
       min-height: 640px;
       min-width: 0;
       overflow: hidden;
@@ -391,6 +395,7 @@
     }
 
     .side {
+      grid-area: side;
       padding: 18px;
       display: flex;
       flex-direction: column;
@@ -459,7 +464,8 @@
     }
 
     .controls {
-      margin-top: 18px;
+      grid-area: controls;
+      margin-top: 0;
       padding: 14px;
       display: grid;
       grid-template-columns: 1fr;
@@ -626,6 +632,13 @@
         grid-template-columns: 1fr;
       }
 
+      .layout {
+        grid-template-areas:
+          "visual"
+          "controls"
+          "side";
+      }
+
       .tabs {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -742,9 +755,8 @@
         <div id="conceptCards" class="concept-stack" aria-label="Карточки понятий"></div>
         <p id="sceneNote" class="scene-text"></p>
       </aside>
-    </main>
 
-    <section class="controls" aria-label="Scene controls">
+      <section class="controls" aria-label="Scene controls">
       <div class="tabs" id="tabs"></div>
       <div class="control-row">
         <label for="wind">Сила общего фона</label>
@@ -759,7 +771,8 @@
         <input id="phase" type="range" min="0" max="100" value="0">
         <button id="play" type="button">Пуск</button>
       </div>
-    </section>
+      </section>
+    </main>
 
     <section class="metrics" aria-label="Cosine metrics">
       <div class="metric-grid" id="metrics"></div>

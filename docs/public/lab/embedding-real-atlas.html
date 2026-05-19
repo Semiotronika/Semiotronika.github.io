@@ -1473,6 +1473,8 @@
     let viewZoom = 1;
     let lastProjected = [];
     let dragState = null;
+    const activePointers = new Map();
+    let pinchState = null;
     let lastTick = 0;
     const AUTO_SPIN_SPEED = 0.000018;
     const ROTATION_BASE = 0.43;
@@ -1864,6 +1866,71 @@
       };
     }
 
+    function pointerDistance(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    function startPinch() {
+      if (activePointers.size < 2) return;
+      const points = Array.from(activePointers.values()).slice(0, 2);
+      pinchState = {
+        startDistance: Math.max(1, pointerDistance(points[0], points[1])),
+        startZoom: viewZoom
+      };
+      dragState = null;
+    }
+
+    function capturePointer(event) {
+      try {
+        canvas.setPointerCapture(event.pointerId);
+      } catch {
+        // Synthetic pointer tests and a few browsers can reject capture.
+      }
+    }
+
+    function releasePointer(event) {
+      try {
+        if (canvas.hasPointerCapture?.(event.pointerId)) {
+          canvas.releasePointerCapture(event.pointerId);
+        }
+      } catch {
+        // If capture was never accepted, there is nothing to release.
+      }
+    }
+
+    function continueSinglePointerDrag() {
+      pinchState = null;
+      const entry = activePointers.entries().next().value;
+      if (!entry) return;
+      const [id, point] = entry;
+      dragState = {
+        id,
+        startX: point.x,
+        startY: point.y,
+        lastX: point.x,
+        lastY: point.y,
+        moved: 8
+      };
+    }
+
+    function finishPointer(event, allowPick) {
+      const wasClick = dragState && dragState.id === event.pointerId && dragState.moved < 7;
+      const wasPinching = Boolean(pinchState) || activePointers.size > 1;
+      activePointers.delete(event.pointerId);
+      releasePointer(event);
+      if (activePointers.size >= 2) {
+        startPinch();
+      } else if (activePointers.size === 1) {
+        continueSinglePointerDrag();
+      } else {
+        pinchState = null;
+        dragState = null;
+        autoSpin = true;
+        canvas.classList.remove("dragging");
+      }
+      if (allowPick && wasClick && !wasPinching) pickPoint(event);
+    }
+
     function pickPoint(event) {
       const p = canvasPoint(event);
       let best = null;
@@ -2054,6 +2121,14 @@
     }, { passive: false });
     canvas.addEventListener("pointerdown", (event) => {
       const p = canvasPoint(event);
+      activePointers.set(event.pointerId, p);
+      autoSpin = false;
+      canvas.classList.add("dragging");
+      capturePointer(event);
+      if (activePointers.size >= 2) {
+        startPinch();
+        return;
+      }
       dragState = {
         id: event.pointerId,
         startX: p.x,
@@ -2062,13 +2137,25 @@
         lastY: p.y,
         moved: 0
       };
-      autoSpin = false;
-      canvas.classList.add("dragging");
-      canvas.setPointerCapture(event.pointerId);
     });
     canvas.addEventListener("pointermove", (event) => {
-      if (!dragState || dragState.id !== event.pointerId) return;
       const p = canvasPoint(event);
+      if (!activePointers.has(event.pointerId)) return;
+      activePointers.set(event.pointerId, p);
+      if (activePointers.size >= 2) {
+        const points = Array.from(activePointers.values()).slice(0, 2);
+        const distance = Math.max(1, pointerDistance(points[0], points[1]));
+        if (!pinchState) {
+          pinchState = {
+            startDistance: distance,
+            startZoom: viewZoom
+          };
+        }
+        viewZoom = clamp(pinchState.startZoom * (distance / pinchState.startDistance), 0.45, 2.4);
+        render();
+        return;
+      }
+      if (!dragState || dragState.id !== event.pointerId) return;
       const dx = p.x - dragState.lastX;
       const dy = p.y - dragState.lastY;
       dragState.lastX = p.x;
@@ -2081,19 +2168,12 @@
       }
     });
     canvas.addEventListener("pointerup", (event) => {
-      if (!dragState || dragState.id !== event.pointerId) return;
-      const wasClick = dragState.moved < 7;
-      dragState = null;
-      autoSpin = true;
-      canvas.classList.remove("dragging");
-      canvas.releasePointerCapture(event.pointerId);
-      if (wasClick) pickPoint(event);
+      if (!activePointers.has(event.pointerId)) return;
+      finishPointer(event, true);
     });
     canvas.addEventListener("pointercancel", (event) => {
-      if (!dragState || dragState.id !== event.pointerId) return;
-      dragState = null;
-      autoSpin = true;
-      canvas.classList.remove("dragging");
+      if (!activePointers.has(event.pointerId)) return;
+      finishPointer(event, false);
     });
     labelDensity.addEventListener("input", render);
     window.addEventListener("resize", () => {
