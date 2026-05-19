@@ -7,14 +7,14 @@ const props = defineProps<{
   title: string
 }>()
 
-const LAB_ENGINE_VERSION = '20260519-no-zoom-slider-controls-order'
+const LAB_ENGINE_VERSION = '20260519-mobile-cleanup'
 const versionedSrc = computed(() => {
   const joiner = props.src.includes('?') ? '&' : '?'
   return `${props.src}${joiner}v=${LAB_ENGINE_VERSION}`
 })
 
 const frame = ref<HTMLIFrameElement | null>(null)
-const height = ref('760px')
+const height = ref('720px')
 const { isDark } = useData()
 
 let timer: number | undefined
@@ -26,7 +26,6 @@ function updateHeight() {
   if (!doc) return
 
   const body = doc.body
-  const html = doc.documentElement
   const visibleBottom = Array.from(body.children).reduce((bottom, child) => {
     const element = child as HTMLElement
     const style = doc.defaultView?.getComputedStyle(element)
@@ -34,12 +33,8 @@ function updateHeight() {
     const rect = element.getBoundingClientRect()
     return Math.max(bottom, rect.bottom)
   }, 0)
-  const next = Math.max(
-    Math.ceil(visibleBottom),
-    body?.offsetHeight || 0,
-    html?.offsetHeight || 0,
-    720,
-  )
+  const minHeight = window.innerWidth <= 720 ? 420 : 640
+  const next = Math.max(Math.ceil(visibleBottom), minHeight)
   height.value = `${next}px`
 }
 

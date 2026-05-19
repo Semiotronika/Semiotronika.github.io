@@ -1115,7 +1115,11 @@
 
     function sceneCaption(primary, secondary) {
       const x = 164;
-      const y = 570;
+      const compact = window.innerWidth <= 560;
+      const y = compact ? 446 : 570;
+      const gap = 22;
+      const primarySize = compact ? 16 : 14;
+      const secondarySize = compact ? 16 : 15;
       const shared = {
         "paint-order": "stroke",
         stroke: "#17181d",
@@ -1125,12 +1129,12 @@
       return screenText(primary, x, y, {
         ...shared,
         fill: "#f5f7fb",
-        "font-size": 14,
+        "font-size": primarySize,
         "font-weight": 800
-      }) + screenText(secondary, x, y + 22, {
+      }) + screenText(secondary, x, y + gap, {
         ...shared,
         fill: "#c4ff7b",
-        "font-size": 15,
+        "font-size": secondarySize,
         "font-weight": 800
       });
     }
@@ -1275,8 +1279,10 @@
       out += circle(va, 10, { fill: ca, stroke: "#f5f7fb", "stroke-width": 2 });
       out += circle(vb, 10, { fill: cb, stroke: "#f5f7fb", "stroke-width": 2 });
       if (opts.caption !== false) {
-        const detail = opts.detail ? ` · ${opts.detail}` : "";
-        out += sceneCaption(`${label}: ${cos.toFixed(3)}`, `угол: ${deg.toFixed(0)}°${detail}`);
+        const compact = window.innerWidth <= 560;
+        const captionLabel = compact ? "cos" : label;
+        const detail = !compact && opts.detail ? ` · ${opts.detail}` : "";
+        out += sceneCaption(`${captionLabel}: ${cos.toFixed(3)}`, `угол: ${deg.toFixed(0)}°${detail}`);
       }
       return out;
     }

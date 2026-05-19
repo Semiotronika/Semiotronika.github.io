@@ -421,6 +421,7 @@
 
 .lab-page .VPDoc {
   padding-top: 0;
+  padding-bottom: 32px;
 }
 
 .lab-page .VPContent {
@@ -437,7 +438,11 @@
 }
 
 .lab-page .VPDoc .content {
-  padding: 0 24px 28px;
+  padding: 0 24px 12px;
+}
+
+.lab-page .VPDocFooter {
+  display: none;
 }
 
 .lab-page .vp-doc {
@@ -517,7 +522,7 @@
   display: block;
   width: 100%;
   max-width: 100%;
-  min-height: 760px;
+  min-height: 0;
   border: 0;
   background: transparent;
   overflow: hidden;
@@ -525,7 +530,7 @@
 
 @media (max-width: 720px) {
   .lab-page .VPDoc .content {
-    padding: 0 14px 24px;
+    padding: 0 14px 8px;
   }
 
   .lab-page .VPDoc .container,
