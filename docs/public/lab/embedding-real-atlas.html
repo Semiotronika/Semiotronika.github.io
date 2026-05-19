@@ -1231,31 +1231,7 @@
       apply(explicitTheme || localStorage.getItem(key) || "auto");
     })();
   </script>
-  <script src="embedding-real-atlas-data.js"></script>
-  <script src="embedding-real-atlas-nomic-data.js"></script>
-  <script src="embedding-real-atlas-nomic-v2-data.js"></script>
   <script src="embedding-real-atlas-qwen3-768-data.js"></script>
-  <script src="embedding-real-atlas-qwen3-2048-data.js"></script>
-  <script src="embedding-real-atlas-qwen3-4096-data.js"></script>
-  <script src="embedding-real-atlas-qwen3-06b-1024-data.js"></script>
-  <script src="embedding-real-atlas-qwen3-4b-2560-data.js"></script>
-  <script src="embedding-real-atlas-embedding-gemma-768-data.js"></script>
-  <script src="embedding-real-atlas-large-qwen3-768-data.js"></script>
-  <script src="embedding-real-atlas-large-qwen3-2048-data.js"></script>
-  <script src="embedding-real-atlas-large-qwen3-4096-data.js"></script>
-  <script src="embedding-real-atlas-large-granite-data.js"></script>
-  <script src="embedding-real-atlas-large-nomic-data.js"></script>
-  <script src="embedding-real-atlas-large-nomic-v2-data.js"></script>
-  <script src="embedding-real-atlas-large-qwen3-06b-1024-data.js"></script>
-  <script src="embedding-real-atlas-large-qwen3-4b-2560-data.js"></script>
-  <script src="embedding-real-atlas-large-embedding-gemma-768-data.js"></script>
-  <script src="embedding-real-atlas-cats-granite-data.js"></script>
-  <script src="embedding-real-atlas-cats-nomic-data.js"></script>
-  <script src="embedding-real-atlas-cats-nomic-v2-data.js"></script>
-  <script src="embedding-real-atlas-cats-qwen3-4096-data.js"></script>
-  <script src="embedding-real-atlas-cats-qwen3-06b-1024-data.js"></script>
-  <script src="embedding-real-atlas-cats-qwen3-4b-2560-data.js"></script>
-  <script src="embedding-real-atlas-cats-embedding-gemma-768-data.js"></script>
   <script>
     const VOCABULARIES = {
       curated: "Базовый словарь 120",
@@ -1274,6 +1250,34 @@
     };
 
     const MODEL_ORDER = ["qwen3", "qwen4", "qwen06", "embeddingGemma", "nomicV2", "granite", "nomic"];
+
+    const DATASET_SOURCES = {
+      granite: ["embedding-real-atlas-data.js", "EMBEDDING_REAL_ATLAS_GRANITE"],
+      nomic: ["embedding-real-atlas-nomic-data.js", "EMBEDDING_REAL_ATLAS_NOMIC"],
+      nomicV2: ["embedding-real-atlas-nomic-v2-data.js", "EMBEDDING_REAL_ATLAS_NOMIC_V2"],
+      qwen768: ["embedding-real-atlas-qwen3-768-data.js", "EMBEDDING_REAL_ATLAS_QWEN3_768"],
+      qwen2048: ["embedding-real-atlas-qwen3-2048-data.js", "EMBEDDING_REAL_ATLAS_QWEN3_2048"],
+      qwen4096: ["embedding-real-atlas-qwen3-4096-data.js", "EMBEDDING_REAL_ATLAS_QWEN3_4096"],
+      qwen06: ["embedding-real-atlas-qwen3-06b-1024-data.js", "EMBEDDING_REAL_ATLAS_QWEN3_06B_1024"],
+      qwen4: ["embedding-real-atlas-qwen3-4b-2560-data.js", "EMBEDDING_REAL_ATLAS_QWEN3_4B_2560"],
+      embeddingGemma: ["embedding-real-atlas-embedding-gemma-768-data.js", "EMBEDDING_REAL_ATLAS_EMBEDDING_GEMMA_768"],
+      largeQwen768: ["embedding-real-atlas-large-qwen3-768-data.js", "EMBEDDING_REAL_ATLAS_LARGE_QWEN3_768"],
+      largeQwen2048: ["embedding-real-atlas-large-qwen3-2048-data.js", "EMBEDDING_REAL_ATLAS_LARGE_QWEN3_2048"],
+      largeQwen4096: ["embedding-real-atlas-large-qwen3-4096-data.js", "EMBEDDING_REAL_ATLAS_LARGE_QWEN3_4096"],
+      largeGranite: ["embedding-real-atlas-large-granite-data.js", "EMBEDDING_REAL_ATLAS_LARGE_GRANITE"],
+      largeNomic: ["embedding-real-atlas-large-nomic-data.js", "EMBEDDING_REAL_ATLAS_LARGE_NOMIC"],
+      largeNomicV2: ["embedding-real-atlas-large-nomic-v2-data.js", "EMBEDDING_REAL_ATLAS_LARGE_NOMIC_V2"],
+      largeQwen06: ["embedding-real-atlas-large-qwen3-06b-1024-data.js", "EMBEDDING_REAL_ATLAS_LARGE_QWEN3_06B_1024"],
+      largeQwen4: ["embedding-real-atlas-large-qwen3-4b-2560-data.js", "EMBEDDING_REAL_ATLAS_LARGE_QWEN3_4B_2560"],
+      largeEmbeddingGemma: ["embedding-real-atlas-large-embedding-gemma-768-data.js", "EMBEDDING_REAL_ATLAS_LARGE_EMBEDDING_GEMMA_768"],
+      catsGranite: ["embedding-real-atlas-cats-granite-data.js", "EMBEDDING_REAL_ATLAS_CATS_GRANITE"],
+      catsNomic: ["embedding-real-atlas-cats-nomic-data.js", "EMBEDDING_REAL_ATLAS_CATS_NOMIC"],
+      catsNomicV2: ["embedding-real-atlas-cats-nomic-v2-data.js", "EMBEDDING_REAL_ATLAS_CATS_NOMIC_V2"],
+      catsQwen4096: ["embedding-real-atlas-cats-qwen3-4096-data.js", "EMBEDDING_REAL_ATLAS_CATS_QWEN3_4096"],
+      catsQwen06: ["embedding-real-atlas-cats-qwen3-06b-1024-data.js", "EMBEDDING_REAL_ATLAS_CATS_QWEN3_06B_1024"],
+      catsQwen4: ["embedding-real-atlas-cats-qwen3-4b-2560-data.js", "EMBEDDING_REAL_ATLAS_CATS_QWEN3_4B_2560"],
+      catsEmbeddingGemma: ["embedding-real-atlas-cats-embedding-gemma-768-data.js", "EMBEDDING_REAL_ATLAS_CATS_EMBEDDING_GEMMA_768"]
+    };
 
     const DATASETS = {
       granite: {
@@ -1427,11 +1431,53 @@
         data: window.EMBEDDING_REAL_ATLAS_CATS_EMBEDDING_GEMMA_768
       }
     };
+
+    for (const [key, [src, globalName]] of Object.entries(DATASET_SOURCES)) {
+      DATASETS[key].src = src;
+      DATASETS[key].globalName = globalName;
+    }
+
+    const datasetLoads = new Map();
     let activeVocab = "curated";
     let activeDimension = 768;
     let activeModel = "qwen3";
     let activeDataset = "qwen768";
     let DATA = DATASETS[activeDataset].data;
+    async function loadScriptOnce(src) {
+      const url = new URL(src, window.location.href).href;
+      if (datasetLoads.has(url)) return datasetLoads.get(url);
+      const promise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.async = true;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error(`Не удалось загрузить набор данных: ${src}`));
+        document.head.appendChild(script);
+      });
+      datasetLoads.set(url, promise);
+      return promise;
+    }
+
+    async function ensureDataset(key) {
+      const record = DATASETS[key];
+      if (!record) throw new Error(`Неизвестный набор данных: ${key}`);
+      if (record.data) return record.data;
+      if (record.globalName && window[record.globalName]) {
+        record.data = window[record.globalName];
+        return record.data;
+      }
+      await loadScriptOnce(record.src);
+      record.data = window[record.globalName];
+      if (!record.data) throw new Error(`Набор данных не найден после загрузки: ${key}`);
+      return record.data;
+    }
+
+    async function activateDataset(key = activeDataset) {
+      activeDataset = key;
+      DATA = await ensureDataset(activeDataset);
+      return DATA;
+    }
+
     const canvas = document.getElementById("atlas");
     const ctx = canvas.getContext("2d");
     const legend = document.getElementById("legend");
@@ -1983,7 +2029,7 @@
     }
 
     function datasetsForVocab(vocab = activeVocab) {
-      return Object.entries(DATASETS).filter(([, record]) => record.vocab === vocab && record.data);
+      return Object.entries(DATASETS).filter(([, record]) => record.vocab === vocab);
     }
 
     function dimensionsForVocab(vocab = activeVocab) {
@@ -2018,9 +2064,17 @@
       }
 
       activeDataset = datasetKeyFor() || models[0]?.[0];
-      DATA = DATASETS[activeDataset].data;
       activeDimension = DATASETS[activeDataset].dimension;
       activeModel = DATASETS[activeDataset].model;
+    }
+
+    async function applyDatasetSelection() {
+      syncActiveDataset();
+      await activateDataset();
+      refreshMaps();
+      rebuildChoices();
+      updatePanel();
+      render();
     }
 
     function rebuildChoices() {
@@ -2071,7 +2125,7 @@
       modelSelect.value = activeModel;
     }
 
-    function build() {
+    async function build() {
       for (const [key, label] of Object.entries(VOCABULARIES)) {
         const option = document.createElement("option");
         option.value = key;
@@ -2081,6 +2135,7 @@
       vocabSelect.value = activeVocab;
       rebuildDimensionChoices();
       rebuildModelChoices();
+      await activateDataset();
       refreshMaps();
       rebuildChoices();
       updatePanel();
@@ -2105,30 +2160,20 @@
     termSelect.addEventListener("change", () => {
       chooseTerm(termSelect.value);
     });
-    vocabSelect.addEventListener("change", () => {
+    vocabSelect.addEventListener("change", async () => {
       activeVocab = vocabSelect.value;
       rebuildDimensionChoices();
       rebuildModelChoices();
-      refreshMaps();
-      rebuildChoices();
-      updatePanel();
-      render();
+      await applyDatasetSelection();
     });
-    dimensionSelect.addEventListener("change", () => {
+    dimensionSelect.addEventListener("change", async () => {
       activeDimension = Number(dimensionSelect.value);
       rebuildModelChoices();
-      refreshMaps();
-      rebuildChoices();
-      updatePanel();
-      render();
+      await applyDatasetSelection();
     });
-    modelSelect.addEventListener("change", () => {
+    modelSelect.addEventListener("change", async () => {
       activeModel = modelSelect.value;
-      syncActiveDataset();
-      refreshMaps();
-      rebuildChoices();
-      updatePanel();
-      render();
+      await applyDatasetSelection();
     });
     canvas.addEventListener("wheel", (event) => {
       event.preventDefault();
@@ -2246,9 +2291,12 @@
       requestAnimationFrame(tick);
     }
 
-    build();
-    resize();
-    tick();
+    build().then(() => {
+      resize();
+      tick();
+    }).catch((error) => {
+      console.error(error);
+    });
   </script>
 </body>
 </html>
