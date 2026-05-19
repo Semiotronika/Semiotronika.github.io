@@ -598,7 +598,7 @@
   margin-top: 28px;
 }
 
-.lab-soon__button {
+.vp-doc .lab-soon__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -608,11 +608,12 @@
   color: var(--vp-c-text-1);
   font-size: 0.9rem;
   font-weight: 650;
+  background: transparent;
   text-decoration: none;
   transition: border-color 0.2s, color 0.2s, background-color 0.2s;
 }
 
-.lab-soon__button:hover {
+.vp-doc .lab-soon__button:hover {
   border-color: var(--vp-c-brand-1);
   color: #FFFFFF;
   background: var(--vp-c-brand-1);
