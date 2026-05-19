@@ -404,6 +404,8 @@
       min-height: 500px;
       min-width: 0;
       overflow: hidden;
+      overscroll-behavior: contain;
+      touch-action: none;
     }
 
     canvas {
@@ -414,6 +416,9 @@
       background: var(--canvas-bg);
       cursor: grab;
       touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
     }
 
     canvas.dragging {
@@ -1131,8 +1136,8 @@
       <aside class="panel">
         <div class="range-row label-tools">
           <label for="labelDensity">Слова</label>
-          <input id="labelDensity" type="range" min="1" max="100" value="58">
-          <div id="labelValue" class="value">0.58</div>
+          <input id="labelDensity" type="range" min="1" max="100" value="1">
+          <div id="labelValue" class="value">1</div>
         </div>
         <h2 id="selectedTitle">человек</h2>
         <p id="selectedText"></p>
@@ -1475,6 +1480,7 @@
     let dragState = null;
     const activePointers = new Map();
     let pinchState = null;
+    let touchPinchState = null;
     let lastTick = 0;
     const AUTO_SPIN_SPEED = 0.000018;
     const ROTATION_BASE = 0.43;
@@ -1870,6 +1876,12 @@
       return Math.hypot(a.x - b.x, a.y - b.y);
     }
 
+    function touchDistance(touches) {
+      const a = touches[0];
+      const b = touches[1];
+      return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    }
+
     function startPinch() {
       if (activePointers.size < 2) return;
       const points = Array.from(activePointers.values()).slice(0, 2);
@@ -2175,6 +2187,42 @@
       if (!activePointers.has(event.pointerId)) return;
       finishPointer(event, false);
     });
+    canvas.addEventListener("touchstart", (event) => {
+      if (event.touches.length < 2) return;
+      event.preventDefault();
+      const distance = Math.max(1, touchDistance(event.touches));
+      touchPinchState = {
+        startDistance: distance,
+        startZoom: viewZoom
+      };
+      dragState = null;
+      pinchState = null;
+      autoSpin = false;
+      canvas.classList.add("dragging");
+    }, { passive: false });
+    canvas.addEventListener("touchmove", (event) => {
+      if (event.touches.length < 2 || !touchPinchState) return;
+      event.preventDefault();
+      const distance = Math.max(1, touchDistance(event.touches));
+      viewZoom = clamp(touchPinchState.startZoom * (distance / touchPinchState.startDistance), 0.45, 2.4);
+      render();
+    }, { passive: false });
+    canvas.addEventListener("touchend", (event) => {
+      if (event.touches.length >= 2) return;
+      touchPinchState = null;
+      if (event.touches.length === 0 && activePointers.size === 0) {
+        autoSpin = true;
+        canvas.classList.remove("dragging");
+      }
+    }, { passive: false });
+    canvas.addEventListener("touchcancel", (event) => {
+      if (event.touches.length >= 2) return;
+      touchPinchState = null;
+      if (event.touches.length === 0 && activePointers.size === 0) {
+        autoSpin = true;
+        canvas.classList.remove("dragging");
+      }
+    }, { passive: false });
     labelDensity.addEventListener("input", render);
     window.addEventListener("resize", () => {
       resize();
