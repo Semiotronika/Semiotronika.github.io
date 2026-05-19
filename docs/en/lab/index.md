@@ -35,7 +35,6 @@ pageClass: lab-page
         <a class="lab-soon__button" href="/en/">Back to English home</a>
       </div>
     </div>
-
     <div class="lab-soon__notes" aria-label="What is being prepared">
       <div>
         <strong>Real vectors</strong>
