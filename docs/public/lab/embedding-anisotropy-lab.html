@@ -1,0 +1,1505 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Семантическая лаборатория — график косинусов</title>
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const embedded = params.has("embed");
+      if (!embedded && window.location.protocol !== "file:") {
+        window.location.replace("/lab/cosines");
+        return;
+      }
+      const key = "vitepress-theme-appearance";
+      const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+      function isDark(value) {
+        return value === "dark" || ((value || "auto") === "auto" && media?.matches);
+      }
+      window.applySemiotronikaLabTheme = (value) => {
+        document.documentElement.classList.toggle("dark", isDark(value));
+        window.dispatchEvent(new Event("lab-theme-change"));
+      };
+      window.applySemiotronikaLabTheme(params.get("theme") || localStorage.getItem(key) || "auto");
+      window.addEventListener("message", (event) => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data?.type !== "semiotronika-lab-theme") return;
+        if (!["auto", "dark", "light"].includes(event.data.theme)) return;
+        window.applySemiotronikaLabTheme(event.data.theme);
+      });
+      if (embedded) {
+        document.documentElement.classList.add("is-embedded");
+      }
+    })();
+  </script>
+  <style>
+    @font-face {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("/fonts/inter-roman-cyrillic.woff2") format("woff2");
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+
+    @font-face {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("/fonts/inter-roman-latin.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+        U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+        U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    :root {
+      color-scheme: light;
+      --bg: #f6f4ef;
+      --panel: #ffffff;
+      --panel-2: #f0eee8;
+      --field: #faf9f5;
+      --ink: #202126;
+      --muted: #5f6372;
+      --soft: #858a98;
+      --line: #dadde7;
+      --accent: #bc1f50;
+      --accent-strong: #9f1843;
+      --accent-soft: rgba(188, 31, 80, 0.12);
+      --lime: #c4ff7b;
+      --green: #3fff62;
+      --magenta: #ff00a1;
+      --cyan: #5fd6ff;
+      --amber: #ffca58;
+      --rose: #ff687a;
+      --violet: #b990ff;
+      --blue: #7ca7ff;
+      --nav-bg: rgba(255, 255, 255, 0.9);
+      --nav-link: #202126;
+      --font-base: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .dark {
+      color-scheme: dark;
+      --bg: #08090d;
+      --panel: #101217;
+      --panel-2: #151720;
+      --field: #0b0c11;
+      --ink: #f5f5f0;
+      --muted: #b7b7bf;
+      --soft: #85858f;
+      --line: #292c36;
+      --accent: #c4ff7b;
+      --accent-strong: #dfff9e;
+      --accent-soft: rgba(196, 255, 123, 0.14);
+      --nav-bg: rgba(8, 9, 13, 0.92);
+      --nav-link: #f5f7fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-base);
+      letter-spacing: 0;
+    }
+
+    .is-embedded body {
+      min-height: 0;
+      background: transparent;
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 50px;
+      border-bottom: 1px solid var(--line);
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+    }
+
+    .site-nav-inner {
+      width: min(1920px, 100%);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .site-brand {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--lime);
+      text-decoration: none;
+      letter-spacing: 0;
+    }
+
+    .site-brand span {
+      color: var(--magenta);
+    }
+
+    .site-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-left: auto;
+    }
+
+    .site-links a {
+      color: var(--nav-link);
+      font-size: 14px;
+      font-weight: 650;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .site-links a:hover,
+    .site-links a.active {
+      color: var(--accent-strong);
+    }
+
+    .site-links a[href^="mailto"]::after {
+      content: "↗";
+      margin-left: 3px;
+      font-size: 11px;
+      opacity: 0.55;
+    }
+
+    .site-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .site-separator {
+      width: 1px;
+      height: 24px;
+      background: var(--line);
+    }
+
+    .site-icon {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    .site-icon:hover {
+      color: var(--ink);
+      background: var(--field);
+    }
+
+    .site-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .site-locale {
+      display: inline-flex;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
+    }
+
+    .site-locale a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 31px;
+      height: 24px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    .site-locale a + a {
+      border-left: 1px solid var(--line);
+    }
+
+    .site-locale a:hover {
+      color: var(--ink);
+    }
+
+    .site-locale a.active {
+      color: var(--accent-strong);
+      background: var(--accent-soft);
+    }
+
+    button.site-theme {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px;
+      background: var(--field);
+      cursor: pointer;
+    }
+
+    .site-theme-knob {
+      display: block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .dark .site-theme-knob {
+      transform: translateX(16px);
+      background: var(--accent-strong);
+    }
+
+    .shell {
+      width: min(1440px, 100%);
+      max-width: 100%;
+      min-width: 0;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .is-embedded .site-nav,
+    .is-embedded .shell > header {
+      display: none;
+    }
+
+    .is-embedded .shell {
+      width: 100%;
+      padding: 0;
+    }
+
+    .is-embedded .metrics,
+    .is-embedded .thesis {
+      display: none;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 3vw, 44px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 820px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .lab-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .lab-nav a {
+      border: 1px solid var(--line);
+      background: var(--field);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .lab-nav a:hover,
+    .lab-nav a.active {
+      border-color: var(--accent);
+      color: var(--accent-strong);
+      background: var(--accent-soft);
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      background: var(--field);
+      color: var(--accent-strong);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.78fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .visual,
+    .side,
+    .controls,
+    .metrics,
+    .thesis {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+    }
+
+    .visual {
+      min-height: 640px;
+      min-width: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 640px;
+    }
+
+    .side {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .scene-title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .scene-text {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .formula {
+      border: 1px solid var(--line);
+      background: var(--field);
+      border-radius: 8px;
+      padding: 13px;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    .concept-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .concept-title {
+      margin: 0 0 -4px;
+      color: var(--soft);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .concept-card {
+      border: 1px solid var(--line);
+      background: var(--field);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .concept-card h3 {
+      margin: 0 0 7px;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .concept-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .controls {
+      margin-top: 18px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--field);
+      color: var(--muted);
+      border-radius: 8px;
+      width: 100%;
+      min-width: 0;
+      min-height: 42px;
+      padding: 9px 10px;
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: #5b5b63;
+      color: var(--ink);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    button.active {
+      border-color: var(--accent);
+      color: var(--accent-strong);
+      background: var(--accent-soft);
+    }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: minmax(190px, 1fr) minmax(220px, 2fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .control-hint {
+      margin: -4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .value {
+      min-width: 56px;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .metrics {
+      padding: 14px;
+      margin-top: 18px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(2, 0.7fr);
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+    }
+
+    .metric-grid div {
+      background: var(--field);
+      padding: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .metric-grid .head {
+      color: var(--ink);
+      background: var(--panel-2);
+    }
+
+    .metric-grid .num {
+      color: var(--accent-strong);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .thesis {
+      margin-top: 18px;
+      padding: 16px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .thesis strong {
+      color: var(--ink);
+    }
+
+    .legend {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: calc(100% - 32px);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      background: rgba(27, 27, 31, 0.78);
+      border-radius: 8px;
+      padding: 7px 9px;
+      color: var(--muted);
+      font-size: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--lime);
+    }
+
+    @media (max-width: 980px) {
+      .site-nav-inner {
+        padding: 0 18px;
+      }
+
+      .site-links {
+        gap: 14px;
+      }
+
+      .shell {
+        padding: 14px;
+      }
+
+      header,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .control-row {
+        grid-template-columns: 1fr;
+      }
+
+      .value {
+        text-align: left;
+      }
+
+      .visual,
+      svg {
+        min-height: 560px;
+      }
+
+    }
+
+    @media (max-width: 560px) {
+      .site-nav-inner {
+        padding: 0 14px;
+      }
+
+      .site-links {
+        gap: 10px;
+      }
+
+      .site-links a {
+        font-size: 12px;
+      }
+
+      .site-links a[href^="mailto"] {
+        display: none;
+      }
+
+      .shell {
+        padding: 14px;
+      }
+
+      .visual,
+      svg {
+        min-height: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Навигация сайта">
+    <div class="site-nav-inner">
+      <a class="site-brand" href="/" aria-label="Семиотроника"><span>{</span>Σ<span>}</span></a>
+      <div class="site-links">
+        <a href="/">Главная</a>
+        <a href="/nouz/use-cases">NOUZ</a>
+        <a class="active" href="/lab/embedding-real-atlas.html">Лаборатория</a>
+      </div>
+      <div class="site-actions">
+        <span class="site-separator" aria-hidden="true"></span>
+        <a class="site-icon" href="https://github.com/Semiotronika/NOUZ-MCP" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 .5C5.65 .5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.02c-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.34.96.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18A10.9 10.9 0 0 1 12 6.19c.97 0 1.95.13 2.87.39 2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.08 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.02c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"></path>
+          </svg>
+        </a>
+        <a class="site-icon" href="https://t.me/Masha_Belkina" aria-label="Telegram" title="Telegram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M21.86 4.54 18.65 19.7c-.24 1.07-.87 1.33-1.76.83l-4.86-3.58-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.96 9.03-8.16c.39-.35-.09-.54-.61-.2L6.32 13.4l-4.8-1.5c-1.04-.33-1.06-1.04.22-1.54L20.5 3.13c.87-.32 1.63.21 1.36 1.41Z"></path>
+          </svg>
+        </a>
+        <div class="site-locale" aria-label="Язык">
+          <a class="active" href="/lab/embedding-anisotropy-lab.html" aria-current="page" title="Русский">RU</a>
+          <a href="/en/" title="English">EN</a>
+        </div>
+        <span class="site-separator" aria-hidden="true"></span>
+        <button class="site-theme" id="themeToggle" type="button" aria-label="Переключить тему">
+          <span class="site-theme-knob"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="shell">
+    <header>
+      <div>
+        <h1>Семантическая лаборатория</h1>
+        <p class="subtitle">геометрия в языковых моделях</p>
+        <nav class="lab-nav" aria-label="Разделы лаборатории">
+          <a href="embedding-real-atlas.html">Облако эмбеддингов</a>
+          <a class="active" href="embedding-anisotropy-lab.html">График косинусов</a>
+        </nav>
+      </div>
+      <div class="badge">косинус → центр → ABTT → whitening</div>
+    </header>
+
+    <main class="layout">
+      <section class="visual" aria-label="SVG visualization">
+        <svg id="stage" viewBox="0 0 940 660" role="img" aria-labelledby="svgTitle svgDesc">
+          <title id="svgTitle">Визуализация анизотропии эмбеддингов</title>
+          <desc id="svgDesc">Точки и векторы показывают общий фон, центрирование, удаление главной компоненты и whitening.</desc>
+        </svg>
+        <div class="legend">
+          <span class="legend-item"><span class="swatch" style="background:#c4ff7b"></span>животные</span>
+          <span class="legend-item"><span class="swatch" style="background:#ff00a1"></span>физика</span>
+          <span class="legend-item"><span class="swatch" style="background:#5fd6ff"></span>техника</span>
+          <span class="legend-item"><span class="swatch" style="background:#ffca58"></span>быт</span>
+          <span class="legend-item"><span class="swatch" style="background:#b990ff"></span>планы</span>
+        </div>
+      </section>
+
+      <aside class="side">
+        <h2 id="sceneTitle" class="scene-title"></h2>
+        <p id="sceneText" class="scene-text"></p>
+        <div id="formula" class="formula"></div>
+        <div class="concept-title">Важно</div>
+        <div id="conceptCards" class="concept-stack" aria-label="Карточки понятий"></div>
+        <p id="sceneNote" class="scene-text"></p>
+      </aside>
+    </main>
+
+    <section class="controls" aria-label="Scene controls">
+      <div class="tabs" id="tabs"></div>
+      <div class="control-row">
+        <label for="wind">Сила общего фона</label>
+        <input id="wind" type="range" min="0" max="100" value="82">
+        <div id="windValue" class="value">0.82</div>
+      </div>
+      <p class="control-hint">
+        Ползунок добавляет всем словам одинаковую компоненту: игрушечную модель частотности, синтаксиса, жанра корпуса и перекосов обучения.
+      </p>
+      <div class="control-row">
+        <label>Анимация перехода</label>
+        <input id="phase" type="range" min="0" max="100" value="0">
+        <button id="play" type="button">Пуск</button>
+      </div>
+    </section>
+
+    <section class="metrics" aria-label="Cosine metrics">
+      <div class="metric-grid" id="metrics"></div>
+    </section>
+
+    <section class="thesis">
+      <strong>Главная мысль:</strong>
+      язык дискретный, частотный и синтаксически неравномерный, поэтому в эмбеддингах часто появляется общий фон: разные слова получают похожую добавку и кажутся ближе, чем должны. Коррекция убирает измерительный перекос перед поиском соседей, но даже после коррекции пространство остаётся анизотропным.
+    </section>
+
+  </div>
+
+  <script>
+    (() => {
+      const key = "vitepress-theme-appearance";
+      const explicitTheme = new URLSearchParams(window.location.search).get("theme");
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      const button = document.getElementById("themeToggle");
+      function isDark(value) {
+        return value === "dark" || ((value || "auto") === "auto" && media.matches);
+      }
+      function apply(value) {
+        const dark = isDark(value);
+        window.applySemiotronikaLabTheme?.(value);
+        button?.setAttribute("aria-pressed", String(dark));
+      }
+      button?.addEventListener("click", () => {
+        const next = document.documentElement.classList.contains("dark") ? "light" : "dark";
+        localStorage.setItem(key, next);
+        apply(next);
+      });
+      window.addEventListener("storage", (event) => {
+        if (explicitTheme) return;
+        if (event.key === key) apply(event.newValue || "auto");
+      });
+      media.addEventListener?.("change", () => {
+        if (explicitTheme) return;
+        if ((localStorage.getItem(key) || "auto") === "auto") apply("auto");
+      });
+      apply(explicitTheme || localStorage.getItem(key) || "auto");
+    })();
+  </script>
+
+  <script>
+    const svg = document.getElementById("stage");
+    const tabs = document.getElementById("tabs");
+    const windInput = document.getElementById("wind");
+    const windValue = document.getElementById("windValue");
+    const phaseInput = document.getElementById("phase");
+    const playButton = document.getElementById("play");
+    const metricsEl = document.getElementById("metrics");
+    const sceneTitle = document.getElementById("sceneTitle");
+    const sceneText = document.getElementById("sceneText");
+    const sceneNote = document.getElementById("sceneNote");
+    const conceptCards = document.getElementById("conceptCards");
+    const formula = document.getElementById("formula");
+
+    const colors = {
+      animal: "#c4ff7b",
+      physics: "#ff00a1",
+      tech: "#5fd6ff",
+      everyday: "#ffca58",
+      plan: "#b990ff",
+      axis: "#6f7b8d",
+      ink: "#f5f7fb"
+    };
+
+    const points = [
+      { label: "кот", group: "animal", semantic: [0.92, 0.28], labelOffset: [0.12, 0.22], rawLabelOffset: [0.22, 0.36] },
+      { label: "собака", group: "animal", semantic: [0.78, 0.12], labelOffset: [0.16, -0.18], rawLabelOffset: [0.24, -0.34] },
+      { label: "фотон", group: "physics", semantic: [-0.92, 0.34], labelOffset: [-0.12, 0.22], rawLabelOffset: [-0.26, 0.34], decomposeLabelOffset: [-0.32, 0.34], labelAnchor: "end" },
+      { label: "гравитация", group: "physics", semantic: [-0.82, 0.12], labelOffset: [-0.14, -0.18], rawLabelOffset: [-0.28, -0.34], labelAnchor: "end" },
+      { label: "эмбеддинг", group: "tech", semantic: [-0.06, -0.92], labelOffset: [-0.16, -0.18], rawLabelOffset: [-0.3, -0.34], decomposeLabelOffset: [-0.34, -0.34], labelAnchor: "end" },
+      { label: "косинус", group: "tech", semantic: [-0.28, -0.78], labelOffset: [-0.16, 0.16], rawLabelOffset: [-0.3, 0.28], labelAnchor: "end" },
+      { label: "пирог", group: "everyday", semantic: [0.48, -0.78], labelOffset: [0.14, 0.16], rawLabelOffset: [0.24, 0.28] },
+      { label: "рецепт", group: "everyday", semantic: [0.26, -0.96], labelOffset: [0.18, -0.34], rawLabelOffset: [0.28, -0.46] },
+      { label: "дедлайн", group: "plan", semantic: [0.20, 0.94], labelOffset: [-0.14, 0.22], rawLabelOffset: [-0.26, 0.34], decomposeLabelOffset: [-0.3, 0.34], labelAnchor: "end" },
+      { label: "план", group: "plan", semantic: [0.48, 0.78], labelOffset: [0.16, 0.04], rawLabelOffset: [0.24, 0.18] }
+    ];
+
+    const sceneDefs = [
+      {
+        id: "raw",
+        tab: "1. Конус",
+        title: "Исходный конус",
+        text: "Все векторы получают большую общую добавку. Из начала координат они смотрят в один сектор, поэтому угол между несвязанными словами становится подозрительно маленьким.",
+        formula: "исходный вектор = смысл + общий фон\n\ncos(кот, фотон) может быть высоким:\nобщий фон добавляет им похожее направление.",
+        concepts: [
+          {
+            title: "Конус",
+            text: "Конус значит, что много стрелок смотрят примерно в одну сторону. Тогда даже далёкие слова получают маленький угол между векторами."
+          },
+          {
+            title: "Косинус",
+            text: "Косинус измеряет угол между стрелками из нуля к двум точкам. Чем меньше угол, тем выше похожесть."
+          }
+        ],
+        note: ""
+      },
+      {
+        id: "decompose",
+        tab: "2. Фон",
+        title: "Фон плюс смысл",
+        text: "Вектор можно мысленно разложить на общий фон и остаток. Остаток несет больше локального смысла, но исходный косинус видит сумму целиком.",
+        formula: "v = b + s\n\nb = общая компонента корпуса\ns = смысловой остаток конкретного слова",
+        concepts: [
+          {
+            title: "Общий фон",
+            text: "Это похожая добавка у многих слов. Она может идти от частотности, синтаксиса, жанра корпуса и устройства обучения."
+          },
+          {
+            title: "Смысловой остаток",
+            text: "Остаток — часть вектора, которая сильнее отличает одно слово от другого после удаления общей добавки."
+          }
+        ],
+        note: "На рисунке остатки нарисованы от конца общего фонового вектора."
+      },
+      {
+        id: "center",
+        tab: "3. Центр",
+        title: "Центрирование",
+        text: "Мы считаем средний вектор корпуса и вычитаем его из каждого эмбеддинга. Облако возвращается ближе к нулю, а косинус начинает сильнее видеть различия между словами.",
+        formula: "средний фон = среднее всех исходных векторов\nновый вектор = исходный вектор - средний фон",
+        concepts: [
+          {
+            title: "Средний вектор",
+            text: "Берём много слов и считаем их среднее направление. Это грубая оценка общего фона выбранного корпуса."
+          },
+          {
+            title: "Центрирование",
+            text: "Из каждого вектора вычитается средний вектор. После этого случайные слова часто перестают казаться слишком близкими."
+          }
+        ],
+        note: "На практике такой шаг часто резко снижает среднюю похожесть случайных слов: они перестают быть близкими только из-за общего фона."
+      },
+      {
+        id: "abtt",
+        tab: "4. ABTT",
+        title: "ABTT: убрать верхние оси",
+        text: "ABTT убирает средний сдвиг и несколько самых доминирующих направлений. Если верхняя компонента техническая, ее удаление делает соседей честнее.",
+        formula: "сначала: вектор - средний фон\nпотом: убрать проекцию на PC1..PCk",
+        concepts: [
+          {
+            title: "PC1",
+            text: "Первая главная компонента — направление, вдоль которого облако вытянуто сильнее всего."
+          },
+          {
+            title: "ABTT",
+            text: "All-but-the-top удаляет несколько верхних направлений. Это помогает, когда верхние оси несут общий перекос."
+          }
+        ],
+        note: "PC1 — направление, вдоль которого облако вытянуто сильнее всего. Если эта ось техническая, ABTT вычитает проекцию на неё из каждого вектора."
+      },
+      {
+        id: "white",
+        tab: "5. Оси",
+        title: "Whitening: выровнять оси",
+        text: "Whitening идёт дальше вычитания фона: он сжимает слишком длинные оси и растягивает слишком короткие, чтобы разброс точек стал более равным по направлениям.",
+        formula: "длинная ось ↓\nкороткая ось ↑\n\nразброс становится ровнее",
+        concepts: [
+          {
+            title: "Whitening",
+            text: "Отбеливание выравнивает масштаб направлений: длинные оси сжимает, короткие растягивает."
+          },
+          {
+            title: "Оси разброса",
+            text: "Если облако сильно вытянуто, одна ось слишком много влияет на похожесть. Выравнивание осей снижает этот перекос."
+          }
+        ],
+        note: "Это полезно, когда пространство похоже на сигару или блин: есть вытянутые и сжатые оси, плюс возможный общий сдвиг."
+      },
+      {
+        id: "semantic",
+        tab: "6. Кластеры",
+        title: "Кластеры после коррекции",
+        text: "Коррекция убирает общий фон, а близкие понятия всё равно держатся областями. Здесь важны темы, переходы между темами и плотность выбранных смыслов.",
+        formula: "исправить метрику = убрать технический перекос\n\nструктура мира остаётся:\nкластеры, мосты, центры притяжения.",
+        concepts: [
+          {
+            title: "Кластеры",
+            text: "Похожие слова собираются областями: животные рядом с животными, физика рядом с физикой, инструменты рядом с инструментами."
+          },
+          {
+            title: "Мосты",
+            text: "Некоторые слова лежат между областями и связывают темы. Такие переходы тоже часть смысла."
+          }
+        ],
+        note: "Это честная структура выбранных смыслов: она помогает искать соседей и видеть, какие области словаря связаны между собой."
+      }
+    ];
+
+    const requestedScene = new URLSearchParams(window.location.search).get("scene");
+    const requestedSceneIndex = sceneDefs.findIndex((scene) => scene.id === requestedScene);
+    let currentScene = requestedSceneIndex >= 0 ? requestedSceneIndex : 0;
+    let playing = false;
+    let phase = 0;
+    let lastTime = performance.now();
+
+    function vAdd(a, b) {
+      const n = Math.max(a.length, b.length);
+      return Array.from({ length: n }, (_, i) => (a[i] || 0) + (b[i] || 0));
+    }
+    function vSub(a, b) {
+      const n = Math.max(a.length, b.length);
+      return Array.from({ length: n }, (_, i) => (a[i] || 0) - (b[i] || 0));
+    }
+    function vMul(a, s) { return a.map((x) => x * s); }
+    function dot(a, b) {
+      const n = Math.max(a.length, b.length);
+      let sum = 0;
+      for (let i = 0; i < n; i += 1) sum += (a[i] || 0) * (b[i] || 0);
+      return sum;
+    }
+    function norm(a) { return Math.sqrt(dot(a, a)); }
+    function unit(a) {
+      const n = norm(a) || 1;
+      return [a[0] / n, a[1] / n];
+    }
+    function cosine(a, b) {
+      return dot(a, b) / ((norm(a) || 1) * (norm(b) || 1));
+    }
+    function lerp(a, b, t) {
+      return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+    }
+    function meanOf(list) {
+      const sum = list.reduce((acc, p) => vAdd(acc, p), [0, 0]);
+      return vMul(sum, 1 / list.length);
+    }
+
+    function backgroundVector() {
+      const strength = Number(windInput.value) / 100;
+      return vMul([2.72, 3.08], strength);
+    }
+
+    function rawVectors() {
+      const b = backgroundVector();
+      return points.map((p) => vAdd(p.semantic, b));
+    }
+
+    function centeredVectors() {
+      const raw = rawVectors();
+      const m = meanOf(raw);
+      return raw.map((p) => vSub(p, m));
+    }
+
+    function covariance(list) {
+      let xx = 0, xy = 0, yy = 0;
+      for (const p of list) {
+        xx += p[0] * p[0];
+        xy += p[0] * p[1];
+        yy += p[1] * p[1];
+      }
+      return [xx / list.length, xy / list.length, yy / list.length];
+    }
+
+    function eigen2(cov) {
+      const [a, b, d] = cov;
+      const tr = a + d;
+      const det = a * d - b * b;
+      const disc = Math.sqrt(Math.max(0, tr * tr - 4 * det));
+      const l1 = Math.max(0.0001, (tr + disc) / 2);
+      const l2 = Math.max(0.0001, (tr - disc) / 2);
+      const e1 = Math.abs(b) > 0.0001 ? unit([b, l1 - a]) : (a >= d ? [1, 0] : [0, 1]);
+      const e2 = [-e1[1], e1[0]];
+      return { l1, l2, e1, e2 };
+    }
+
+    function whitenedVectors() {
+      const centered = centeredVectors();
+      const e = eigen2(covariance(centered));
+      const target = 0.82;
+      return centered.map((p) => {
+        const c1 = dot(p, e.e1) / Math.sqrt(e.l1) * target;
+        const c2 = dot(p, e.e2) / Math.sqrt(e.l2) * target;
+        return vAdd(vMul(e.e1, c1), vMul(e.e2, c2));
+      });
+    }
+
+    function abttVectors(t) {
+      const centered = centeredVectors();
+      const e = eigen2(covariance(centered));
+      return centered.map((p) => {
+        const projection = vMul(e.e1, dot(p, e.e1));
+        return vSub(p, vMul(projection, t));
+      });
+    }
+
+    function screen(p) {
+      return [470 + p[0] * 78, 405 - p[1] * 78];
+    }
+
+    function el(name, attrs = {}, children = "") {
+      const parts = Object.entries(attrs).map(([k, v]) => `${k}="${String(v)}"`).join(" ");
+      return `<${name}${parts ? " " + parts : ""}>${children}</${name}>`;
+    }
+
+    function line(a, b, attrs = {}) {
+      const A = screen(a), B = screen(b);
+      return el("line", { x1: A[0], y1: A[1], x2: B[0], y2: B[1], ...attrs });
+    }
+
+    function circle(p, r, attrs = {}) {
+      const P = screen(p);
+      return el("circle", { cx: P[0], cy: P[1], r, ...attrs });
+    }
+
+    function text(label, p, attrs = {}) {
+      const P = screen(p);
+      return el("text", { x: P[0], y: P[1], ...attrs }, label);
+    }
+
+    function screenText(label, x, y, attrs = {}) {
+      return el("text", { x, y, ...attrs }, label);
+    }
+
+    function sceneCaption(primary, secondary) {
+      const x = 164;
+      const y = 570;
+      const shared = {
+        "paint-order": "stroke",
+        stroke: "#17181d",
+        "stroke-width": 5,
+        "stroke-linejoin": "round"
+      };
+      return screenText(primary, x, y, {
+        ...shared,
+        fill: "#f5f7fb",
+        "font-size": 14,
+        "font-weight": 800
+      }) + screenText(secondary, x, y + 22, {
+        ...shared,
+        fill: "#c4ff7b",
+        "font-size": 15,
+        "font-weight": 800
+      });
+    }
+
+    function pointLabel(label, p, attrs = {}) {
+      const P = screen(p);
+      const anchor = attrs["text-anchor"] || "start";
+      const width = Math.max(34, label.length * 7.2 + 12);
+      const height = 21;
+      const rectX = anchor === "end" ? P[0] - width + 4 : P[0] - 6;
+      const rectY = P[1] - 15;
+      const textX = anchor === "end" ? P[0] - 4 : P[0];
+      const rect = el("rect", {
+        x: rectX,
+        y: rectY,
+        width,
+        height,
+        rx: 5,
+        fill: "#1b1b1f",
+        opacity: 0.82,
+        stroke: "#34343a",
+        "stroke-width": 1
+      });
+      const labelAttrs = { x: textX, y: P[1], ...attrs };
+      return rect + el("text", labelAttrs, label);
+    }
+
+    function arrow(a, b, color, width = 2, opacity = 1, cls = "") {
+      return line(a, b, {
+        stroke: color,
+        "stroke-width": width,
+        "stroke-opacity": opacity,
+        "marker-end": `url(#arrow-${cls || "main"})`,
+        fill: "none"
+      });
+    }
+
+    function grid() {
+      const origin = screen([0, 0]);
+      let out = `
+        <defs>
+          <marker id="arrow-main" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5f7fb"></path>
+          </marker>
+          <marker id="arrow-soft" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#6f7b8d"></path>
+          </marker>
+          <marker id="arrow-lime" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#c4ff7b"></path>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="940" height="660" fill="#17181d"></rect>
+      `;
+      for (let x = 80; x < 900; x += 52) {
+        out += `<line x1="${x}" y1="40" x2="${x}" y2="610" stroke="#26272d" stroke-width="1"></line>`;
+      }
+      for (let y = 70; y < 610; y += 52) {
+        out += `<line x1="48" y1="${y}" x2="900" y2="${y}" stroke="#26272d" stroke-width="1"></line>`;
+      }
+      out += `<line x1="48" y1="${origin[1]}" x2="900" y2="${origin[1]}" stroke="#34343a" stroke-width="1.4"></line>`;
+      out += `<line x1="${origin[0]}" y1="40" x2="${origin[0]}" y2="610" stroke="#34343a" stroke-width="1.4"></line>`;
+      out += `<text x="${origin[0] + 8}" y="${origin[1] + 18}" fill="#6f7b8d" font-size="12">(0,0)</text>`;
+      return out;
+    }
+
+    function coneShape(b) {
+      const u = unit(b);
+      const perp = [-u[1], u[0]];
+      const far = vMul(u, 5.6);
+      const left = vAdd(far, vMul(perp, 1.12));
+      const right = vSub(far, vMul(perp, 1.12));
+      const O = screen([0, 0]), L = screen(left), R = screen(right);
+      return `<path d="M ${O[0]} ${O[1]} L ${L[0]} ${L[1]} L ${R[0]} ${R[1]} Z" fill="#c4ff7b" opacity="0.08" stroke="#c4ff7b" stroke-opacity="0.22"></path>`;
+    }
+
+    function drawPoints(vecs, opts = {}) {
+      const { arrows = true, labels = true, opacity = 1, radius = 7, from = [0, 0], labelOffsetKey = "labelOffset", labelIndices = null } = opts;
+      const allowedLabels = labelIndices ? new Set(labelIndices) : null;
+      let out = "";
+      vecs.forEach((v, i) => {
+        const p = points[i];
+        const color = colors[p.group];
+        if (arrows) out += arrow(from, v, color, 1.25, opacity * 0.42, "soft");
+        out += circle(v, radius, {
+          fill: color,
+          opacity,
+          stroke: "#17181d",
+          "stroke-width": 2
+        });
+        if (labels && (!allowedLabels || allowedLabels.has(i))) {
+          out += pointLabel(p.label, vAdd(v, p[labelOffsetKey] || p.labelOffset || [0.08, 0.12]), {
+            fill: "#dce4f2",
+            "font-size": 13,
+            opacity,
+            "text-anchor": p.labelAnchor || "start"
+          });
+        }
+      });
+      return out;
+    }
+
+    function drawSelectedLabels(vecs, indices, labelOffsetKey = "labelOffset") {
+      let out = "";
+      indices.forEach((i) => {
+        const p = points[i];
+        out += pointLabel(p.label, vAdd(vecs[i], p[labelOffsetKey] || p.labelOffset || [0.08, 0.12]), {
+          fill: "#f5f7fb",
+          "font-size": 13,
+          "font-weight": 700,
+          "text-anchor": p.labelAnchor || "start"
+        });
+      });
+      return out;
+    }
+
+    function drawCosinePair(vecs, a = 0, b = 2, label = "cos(кот, фотон)", opts = {}) {
+      const va = vecs[a];
+      const vb = vecs[b];
+      const pa = points[a];
+      const pb = points[b];
+      const ca = colors[pa.group];
+      const cb = colors[pb.group];
+      const cos = Math.max(-1, Math.min(1, cosine(va, vb)));
+      const deg = Math.acos(cos) * 180 / Math.PI;
+      const angleA = Math.atan2(va[1], va[0]);
+      let delta = Math.atan2(vb[1], vb[0]) - angleA;
+      while (delta > Math.PI) delta -= Math.PI * 2;
+      while (delta < -Math.PI) delta += Math.PI * 2;
+
+      const radius = 0.72;
+      const steps = Math.max(8, Math.ceil(Math.abs(delta) * 22));
+      let d = "";
+      for (let i = 0; i <= steps; i += 1) {
+        const angle = angleA + delta * (i / steps);
+        const p = screen([Math.cos(angle) * radius, Math.sin(angle) * radius]);
+        d += `${i === 0 ? "M" : "L"} ${p[0]} ${p[1]} `;
+      }
+      let out = "";
+      out += arrow([0, 0], va, ca, 4.4, 0.98, "lime");
+      out += arrow([0, 0], vb, cb, 4.4, 0.98, "lime");
+      out += `<path d="${d}" fill="none" stroke="#f5f7fb" stroke-width="4" stroke-linecap="round" opacity="0.92"></path>`;
+      out += circle(va, 10, { fill: ca, stroke: "#f5f7fb", "stroke-width": 2 });
+      out += circle(vb, 10, { fill: cb, stroke: "#f5f7fb", "stroke-width": 2 });
+      if (opts.caption !== false) {
+        const detail = opts.detail ? ` · ${opts.detail}` : "";
+        out += sceneCaption(`${label}: ${cos.toFixed(3)}`, `угол: ${deg.toFixed(0)}°${detail}`);
+      }
+      return out;
+    }
+
+    function drawEllipse(center, e1, e2, r1, r2, attrs = {}) {
+      const angle = Math.atan2(e1[1], e1[0]) * 180 / Math.PI;
+      const C = screen(center);
+      const rx = r1 * 78;
+      const ry = r2 * 78;
+      return el("ellipse", {
+        cx: C[0],
+        cy: C[1],
+        rx,
+        ry,
+        transform: `rotate(${-angle} ${C[0]} ${C[1]})`,
+        ...attrs
+      });
+    }
+
+    function rawScene() {
+      const raw = rawVectors();
+      const b = backgroundVector();
+      let out = grid();
+      out += coneShape(b);
+      out += arrow([0, 0], b, "#f5f7fb", 4, 0.55, "main");
+      out += drawPoints(raw, { arrows: true, labels: false, opacity: 0.96, labelOffsetKey: "rawLabelOffset" });
+      out += drawCosinePair(raw, 0, 2, "исходный cos", { detail: "узкий сектор направлений" });
+      out += drawSelectedLabels(raw, [0, 2], "rawLabelOffset");
+      return out;
+    }
+
+    function decomposeScene() {
+      const raw = rawVectors();
+      const b = backgroundVector();
+      let out = grid();
+      out += coneShape(b);
+      out += drawPoints(raw, { arrows: true, labels: false, opacity: 0.2, radius: 5 });
+      out += arrow([0, 0], b, "#f5f7fb", 4, 0.84, "main");
+      out += circle(b, 6, { fill: "#f5f7fb", opacity: 0.9 });
+      [0, 2, 4, 8].forEach((i) => {
+        const p = points[i];
+        const v = raw[i];
+        out += arrow(b, v, colors[p.group], 3, 0.92, "lime");
+        out += circle(v, 8, { fill: colors[p.group], stroke: "#17181d", "stroke-width": 2 });
+        out += pointLabel(p.label, vAdd(v, p.decomposeLabelOffset || p.rawLabelOffset || p.labelOffset || [0.09, 0.12]), {
+          fill: "#f5f7fb",
+          "font-size": 14,
+          "text-anchor": p.labelAnchor || "start"
+        });
+      });
+      out += sceneCaption("v = b + s", "b: общий фон · s: смысловые остатки");
+      return out;
+    }
+
+    function centerScene() {
+      const t = phase;
+      const raw = rawVectors();
+      const m = meanOf(raw);
+      const shifted = raw.map((p) => vSub(p, vMul(m, t)));
+      let out = grid();
+      out += drawPoints(raw, { arrows: false, labels: false, opacity: 0.22, radius: 5 });
+      out += arrow([0, 0], m, "#ff687a", 4, 0.84, "main");
+      out += circle(m, 8, { fill: "#ff687a" });
+      out += pointLabel("mean корпуса", vAdd(m, [0.36, -0.16]), {
+        fill: "#ff687a",
+        "font-size": 13,
+        "font-weight": 700
+      });
+      out += drawPoints(shifted, { arrows: true, labels: false, opacity: 0.96, radius: 7 });
+      out += drawCosinePair(shifted, 0, 2, "cos после сдвига", { detail: `вычитание среднего: ${(t * 100).toFixed(0)}%` });
+      out += drawSelectedLabels(shifted, [0, 2]);
+      return out;
+    }
+
+    function abttScene() {
+      const t = phase;
+      const centered = centeredVectors();
+      const clean = abttVectors(t);
+      const e = eigen2(covariance(centered));
+      let out = grid();
+      out += drawEllipse([0, 0], e.e1, e.e2, Math.sqrt(e.l1) * 2.25, Math.sqrt(e.l2) * 2.25, {
+        fill: "none",
+        stroke: "#ff687a",
+        "stroke-width": 2,
+        "stroke-dasharray": "7 8",
+        opacity: 0.8
+      });
+      out += line(vMul(e.e1, -3.4), vMul(e.e1, 3.4), {
+        stroke: "#ff687a",
+        "stroke-width": 3,
+        "stroke-opacity": 0.75
+      });
+      out += text("PC1: верхнее навязчивое направление", vAdd(vMul(e.e1, 2.25), [0.12, 0.18]), {
+        fill: "#ff687a",
+        "font-size": 14,
+        "font-weight": 700
+      });
+      centered.forEach((p, i) => {
+        const removed = clean[i];
+        out += line(p, removed, { stroke: "#6f7b8d", "stroke-width": 1.5, "stroke-dasharray": "4 5", opacity: 0.7 });
+      });
+      out += drawPoints(centered, { arrows: false, labels: false, opacity: 0.24, radius: 5 });
+      out += drawPoints(clean, { arrows: true, labels: false, opacity: 0.96, radius: 7 });
+      out += drawCosinePair(clean, 0, 2, "cos после ABTT", { detail: `удаление PC1: ${(t * 100).toFixed(0)}%` });
+      out += drawSelectedLabels(clean, [0, 2]);
+      return out;
+    }
+
+    function whiteScene() {
+      const t = phase;
+      const centered = centeredVectors();
+      const white = whitenedVectors();
+      const mixed = centered.map((p, i) => lerp(p, white[i], t));
+      const e = eigen2(covariance(centered));
+      let out = grid();
+      out += drawEllipse([0, 0], e.e1, e.e2, Math.sqrt(e.l1) * 2.22, Math.sqrt(e.l2) * 2.22, {
+        fill: "#5fd6ff",
+        opacity: 0.06,
+        stroke: "#5fd6ff",
+        "stroke-width": 2,
+        "stroke-dasharray": "8 7"
+      });
+      out += circle([0, 0], 132, { fill: "#c4ff7b", opacity: 0.035, stroke: "#c4ff7b", "stroke-width": 2, "stroke-dasharray": "8 7" });
+      out += line(vMul(e.e1, -2.8), vMul(e.e1, 2.8), { stroke: "#5fd6ff", "stroke-width": 2, "stroke-opacity": 0.7 });
+      out += line(vMul(e.e2, -2.1), vMul(e.e2, 2.1), { stroke: "#c4ff7b", "stroke-width": 2, "stroke-opacity": 0.7 });
+      out += drawPoints(mixed, { arrows: true, labels: false, opacity: 0.96, radius: 7 });
+      out += drawCosinePair(mixed, 0, 2, "cos после whitening", { detail: `whitening: ${(t * 100).toFixed(0)}%` });
+      out += drawSelectedLabels(mixed, [0, 2]);
+      return out;
+    }
+
+    function semanticScene() {
+      const white = whitenedVectors();
+      let out = grid();
+      const clusterSpecs = [
+        { center: [1.1, 0.26], rx: 0.9, ry: 0.38, color: colors.animal },
+        { center: [-1.05, 0.24], rx: 0.9, ry: 0.42, color: colors.physics },
+        { center: [-0.18, -1.0], rx: 0.82, ry: 0.36, color: colors.tech },
+        { center: [0.52, -0.92], rx: 0.72, ry: 0.34, color: colors.everyday },
+        { center: [0.42, 1.0], rx: 0.78, ry: 0.36, color: colors.plan }
+      ];
+      clusterSpecs.forEach((c) => {
+        out += drawEllipse(c.center, [1, 0], [0, 1], c.rx, c.ry, {
+          fill: c.color,
+          opacity: 0.08,
+          stroke: c.color,
+          "stroke-width": 2,
+          "stroke-dasharray": "7 7"
+        });
+      });
+      const path = [
+        screen([-1.42, 0.18]),
+        screen([-0.72, 0.58]),
+        screen([0.05, 0.78]),
+        screen([0.72, 0.56]),
+        screen([1.28, 0.24])
+      ];
+      out += `<path d="M ${path[0][0]} ${path[0][1]} C ${path[1][0]} ${path[1][1]}, ${path[2][0]} ${path[2][1]}, ${path[3][0]} ${path[3][1]} S ${path[4][0]} ${path[4][1]}, ${path[4][0]} ${path[4][1]}" fill="none" stroke="#f5f7fb" stroke-width="2" stroke-opacity="0.35" stroke-dasharray="5 7"></path>`;
+      out += drawPoints(white, { arrows: true, labels: true, opacity: 0.96, radius: 7 });
+      out += drawCosinePair(white, 0, 2, "cos в чистом слое", { detail: "кластеры и мосты остаются" });
+      return out;
+    }
+
+    function renderScene() {
+      const scene = sceneDefs[currentScene];
+      windValue.textContent = (Number(windInput.value) / 100).toFixed(2);
+      sceneTitle.textContent = scene.title;
+      sceneText.textContent = scene.text;
+      sceneNote.textContent = scene.note || "";
+      sceneNote.hidden = !scene.note;
+      formula.textContent = scene.formula;
+      conceptCards.innerHTML = (scene.concepts || []).map((card) => `
+        <article class="concept-card">
+          <h3>${card.title}</h3>
+          <p>${card.text}</p>
+        </article>
+      `).join("");
+
+      let body = "";
+      if (scene.id === "raw") body = rawScene();
+      if (scene.id === "decompose") body = decomposeScene();
+      if (scene.id === "center") body = centerScene();
+      if (scene.id === "abtt") body = abttScene();
+      if (scene.id === "white") body = whiteScene();
+      if (scene.id === "semantic") body = semanticScene();
+      svg.innerHTML = body;
+      renderMetrics();
+      [...tabs.children].forEach((btn, i) => btn.classList.toggle("active", i === currentScene));
+    }
+
+    function renderMetrics() {
+      const raw = rawVectors();
+      const centered = centeredVectors();
+      const pairs = [
+        ["кот / фотон", 0, 2],
+        ["кот / собака", 0, 1],
+        ["эмбеддинг / косинус", 4, 5],
+        ["пирог / гравитация", 6, 3]
+      ];
+      let html = `
+        <div class="head">Пара</div>
+        <div class="head">исходный косинус</div>
+        <div class="head">после центрирования</div>
+      `;
+      pairs.forEach(([label, a, b]) => {
+        html += `<div>${label}</div>`;
+        html += `<div class="num">${cosine(raw[a], raw[b]).toFixed(3)}</div>`;
+        html += `<div class="num">${cosine(centered[a], centered[b]).toFixed(3)}</div>`;
+      });
+      metricsEl.innerHTML = html;
+    }
+
+    function buildTabs() {
+      sceneDefs.forEach((scene, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = scene.tab;
+        btn.addEventListener("click", () => {
+          currentScene = i;
+          if (scene.id === "center" || scene.id === "abtt" || scene.id === "white") {
+            phase = Number(phaseInput.value) / 100;
+          } else {
+            phase = 0;
+            phaseInput.value = "0";
+          }
+          renderScene();
+        });
+        tabs.appendChild(btn);
+      });
+    }
+
+    function animate(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+      let shouldRender = false;
+      if (playing) {
+        const scene = sceneDefs[currentScene];
+        if (scene.id === "center" || scene.id === "abtt" || scene.id === "white") {
+          phase = (phase + dt * 0.24) % 1;
+          phaseInput.value = String(Math.round(phase * 100));
+          shouldRender = true;
+        }
+      }
+      if (shouldRender) renderScene();
+      requestAnimationFrame(animate);
+    }
+
+    windInput.addEventListener("input", renderScene);
+    window.addEventListener("lab-theme-change", renderScene);
+    phaseInput.addEventListener("input", () => {
+      phase = Number(phaseInput.value) / 100;
+      renderScene();
+    });
+    playButton.addEventListener("click", () => {
+      playing = !playing;
+      playButton.textContent = playing ? "Пауза" : "Пуск";
+    });
+
+    buildTabs();
+    renderScene();
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-# Etalon Quality
+﻿# Etalon Quality
 
 Etalons are the foundation of NOUZ classification. If etalons overlap semantically, classification becomes noisy. This page explains how to verify etalon quality using `calibrate_cores`.
 
@@ -108,9 +108,16 @@ Etalons only need recalibration when `config.yaml` changes.
 To reproduce the calculation, use the same S/D/E texts from `config.template.yaml` and the same embedding model. If LM Studio is available at another address:
 
 ```bash
-set EMBED_API_URL=http://10.8.0.10:1234
+set EMBED_API_URL=http://127.0.0.1:1234
 set EMBED_MODEL=text-embedding-granite-embedding-278m-multilingual
 python scripts/calc_etalons.py
 ```
 
 If you change etalon texts or the embedding model, recalculate the numbers. Old cosine values do not validate a new etalon set.
+
+<div class="lab-bridge">
+  <p class="lab-bridge__eyebrow">Semantic Laboratory</p>
+  <h2>From Numbers to a Map</h2>
+  <p>To see embedding geometry directly, open the lab: rotate a word cloud, compare neighbors before and after centering, and see the SVD spectrum as the shape of the space.</p>
+  <a class="lab-bridge__button" href="/lab/">Open the laboratory</a>
+</div>

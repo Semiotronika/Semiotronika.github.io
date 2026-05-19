@@ -1,0 +1,2124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Семантическая лаборатория — облако эмбеддингов</title>
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const embedded = params.has("embed");
+      if (!embedded && window.location.protocol !== "file:") {
+        window.location.replace("/lab/");
+        return;
+      }
+      const key = "vitepress-theme-appearance";
+      const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+      function isDark(value) {
+        return value === "dark" || ((value || "auto") === "auto" && media?.matches);
+      }
+      window.applySemiotronikaLabTheme = (value) => {
+        document.documentElement.classList.toggle("dark", isDark(value));
+        window.dispatchEvent(new Event("lab-theme-change"));
+      };
+      window.applySemiotronikaLabTheme(params.get("theme") || localStorage.getItem(key) || "auto");
+      window.addEventListener("message", (event) => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data?.type !== "semiotronika-lab-theme") return;
+        if (!["auto", "dark", "light"].includes(event.data.theme)) return;
+        window.applySemiotronikaLabTheme(event.data.theme);
+      });
+      if (embedded) {
+        document.documentElement.classList.add("is-embedded");
+      }
+    })();
+  </script>
+  <style>
+    @font-face {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("/fonts/inter-roman-cyrillic.woff2") format("woff2");
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+
+    @font-face {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("/fonts/inter-roman-latin.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+        U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+        U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    :root {
+      color-scheme: light;
+      --bg: #f6f4ef;
+      --panel: #ffffff;
+      --panel-2: #f0eee8;
+      --field: #faf9f5;
+      --line: #dadde7;
+      --ink: #202126;
+      --muted: #5f6372;
+      --soft: #858a98;
+      --accent: #bc1f50;
+      --accent-strong: #9f1843;
+      --accent-soft: rgba(188, 31, 80, 0.12);
+      --lime: #c4ff7b;
+      --magenta: #ff00a1;
+      --cyan: #5fd6ff;
+      --amber: #ffca58;
+      --red: #ff687a;
+      --nav-bg: rgba(255, 255, 255, 0.9);
+      --nav-link: #202126;
+      --canvas-bg: #111217;
+      --viz-bg-0: #2a2a31;
+      --viz-bg-1: #17181d;
+      --viz-bg-2: #0a0b10;
+      --viz-star: #f4f7fb;
+      --word-card: rgba(32, 33, 38, 0.045);
+      --word-card-line: rgba(32, 33, 38, 0.14);
+      --word-card-ink: #202126;
+      --word-card-muted: #646978;
+      --term-chip-bg: rgba(255, 255, 255, 0.64);
+      --term-chip-line: rgba(32, 33, 38, 0.08);
+      --bar-track: rgba(32, 33, 38, 0.075);
+      --bar-track-line: rgba(32, 33, 38, 0.1);
+      --bar-glow: rgba(188, 31, 80, 0.18);
+      --font-base: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .dark {
+      color-scheme: dark;
+      --bg: #08090d;
+      --panel: #101217;
+      --panel-2: #151720;
+      --field: #0b0c11;
+      --line: #292c36;
+      --ink: #f5f5f0;
+      --muted: #b7b7bf;
+      --soft: #85858f;
+      --accent: #c4ff7b;
+      --accent-strong: #dfff9e;
+      --accent-soft: rgba(196, 255, 123, 0.14);
+      --nav-bg: rgba(8, 9, 13, 0.92);
+      --nav-link: #f5f7fb;
+      --canvas-bg: #0b0c11;
+      --viz-bg-0: #262832;
+      --viz-bg-1: #12141b;
+      --viz-bg-2: #08090d;
+      --viz-star: #f4f7fb;
+      --word-card: #101217;
+      --word-card-line: #292c36;
+      --word-card-ink: #f4f7fb;
+      --word-card-muted: #b8becc;
+      --term-chip-bg: rgba(244, 247, 251, 0.08);
+      --term-chip-line: rgba(244, 247, 251, 0.1);
+      --bar-track: rgba(244, 247, 251, 0.07);
+      --bar-track-line: rgba(244, 247, 251, 0.14);
+      --bar-glow: rgba(208, 106, 255, 0.38);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-base);
+      letter-spacing: 0;
+    }
+
+    .is-embedded body {
+      min-height: 0;
+      background: transparent;
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 50px;
+      border-bottom: 1px solid var(--line);
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+    }
+
+    .site-nav-inner {
+      width: min(1920px, 100%);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .site-brand {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--lime);
+      text-decoration: none;
+      letter-spacing: 0;
+    }
+
+    .site-brand span {
+      color: var(--magenta);
+    }
+
+    .site-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-left: auto;
+    }
+
+    .site-links a {
+      color: var(--nav-link);
+      font-size: 14px;
+      font-weight: 650;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .site-links a:hover,
+    .site-links a.active {
+      color: var(--accent-strong);
+    }
+
+    .site-links a[href^="mailto"]::after {
+      content: "↗";
+      margin-left: 3px;
+      font-size: 11px;
+      opacity: 0.55;
+    }
+
+    .site-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .site-separator {
+      width: 1px;
+      height: 24px;
+      background: var(--line);
+    }
+
+    .site-icon {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    .site-icon:hover {
+      color: var(--ink);
+      background: var(--field);
+    }
+
+    .site-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .site-locale {
+      display: inline-flex;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
+    }
+
+    .site-locale a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 31px;
+      height: 24px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    .site-locale a + a {
+      border-left: 1px solid var(--line);
+    }
+
+    .site-locale a:hover {
+      color: var(--ink);
+    }
+
+    .site-locale a.active {
+      color: var(--accent-strong);
+      background: var(--accent-soft);
+    }
+
+    button.site-theme {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px;
+      background: var(--field);
+      cursor: pointer;
+    }
+
+    .site-theme-knob {
+      display: block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .dark .site-theme-knob {
+      transform: translateX(16px);
+      background: var(--accent-strong);
+    }
+
+    .shell {
+      width: min(1440px, 100%);
+      max-width: 100%;
+      min-width: 0;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .is-embedded .site-nav,
+    .is-embedded .shell > header {
+      display: none;
+    }
+
+    .is-embedded .shell {
+      width: 100%;
+      padding: 0;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 3vw, 44px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 820px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .lab-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .lab-nav a {
+      border: 1px solid var(--line);
+      background: var(--field);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .lab-nav a:hover,
+    .lab-nav a.active {
+      border-color: var(--accent);
+      color: var(--accent-strong);
+      background: var(--accent-soft);
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      background: var(--field);
+      color: var(--accent-strong);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+      grid-template-areas:
+        "cloud panel";
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .stage,
+    .panel,
+    .controls,
+    .tables {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+    }
+
+    .stage {
+      grid-area: cloud;
+      position: relative;
+      height: clamp(500px, 58vh, 620px);
+      min-height: 500px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      background: var(--canvas-bg);
+      cursor: grab;
+      touch-action: none;
+    }
+
+    canvas.dragging {
+      cursor: grabbing;
+    }
+
+    .hud {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .pill {
+      border: 1px solid rgba(244, 247, 251, 0.38);
+      background: rgba(27, 27, 31, 0.78);
+      color: rgba(244, 247, 251, 0.7);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    .pill strong {
+      color: #f4f7fb;
+    }
+
+    .legend {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid rgba(244, 247, 251, 0.38);
+      background: rgba(27, 27, 31, 0.78);
+      color: rgba(244, 247, 251, 0.78);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .panel {
+      grid-area: panel;
+      align-self: stretch;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .mini {
+      border: 1px solid var(--line);
+      background: var(--field);
+      border-radius: 8px;
+      padding: 11px;
+      color: var(--ink);
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    .mini h3 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .mini dl {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+    }
+
+    .mini dt {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .mini dd {
+      margin: 2px 0 0;
+      color: var(--muted);
+    }
+
+    .map-support {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .truth-notes {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 10px;
+    }
+
+    .truth-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .truth-card h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .truth-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .truth-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 11px;
+    }
+
+    .truth-facts span {
+      border: 1px solid var(--line);
+      background: var(--field);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 12px;
+    }
+
+    .truth-facts strong {
+      color: var(--ink);
+    }
+
+    .support-group {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .concept-title {
+      margin: 0 0 -4px;
+      color: var(--soft);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .neighbors {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .neighbor-list {
+      border: 1px solid var(--word-card-line);
+      background: var(--word-card);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .neighbor-list h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--word-card-ink);
+      letter-spacing: 0;
+    }
+
+    ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--word-card-muted);
+      font-size: 12.5px;
+      line-height: 1.48;
+    }
+
+    li strong {
+      font-weight: 600;
+    }
+
+    .term-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 5px;
+      border-radius: 6px;
+      background: var(--term-chip-bg);
+      box-shadow: inset 0 0 0 1px var(--term-chip-line);
+      font-weight: 700;
+    }
+
+    .controls {
+      margin: 0 0 16px;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mode-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px;
+    }
+
+    .dictionary-note {
+      margin: 0;
+      max-width: 980px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .dictionary-note strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    button,
+    select {
+      border: 1px solid var(--line);
+      background: var(--field);
+      color: var(--muted);
+      border-radius: 8px;
+      width: 100%;
+      min-width: 0;
+      min-height: 42px;
+      padding: 9px 10px;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:hover,
+    select:hover {
+      color: var(--ink);
+      border-color: #5b5b63;
+      outline: none;
+    }
+
+    button.active {
+      color: var(--accent-strong);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .range-row {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr) 64px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .label-tools {
+      grid-template-columns: 54px minmax(0, 1fr) 64px;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--field);
+    }
+
+    .label-tools label {
+      font-weight: 700;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .value {
+      color: var(--ink);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
+    }
+
+    .tables {
+      margin-top: 18px;
+      padding: 14px;
+    }
+
+    .spectrum {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .spectrum h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .spectrum-intro {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .spectrum-intro strong {
+      color: var(--ink);
+    }
+
+    .spectrum-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .spectrum-meta span {
+      border: 1px solid var(--line);
+      background: var(--field);
+      border-radius: 8px;
+      padding: 7px 9px;
+    }
+
+    .spectrum-bars {
+      display: grid;
+      gap: 7px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 68px minmax(160px, 1fr) 118px;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bar-value {
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--bar-track);
+      border: 1px solid var(--bar-track-line);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.42);
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      box-shadow: 0 0 14px var(--bar-glow);
+    }
+
+    .spectrum-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .pair-grid {
+      display: grid;
+      grid-template-columns: 1.4fr repeat(2, 0.7fr);
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+    }
+
+    .pair-grid div {
+      background: var(--field);
+      padding: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .pair-grid .head {
+      background: var(--panel-2);
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .pair-grid .num {
+      text-align: right;
+      color: var(--accent-strong);
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width: 1180px) and (min-width: 981px) {
+      .main {
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+        gap: 16px;
+      }
+
+      .stage {
+        min-height: 380px;
+        height: clamp(380px, 44vh, 420px);
+      }
+
+      canvas {
+        min-height: 380px;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+
+      .panel p {
+        font-size: 13.5px;
+        line-height: 1.45;
+      }
+
+      .mini {
+        padding: 10px;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .site-nav-inner {
+        padding: 0 18px;
+      }
+
+      .site-links {
+        gap: 14px;
+      }
+
+      .shell {
+        padding: 14px;
+      }
+
+      header,
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .main {
+        grid-template-areas:
+          "cloud"
+          "panel";
+      }
+
+      .range-row {
+        grid-template-columns: 96px minmax(0, 1fr) 54px;
+        gap: 8px;
+      }
+
+      .label-tools {
+        grid-template-columns: 54px minmax(0, 1fr) 64px;
+      }
+
+      .value {
+        text-align: right;
+      }
+
+      .stage {
+        min-height: 460px;
+        height: clamp(460px, 56vh, 540px);
+      }
+
+      canvas {
+        min-height: 460px;
+        height: 100%;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .site-nav-inner {
+        padding: 0 14px;
+      }
+
+      .site-links {
+        gap: 10px;
+      }
+
+      .site-links a {
+        font-size: 12px;
+      }
+
+      .site-links a[href^="mailto"] {
+        display: none;
+      }
+
+      header {
+        gap: 12px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .badge {
+        width: 100%;
+        white-space: normal;
+      }
+
+      .mode-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stage {
+        min-height: 390px;
+        height: 390px;
+      }
+
+      .hud {
+        left: 10px;
+        right: 10px;
+        top: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .pill {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 6px 7px;
+        font-size: 11.5px;
+      }
+
+      .legend {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        gap: 6px;
+      }
+
+      .legend span {
+        padding: 6px 7px;
+        font-size: 11.5px;
+      }
+
+      .panel,
+      .controls,
+      .tables,
+      .spectrum,
+      .map-support,
+      .truth-card {
+        padding: 12px;
+      }
+
+      .truth-notes {
+        grid-template-columns: 1fr;
+      }
+
+      .range-row {
+        grid-template-columns: 78px minmax(0, 1fr) 46px;
+      }
+
+      .label-tools {
+        grid-template-columns: 54px minmax(0, 1fr) 58px;
+      }
+
+      label {
+        font-size: 13px;
+      }
+
+      .value {
+        font-size: 12px;
+      }
+
+      .neighbors {
+        grid-template-columns: 1fr;
+      }
+
+      .bar-row {
+        grid-template-columns: 48px minmax(0, 1fr) 56px;
+        gap: 8px;
+      }
+
+      .bar-unit {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Навигация сайта">
+    <div class="site-nav-inner">
+      <a class="site-brand" href="/" aria-label="Семиотроника"><span>{</span>Σ<span>}</span></a>
+      <div class="site-links">
+        <a href="/">Главная</a>
+        <a href="/nouz/use-cases">NOUZ</a>
+        <a class="active" href="/lab/embedding-real-atlas.html">Лаборатория</a>
+      </div>
+      <div class="site-actions">
+        <span class="site-separator" aria-hidden="true"></span>
+        <a class="site-icon" href="https://github.com/Semiotronika/NOUZ-MCP" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 .5C5.65 .5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.02c-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.34.96.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18A10.9 10.9 0 0 1 12 6.19c.97 0 1.95.13 2.87.39 2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.08 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.02c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"></path>
+          </svg>
+        </a>
+        <a class="site-icon" href="https://t.me/Masha_Belkina" aria-label="Telegram" title="Telegram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M21.86 4.54 18.65 19.7c-.24 1.07-.87 1.33-1.76.83l-4.86-3.58-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.96 9.03-8.16c.39-.35-.09-.54-.61-.2L6.32 13.4l-4.8-1.5c-1.04-.33-1.06-1.04.22-1.54L20.5 3.13c.87-.32 1.63.21 1.36 1.41Z"></path>
+          </svg>
+        </a>
+        <div class="site-locale" aria-label="Язык">
+          <a class="active" href="/lab/embedding-real-atlas.html" aria-current="page" title="Русский">RU</a>
+          <a href="/en/" title="English">EN</a>
+        </div>
+        <span class="site-separator" aria-hidden="true"></span>
+        <button class="site-theme" id="themeToggle" type="button" aria-label="Переключить тему">
+          <span class="site-theme-knob"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="shell">
+    <header>
+      <div>
+        <h1>Семантическая лаборатория</h1>
+        <p class="subtitle">геометрия в языковых моделях</p>
+        <nav class="lab-nav" aria-label="Разделы лаборатории">
+          <a class="active" href="embedding-real-atlas.html">Облако эмбеддингов</a>
+          <a href="embedding-anisotropy-lab.html">График косинусов</a>
+        </nav>
+      </div>
+      <div class="badge">реальные векторы · косинус · 3D-тень PCA</div>
+    </header>
+
+    <section class="controls" aria-label="Управление картой">
+      <div class="mode-row">
+        <button id="centeredMode" type="button" class="active">Centered PCA</button>
+        <button id="rawMode" type="button">Raw PCA</button>
+        <button id="linksMode" type="button" class="active">Соседи вкл</button>
+        <select id="vocabSelect" aria-label="Выбрать словарь"></select>
+        <select id="dimensionSelect" aria-label="Выбрать размерность"></select>
+        <select id="modelSelect" aria-label="Выбрать модель"></select>
+        <select id="termSelect" aria-label="Выбрать понятие"></select>
+      </div>
+      <p class="dictionary-note" id="dictionaryNote"></p>
+    </section>
+
+    <main class="main">
+      <section class="stage" id="cloud" aria-label="Карта эмбеддингов">
+        <canvas id="atlas"></canvas>
+        <div class="hud">
+          <span class="pill">модель: <strong id="modelName"></strong></span>
+          <span class="pill">словарь: <strong id="vocabName"></strong></span>
+          <span class="pill">размерность: <strong id="dimValue"></strong></span>
+          <span class="pill">3D-тень: <strong id="projectionName">Centered PCA</strong></span>
+          <span class="pill">видимый разброс: <strong id="pcaValue"></strong></span>
+          <span class="pill">выбрано: <strong id="selectedHud">человек</strong></span>
+        </div>
+        <div class="legend" id="legend"></div>
+      </section>
+
+      <aside class="panel">
+        <div class="range-row label-tools">
+          <label for="labelDensity">Слова</label>
+          <input id="labelDensity" type="range" min="1" max="100" value="58">
+          <div id="labelValue" class="value">0.58</div>
+        </div>
+        <h2 id="selectedTitle">человек</h2>
+        <p id="selectedText"></p>
+        <div class="mini" id="methodBox"></div>
+      </aside>
+    </main>
+
+    <section class="truth-notes" aria-label="Паспорт эксперимента">
+      <article class="truth-card">
+        <h2>Паспорт карты</h2>
+        <p>
+          Точки, соседи, косинусы, PCA и SVD считаются из реальных эмбеддингов выбранной модели.
+          Видимая сцена — 3D-тень многомерного пространства; полная геометрия остаётся в исходных координатах.
+        </p>
+        <div class="truth-facts">
+          <span>модель: <strong id="passportModel"></strong></span>
+          <span>размерность: <strong id="passportDim"></strong></span>
+          <span>словарь: <strong id="passportWords"></strong></span>
+        </div>
+      </article>
+      <article class="truth-card">
+        <h2>Почему облако меняется</h2>
+        <p>
+          У каждой модели свой корпус, токенизация, задача обучения, нормализация и масштаб осей.
+          PCA заново выбирает три самые заметные оси для каждого набора и показывает только их, поэтому силуэт может резко
+          повернуться или вытянуться. Надёжнее сравнивать соседей, косинусы и SVD-спектр; форму облака
+          читать как подсказку к устройству выбранной модели.
+        </p>
+      </article>
+    </section>
+
+    <section class="map-support" aria-label="Ближайшие слова">
+      <div class="support-group">
+        <div class="concept-title">Ближайшие слова</div>
+        <div class="neighbors">
+          <section class="neighbor-list">
+            <h3>Соседи</h3>
+            <ol id="rawNeighbors"></ol>
+          </section>
+          <section class="neighbor-list">
+            <h3>После центрирования</h3>
+            <ol id="centeredNeighbors"></ol>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="tables">
+      <div class="pair-grid" id="pairGrid"></div>
+    </section>
+
+    <section class="spectrum" id="spectrum">
+      <h2>SVD спектр</h2>
+      <p class="spectrum-intro">
+        <strong>PCA</strong> делает видимую 3D-тень облака. <strong>SVD</strong> показывает, как устроено всё облако целиком: какие независимые оси держат его разброс. <strong>Зачем:</strong> видеть, какая доля многомерного облака попала в эту картинку, и помнить, что красивая 3D-форма показывает только часть пространства.
+      </p>
+      <div class="spectrum-meta" id="spectrumMeta"></div>
+      <div class="spectrum-bars" id="spectrumBars"></div>
+      <p class="spectrum-note" id="spectrumNote"></p>
+    </section>
+
+  </div>
+
+  <script>
+    (() => {
+      const key = "vitepress-theme-appearance";
+      const explicitTheme = new URLSearchParams(window.location.search).get("theme");
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      const button = document.getElementById("themeToggle");
+      function isDark(value) {
+        return value === "dark" || ((value || "auto") === "auto" && media.matches);
+      }
+      function apply(value) {
+        const dark = isDark(value);
+        window.applySemiotronikaLabTheme?.(value);
+        button?.setAttribute("aria-pressed", String(dark));
+      }
+      button?.addEventListener("click", () => {
+        const next = document.documentElement.classList.contains("dark") ? "light" : "dark";
+        localStorage.setItem(key, next);
+        apply(next);
+      });
+      window.addEventListener("storage", (event) => {
+        if (explicitTheme) return;
+        if (event.key === key) apply(event.newValue || "auto");
+      });
+      media.addEventListener?.("change", () => {
+        if (explicitTheme) return;
+        if ((localStorage.getItem(key) || "auto") === "auto") apply("auto");
+      });
+      apply(explicitTheme || localStorage.getItem(key) || "auto");
+    })();
+  </script>
+  <script src="embedding-real-atlas-data.js"></script>
+  <script src="embedding-real-atlas-nomic-data.js"></script>
+  <script src="embedding-real-atlas-nomic-v2-data.js"></script>
+  <script src="embedding-real-atlas-qwen3-768-data.js"></script>
+  <script src="embedding-real-atlas-qwen3-2048-data.js"></script>
+  <script src="embedding-real-atlas-qwen3-4096-data.js"></script>
+  <script src="embedding-real-atlas-qwen3-06b-1024-data.js"></script>
+  <script src="embedding-real-atlas-qwen3-4b-2560-data.js"></script>
+  <script src="embedding-real-atlas-embedding-gemma-768-data.js"></script>
+  <script src="embedding-real-atlas-large-qwen3-768-data.js"></script>
+  <script src="embedding-real-atlas-large-qwen3-2048-data.js"></script>
+  <script src="embedding-real-atlas-large-qwen3-4096-data.js"></script>
+  <script src="embedding-real-atlas-large-granite-data.js"></script>
+  <script src="embedding-real-atlas-large-nomic-data.js"></script>
+  <script src="embedding-real-atlas-large-nomic-v2-data.js"></script>
+  <script src="embedding-real-atlas-large-qwen3-06b-1024-data.js"></script>
+  <script src="embedding-real-atlas-large-qwen3-4b-2560-data.js"></script>
+  <script src="embedding-real-atlas-large-embedding-gemma-768-data.js"></script>
+  <script src="embedding-real-atlas-cats-granite-data.js"></script>
+  <script src="embedding-real-atlas-cats-nomic-data.js"></script>
+  <script src="embedding-real-atlas-cats-nomic-v2-data.js"></script>
+  <script src="embedding-real-atlas-cats-qwen3-4096-data.js"></script>
+  <script src="embedding-real-atlas-cats-qwen3-06b-1024-data.js"></script>
+  <script src="embedding-real-atlas-cats-qwen3-4b-2560-data.js"></script>
+  <script src="embedding-real-atlas-cats-embedding-gemma-768-data.js"></script>
+  <script>
+    const VOCABULARIES = {
+      curated: "Базовый словарь 120",
+      frequency: "Большой нейтральный 2500",
+      cats: "Учимся на кошках"
+    };
+
+    const MODELS = {
+      qwen3: "Qwen3-Embedding-8B",
+      qwen4: "Qwen3-Embedding-4B",
+      qwen06: "Qwen3-Embedding-0.6B",
+      embeddingGemma: "EmbeddingGemma 300M",
+      granite: "Granite 278M multilingual",
+      nomic: "Nomic Embed Text v1.5",
+      nomicV2: "Nomic Embed Text v2 MoE"
+    };
+
+    const MODEL_ORDER = ["qwen3", "qwen4", "qwen06", "embeddingGemma", "nomicV2", "granite", "nomic"];
+
+    const DATASETS = {
+      granite: {
+        vocab: "curated",
+        model: "granite",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_GRANITE
+      },
+      nomic: {
+        vocab: "curated",
+        model: "nomic",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_NOMIC
+      },
+      nomicV2: {
+        vocab: "curated",
+        model: "nomicV2",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_NOMIC_V2
+      },
+      qwen768: {
+        vocab: "curated",
+        model: "qwen3",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_QWEN3_768
+      },
+      qwen2048: {
+        vocab: "curated",
+        model: "qwen3",
+        dimension: 2048,
+        data: window.EMBEDDING_REAL_ATLAS_QWEN3_2048
+      },
+      qwen4096: {
+        vocab: "curated",
+        model: "qwen3",
+        dimension: 4096,
+        data: window.EMBEDDING_REAL_ATLAS_QWEN3_4096
+      },
+      qwen06: {
+        vocab: "curated",
+        model: "qwen06",
+        dimension: 1024,
+        data: window.EMBEDDING_REAL_ATLAS_QWEN3_06B_1024
+      },
+      qwen4: {
+        vocab: "curated",
+        model: "qwen4",
+        dimension: 2560,
+        data: window.EMBEDDING_REAL_ATLAS_QWEN3_4B_2560
+      },
+      embeddingGemma: {
+        vocab: "curated",
+        model: "embeddingGemma",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_EMBEDDING_GEMMA_768
+      },
+      largeQwen768: {
+        vocab: "frequency",
+        model: "qwen3",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_QWEN3_768
+      },
+      largeQwen2048: {
+        vocab: "frequency",
+        model: "qwen3",
+        dimension: 2048,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_QWEN3_2048
+      },
+      largeQwen4096: {
+        vocab: "frequency",
+        model: "qwen3",
+        dimension: 4096,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_QWEN3_4096
+      },
+      largeGranite: {
+        vocab: "frequency",
+        model: "granite",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_GRANITE
+      },
+      largeNomic: {
+        vocab: "frequency",
+        model: "nomic",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_NOMIC
+      },
+      largeNomicV2: {
+        vocab: "frequency",
+        model: "nomicV2",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_NOMIC_V2
+      },
+      largeQwen06: {
+        vocab: "frequency",
+        model: "qwen06",
+        dimension: 1024,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_QWEN3_06B_1024
+      },
+      largeQwen4: {
+        vocab: "frequency",
+        model: "qwen4",
+        dimension: 2560,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_QWEN3_4B_2560
+      },
+      largeEmbeddingGemma: {
+        vocab: "frequency",
+        model: "embeddingGemma",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_LARGE_EMBEDDING_GEMMA_768
+      },
+      catsGranite: {
+        vocab: "cats",
+        model: "granite",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_CATS_GRANITE
+      },
+      catsNomic: {
+        vocab: "cats",
+        model: "nomic",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_CATS_NOMIC
+      },
+      catsNomicV2: {
+        vocab: "cats",
+        model: "nomicV2",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_CATS_NOMIC_V2
+      },
+      catsQwen4096: {
+        vocab: "cats",
+        model: "qwen3",
+        dimension: 4096,
+        data: window.EMBEDDING_REAL_ATLAS_CATS_QWEN3_4096
+      },
+      catsQwen06: {
+        vocab: "cats",
+        model: "qwen06",
+        dimension: 1024,
+        data: window.EMBEDDING_REAL_ATLAS_CATS_QWEN3_06B_1024
+      },
+      catsQwen4: {
+        vocab: "cats",
+        model: "qwen4",
+        dimension: 2560,
+        data: window.EMBEDDING_REAL_ATLAS_CATS_QWEN3_4B_2560
+      },
+      catsEmbeddingGemma: {
+        vocab: "cats",
+        model: "embeddingGemma",
+        dimension: 768,
+        data: window.EMBEDDING_REAL_ATLAS_CATS_EMBEDDING_GEMMA_768
+      }
+    };
+    let activeVocab = "curated";
+    let activeDimension = 768;
+    let activeModel = "qwen3";
+    let activeDataset = "qwen768";
+    let DATA = DATASETS[activeDataset].data;
+    const canvas = document.getElementById("atlas");
+    const ctx = canvas.getContext("2d");
+    const legend = document.getElementById("legend");
+    const vocabSelect = document.getElementById("vocabSelect");
+    const dimensionSelect = document.getElementById("dimensionSelect");
+    const modelSelect = document.getElementById("modelSelect");
+    const termSelect = document.getElementById("termSelect");
+    const dictionaryNote = document.getElementById("dictionaryNote");
+    const rawMode = document.getElementById("rawMode");
+    const centeredMode = document.getElementById("centeredMode");
+    const linksMode = document.getElementById("linksMode");
+    const labelDensity = document.getElementById("labelDensity");
+    const labelValue = document.getElementById("labelValue");
+    const selectedTitle = document.getElementById("selectedTitle");
+    const selectedText = document.getElementById("selectedText");
+    const methodBox = document.getElementById("methodBox");
+    const rawNeighbors = document.getElementById("rawNeighbors");
+    const centeredNeighbors = document.getElementById("centeredNeighbors");
+    const pairGrid = document.getElementById("pairGrid");
+    const modelName = document.getElementById("modelName");
+    const vocabName = document.getElementById("vocabName");
+    const dimValue = document.getElementById("dimValue");
+    const projectionName = document.getElementById("projectionName");
+    const pcaValue = document.getElementById("pcaValue");
+    const selectedHud = document.getElementById("selectedHud");
+    const spectrumMeta = document.getElementById("spectrumMeta");
+    const spectrumBars = document.getElementById("spectrumBars");
+    const spectrumNote = document.getElementById("spectrumNote");
+    const passportModel = document.getElementById("passportModel");
+    const passportDim = document.getElementById("passportDim");
+    const passportWords = document.getElementById("passportWords");
+
+    let categoryById = new Map();
+    let pointByTerm = new Map();
+    let mode = "centered";
+    let showLinks = true;
+    let selected = "человек";
+    let dpr = 1;
+    let time = 0;
+    let autoSpin = true;
+    let manualPitch = 0;
+    let manualYaw = 0;
+    let spinYaw = 0;
+    let viewZoom = 1;
+    let lastProjected = [];
+    let dragState = null;
+    let lastTick = 0;
+    const AUTO_SPIN_SPEED = 0.000018;
+    const ROTATION_BASE = 0.43;
+
+    function refreshMaps() {
+      categoryById = new Map(DATA.categories.map((category) => [category.id, category]));
+      pointByTerm = new Map(DATA.points.map((point) => [point.term, point]));
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.max(1, Math.round(rect.width * dpr));
+      canvas.height = Math.max(1, Math.round(rect.height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function rotate3(p, ax, ay) {
+      const cy = Math.cos(ay), sy = Math.sin(ay);
+      const cx = Math.cos(ax), sx = Math.sin(ax);
+      const x1 = p[0] * cy + p[2] * sy;
+      const z1 = -p[0] * sy + p[2] * cy;
+      const y2 = p[1] * cx - z1 * sx;
+      const z2 = p[1] * sx + z1 * cx;
+      return [x1, y2, z2];
+    }
+
+    function project(p, w, h, zoomFactor) {
+      const depth = 3.2;
+      const f = Math.min(w, h) * 0.78 * zoomFactor / (depth - p[2]);
+      return [w / 2 + p[0] * f, h / 2 - p[1] * f, f / 260];
+    }
+
+    function percentile(sorted, q) {
+      if (!sorted.length) return 0;
+      const index = (sorted.length - 1) * q;
+      const low = Math.floor(index);
+      const high = Math.ceil(index);
+      const t = index - low;
+      return sorted[low] * (1 - t) + sorted[high] * t;
+    }
+
+    function fitProjection(items, w, h) {
+      if (items.length < 2) return;
+      const xs = items.map((item) => item.x).sort((a, b) => a - b);
+      const ys = items.map((item) => item.y).sort((a, b) => a - b);
+      const left = 42;
+      const right = 42;
+      const top = 92;
+      const bottom = 100;
+      const xMin = percentile(xs, 0.03);
+      const xMax = percentile(xs, 0.97);
+      const yMin = percentile(ys, 0.04);
+      const yMax = percentile(ys, 0.96);
+      const sourceX = (xMin + xMax) / 2;
+      const sourceY = (yMin + yMax) / 2;
+      const availableW = Math.max(1, w - left - right);
+      const availableH = Math.max(1, h - top - bottom);
+      const boxW = Math.max(1, xMax - xMin);
+      const boxH = Math.max(1, yMax - yMin);
+      const fit = clamp(Math.min(availableW / boxW, availableH / boxH), 0.84, 1.18);
+      const targetX = left + availableW / 2;
+      const targetY = top + availableH / 2;
+      for (const item of items) {
+        item.x = targetX + (item.x - sourceX) * fit;
+        item.y = targetY + (item.y - sourceY) * fit;
+      }
+    }
+
+    function colorOf(point) {
+      return categoryById.get(point.category)?.color || "#f4f7fb";
+    }
+
+    function textColorFor(color) {
+      if (document.documentElement.classList.contains("dark")) return color;
+      const replacements = {
+        "#c4ff7b": "#5c8012",
+        "#3fff62": "#108c31",
+        "#ffca58": "#8a5a00",
+        "#5fd6ff": "#08779c",
+        "#b990ff": "#6741a5",
+        "#ff00a1": "#b00070",
+        "#ff687a": "#b3203d",
+        "#7ca7ff": "#315ea8"
+      };
+      return replacements[String(color).toLowerCase()] || color;
+    }
+
+    function themeColor(name, fallback) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+    }
+
+    function background(w, h) {
+      const grad = ctx.createRadialGradient(w * 0.5, h * 0.48, 0, w * 0.5, h * 0.48, Math.max(w, h) * 0.76);
+      grad.addColorStop(0, themeColor("--viz-bg-0", "#2a2a31"));
+      grad.addColorStop(0.45, themeColor("--viz-bg-1", "#191a20"));
+      grad.addColorStop(1, themeColor("--viz-bg-2", "#111217"));
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+      ctx.globalAlpha = 0.18;
+      ctx.strokeStyle = themeColor("--viz-star", "#f4f7fb");
+      for (let i = 0; i < 80; i += 1) {
+        const x = ((i * 193) % 997) / 997 * w;
+        const y = ((i * 389) % 991) / 991 * h;
+        ctx.beginPath();
+        ctx.arc(x, y, 0.6 + (i % 3) * 0.35, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function currentNeighbors(term) {
+      return mode === "raw" ? DATA.raw_neighbors[term] : DATA.centered_neighbors[term];
+    }
+
+    function pct(value) {
+      return `${(value * 100).toFixed(1)}%`;
+    }
+
+    function currentPcaVariance() {
+      const variance = mode === "raw" ? DATA.raw_pca_variance : DATA.centered_pca_variance;
+      return variance.reduce((sum, value) => sum + value, 0);
+    }
+
+    function approx(value) {
+      return Number.isFinite(value) ? String(Math.round(value)) : String(value);
+    }
+
+    function humanDimensionMethod(method) {
+      if (!method || method === "native model output") {
+        return "родной выход модели";
+      }
+      const match = method.match(/^first (\d+) coordinates of (\d+)-dim output/);
+      if (match) {
+        return `первые ${match[1]} координат из ${match[2]}-мерного выхода; затем нормализация`;
+      }
+      return method;
+    }
+
+    function humanColoring(method) {
+      if (!method || method === "hand-picked semantic category") {
+        return "заданные смысловые категории";
+      }
+      if (method === "hand-picked local semantic category") {
+        return "локальные группы вокруг выбранной темы";
+      }
+      if (method === "nearest human-named semantic lens in centered embedding space") {
+        return "ближайшая человекочитаемая смысловая линза в центрированном пространстве";
+      }
+      return method;
+    }
+
+    function dictionaryDescription() {
+      if (activeVocab === "frequency") {
+        return "<strong>Большой словарь</strong> собран из частотных лемм русского языка. Лемма — словарная форма: «кошки» -> «кошка», «начался» -> «начаться». Поэтому здесь есть предметы, признаки, действия и связки живого языка.";
+      }
+      if (activeVocab === "cats") {
+        return "<strong>Учимся на кошках</strong> — ручной словарь вокруг одного слова: питомцы, действия, предметы, признаки и дикие родственники.";
+      }
+      return "<strong>Базовый словарь</strong> — небольшой ручной набор нейтральных понятий. Он удобен для первого взгляда на облако, соседей и PCA.";
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function chooseTerm(term) {
+      selected = term;
+      termSelect.value = selected;
+      updatePanel();
+      render();
+    }
+
+    function renderSpectrum() {
+      const spec = DATA.spectrum?.[mode];
+      if (!spec) {
+        spectrumMeta.innerHTML = "";
+        spectrumBars.innerHTML = "";
+        spectrumNote.textContent = "SVD-диагностика для этого набора ещё не рассчитана.";
+        return;
+      }
+
+      const modeLabel = mode === "raw" ? "до центрирования" : "после центрирования";
+      spectrumMeta.innerHTML = [
+        `<span>режим: ${modeLabel}</span>`,
+        `<span>ось 1: ${pct(spec.top1_energy)} разброса</span>`,
+        `<span>оси 1-3: ${pct(spec.top3_energy)} разброса</span>`,
+        `<span>оси 1-10: ${pct(spec.top10_energy)} разброса</span>`,
+        `<span>заметных осей примерно ${approx(spec.effective_rank)} / ${spec.max_rank}</span>`
+      ].join("");
+
+      const topEnergy = Math.max(...spec.top.map((row) => row.energy), 0.000001);
+      spectrumBars.innerHTML = spec.top.slice(0, 18).map((row) => {
+        const width = Math.max(1, row.energy / topEnergy * 100);
+        return `
+          <div class="bar-row">
+            <div>ось ${row.index}</div>
+            <div class="bar-track"><div class="bar-fill" style="width:${width}%"></div></div>
+            <div class="bar-value"><span>${pct(row.energy)}</span><span class="bar-unit"> разброса</span></div>
+          </div>
+        `;
+      }).join("");
+
+      const scopeNote = DATA.vocabulary?.id === "frequency"
+        ? "Здесь спектр посчитан по большому, но всё равно выбранному словарю из 2500 слов."
+        : "Здесь спектр посчитан по маленькому выбранному словарю; он показывает форму этого примера. Для оценки всей модели нужен гораздо больший корпус.";
+      spectrumNote.textContent = `${scopeNote} SVD раскладывает всё облако на независимые оси. Процент рядом с осью показывает, какая доля общего разброса слов приходится на это направление. Например, если ось 1 даёт 65%, значит большая часть облака вытянута вдоль одного общего направления. Это число описывает геометрию выбранного набора: 65% его разброса. “Заметные оси” — грубая оценка того, сколько направлений реально участвует в форме облака.`;
+    }
+
+    function buildLabelTerms(projected, labelCut) {
+      const neighborRows = currentNeighbors(selected).slice(0, 8);
+      const fixed = new Set([selected, ...(showLinks ? neighborRows.map((row) => row.term) : [])]);
+      if (labelCut <= 0) return fixed;
+
+      const total = DATA.points.length;
+      const maxLabels = total > 500
+        ? Math.min(140, Math.max(45, Math.round(total * 0.06)))
+        : Math.min(total, Math.max(16, Math.round(total * 0.45)));
+      const target = Math.min(total, Math.max(fixed.size, fixed.size + Math.round((maxLabels - fixed.size) * Math.pow(labelCut, 1.12))));
+      if (fixed.size >= target) return fixed;
+
+      const selectedPoint = pointByTerm.get(selected);
+      const neighborScore = new Map(currentNeighbors(selected).map((row, index) => [
+        row.term,
+        Math.max(0, row.score) + 0.08 / (index + 1)
+      ]));
+      const priority = (item) => {
+        const sameCategory = selectedPoint && item.point.category === selectedPoint.category ? 0.16 : 0;
+        const semanticNeighbor = neighborScore.get(item.point.term) || 0;
+        return Math.abs(item.z) * 0.58 + item.scale * 0.16 + semanticNeighbor * 0.55 + sameCategory;
+      };
+      const candidates = projected
+        .filter((item) => !fixed.has(item.point.term))
+        .sort((a, b) => priority(b) - priority(a));
+
+      for (const item of candidates) {
+        fixed.add(item.point.term);
+        if (fixed.size >= target) break;
+      }
+      return fixed;
+    }
+
+    function render() {
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      const r = ROTATION_BASE;
+      const zoomFactor = viewZoom;
+      const labelRaw = Number(labelDensity.value);
+      const labelMin = Number(labelDensity.min || 1);
+      const labelMax = Number(labelDensity.max || 100);
+      const labelCut = (labelRaw - labelMin) / Math.max(1, labelMax - labelMin);
+      projectionName.textContent = mode === "raw" ? "Raw PCA" : "Centered PCA";
+      const visibleVariance = currentPcaVariance();
+      pcaValue.textContent = visibleVariance < 0.15 ? `${pct(visibleVariance)} · малая доля` : pct(visibleVariance);
+
+      const ax = -0.28 + (r - 0.5) * 1.1 + manualPitch + Math.sin(time * 0.18) * 0.018;
+      const ay = 0.62 + (r - 0.5) * 2.2 + manualYaw + spinYaw;
+      background(w, h);
+
+      const projected = DATA.points.map((point) => {
+        const coords = point[mode];
+        const rotated = rotate3(coords, ax, ay);
+        const p = project(rotated, w, h, zoomFactor);
+        return { point, x: p[0], y: p[1], z: rotated[2], scale: p[2] };
+      });
+      fitProjection(projected, w, h);
+      projected.sort((a, b) => a.z - b.z);
+      lastProjected = projected;
+
+      const byTerm = new Map(projected.map((item) => [item.point.term, item]));
+      const selectedItem = byTerm.get(selected);
+
+      if (showLinks && selectedItem) {
+        const neighbors = currentNeighbors(selected).slice(0, 7);
+        ctx.save();
+        for (const row of neighbors) {
+          const item = byTerm.get(row.term);
+          if (!item) continue;
+          ctx.globalAlpha = 0.18 + Math.max(0, row.score) * 0.42;
+          ctx.strokeStyle = themeColor("--viz-star", "#f4f7fb");
+          ctx.lineWidth = 1.2 + Math.max(0, row.score) * 2.4;
+          ctx.beginPath();
+          ctx.moveTo(selectedItem.x, selectedItem.y);
+          ctx.lineTo(item.x, item.y);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      for (const item of projected) {
+        const isSelected = item.point.term === selected;
+        const isNeighbor = currentNeighbors(selected).slice(0, 8).some((row) => row.term === item.point.term);
+        const color = colorOf(item.point);
+        const radius = isSelected ? 7.8 : isNeighbor ? 5.4 : 3.2;
+        ctx.globalAlpha = isSelected ? 1 : isNeighbor ? 0.9 : 0.56;
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = isSelected ? 22 : isNeighbor ? 15 : 8;
+        ctx.beginPath();
+        ctx.arc(item.x, item.y, radius * Math.max(0.72, item.scale), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = 1;
+
+      const labelTerms = buildLabelTerms(projected, labelCut);
+      labelValue.textContent = String(labelTerms.size);
+      ctx.font = "800 14px Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      ctx.textBaseline = "middle";
+      for (const item of projected) {
+        const isSelected = item.point.term === selected;
+        if (!labelTerms.has(item.point.term)) continue;
+        ctx.fillStyle = isSelected ? "#f4f7fb" : colorOf(item.point);
+        ctx.strokeStyle = "#111217";
+        ctx.lineWidth = 5;
+        ctx.strokeText(item.point.term, item.x + 8, item.y - 6);
+        ctx.fillText(item.point.term, item.x + 8, item.y - 6);
+      }
+    }
+
+    function listNeighbors(target, rows) {
+      target.innerHTML = rows.slice(0, 6).map((row) => {
+        const point = pointByTerm.get(row.term);
+        const category = categoryById.get(point?.category || "");
+        const color = category?.color || "#f4f7fb";
+        const termColor = textColorFor(color);
+        return `<li><span class="term-pill" style="color:${termColor}">${escapeHtml(row.term)}</span> ${row.score.toFixed(4)}</li>`;
+      }).join("");
+    }
+
+    function updatePanel() {
+      const point = pointByTerm.get(selected);
+      const category = categoryById.get(point.category);
+      selectedTitle.textContent = selected;
+      selectedHud.textContent = selected;
+      selectedText.innerHTML = `Цветовая линза: <strong style="color:${textColorFor(category.color)}">${escapeHtml(category.label)}</strong>. Карта показывает 3D-тень PCA; линии и списки соседей считаются по косинусу в полном пространстве модели.`;
+      passportModel.textContent = MODELS[activeModel] || DATA.model.replace("text-embedding-", "");
+      passportDim.textContent = `${DATA.dimension}`;
+      passportWords.textContent = `${DATA.points.length}`;
+      const rawVariance = DATA.raw_pca_variance.map(pct).join(", ");
+      const centeredVariance = DATA.centered_pca_variance.map(pct).join(", ");
+      methodBox.innerHTML = `
+        <h3>Как читать эту карту</h3>
+        <dl>
+          <div>
+            <dt>Точки</dt>
+            <dd>слова из выбранного словаря, спроецированные из ${escapeHtml(DATA.dimension)} измерений в 3D.</dd>
+          </div>
+          <div>
+            <dt>Линии</dt>
+            <dd>ближайшие соседи по косинусу в исходном пространстве модели.</dd>
+          </div>
+          <div>
+            <dt>Цвета</dt>
+            <dd>${escapeHtml(humanColoring(DATA.vocabulary?.coloring))}.</dd>
+          </div>
+          <div>
+            <dt>Размерность</dt>
+            <dd>${escapeHtml(humanDimensionMethod(DATA.dimension_method))}.</dd>
+          </div>
+          <div>
+            <dt>PCA</dt>
+            <dd>метод главных компонент: он выбирает три направления, где облако сильнее всего разъехалось, и делает из них видимую 3D-карту. В эти три оси попало: до центрирования ${escapeHtml(rawVariance)}, после центрирования ${escapeHtml(centeredVariance)}.</dd>
+          </div>
+        </dl>
+      `;
+      listNeighbors(rawNeighbors, DATA.raw_neighbors[selected]);
+      listNeighbors(centeredNeighbors, DATA.centered_neighbors[selected]);
+      renderPairs();
+      renderSpectrum();
+    }
+
+    function canvasPoint(event) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+    }
+
+    function pickPoint(event) {
+      const p = canvasPoint(event);
+      let best = null;
+      let bestScore = Infinity;
+      for (let i = lastProjected.length - 1; i >= 0; i -= 1) {
+        const item = lastProjected[i];
+        const dx = item.x - p.x;
+        const dy = item.y - p.y;
+        const distance = Math.hypot(dx, dy);
+        const threshold = 14 + 10 * Math.max(0.72, item.scale);
+        if (distance <= threshold && distance < bestScore) {
+          best = item;
+          bestScore = distance;
+        }
+      }
+      if (best) {
+        chooseTerm(best.point.term);
+        return true;
+      }
+      return false;
+    }
+
+    function renderPairs() {
+      const raw = new Map(DATA.raw_pairs.map((row) => [`${row.a} / ${row.b}`, row.score]));
+      const centered = new Map(DATA.centered_pairs.map((row) => [`${row.a} / ${row.b}`, row.score]));
+      let html = `<div class="head">Пара</div><div class="head">raw</div><div class="head">centered</div>`;
+      for (const [label, rawScore] of raw.entries()) {
+        html += `<div>${label}</div>`;
+        html += `<div class="num">${rawScore.toFixed(4)}</div>`;
+        html += `<div class="num">${(centered.get(label) || 0).toFixed(4)}</div>`;
+      }
+      pairGrid.innerHTML = html;
+    }
+
+    function datasetsForVocab(vocab = activeVocab) {
+      return Object.entries(DATASETS).filter(([, record]) => record.vocab === vocab && record.data);
+    }
+
+    function dimensionsForVocab(vocab = activeVocab) {
+      return [...new Set(datasetsForVocab(vocab).map(([, record]) => record.dimension))]
+        .sort((a, b) => a - b);
+    }
+
+    function modelsForDimension(vocab = activeVocab, dimension = activeDimension) {
+      return datasetsForVocab(vocab)
+        .filter(([, record]) => record.dimension === dimension)
+        .sort(([, a], [, b]) => MODEL_ORDER.indexOf(a.model) - MODEL_ORDER.indexOf(b.model));
+    }
+
+    function datasetKeyFor(vocab = activeVocab, dimension = activeDimension, model = activeModel) {
+      return datasetsForVocab(vocab)
+        .find(([, record]) => record.dimension === dimension && record.model === model)?.[0];
+    }
+
+    function syncActiveDataset() {
+      const available = datasetsForVocab();
+      let dimensions = dimensionsForVocab();
+      if (!dimensions.includes(activeDimension)) {
+        const sameModel = available
+          .filter(([, record]) => record.model === activeModel)
+          .sort(([, a], [, b]) => b.dimension - a.dimension)[0];
+        activeDimension = sameModel?.[1].dimension || (dimensions.includes(768) ? 768 : dimensions[0]);
+      }
+
+      let models = modelsForDimension();
+      if (!models.some(([, record]) => record.model === activeModel)) {
+        activeModel = models.find(([, record]) => record.model === "qwen3")?.[1].model || models[0]?.[1].model;
+      }
+
+      activeDataset = datasetKeyFor() || models[0]?.[0];
+      DATA = DATASETS[activeDataset].data;
+      activeDimension = DATASETS[activeDataset].dimension;
+      activeModel = DATASETS[activeDataset].model;
+    }
+
+    function rebuildChoices() {
+      legend.innerHTML = "";
+      termSelect.innerHTML = "";
+      modelName.textContent = MODELS[activeModel] || DATA.model.replace("text-embedding-", "");
+      vocabName.textContent = VOCABULARIES[activeVocab] || activeVocab;
+      dimValue.textContent = String(DATA.dimension);
+      dictionaryNote.innerHTML = dictionaryDescription();
+      for (const category of DATA.categories) {
+        const item = document.createElement("span");
+        item.innerHTML = `<span class="dot" style="background:${category.color}; color:${category.color}"></span>${category.label}`;
+        legend.appendChild(item);
+      }
+      for (const point of [...DATA.points].sort((a, b) => a.term.localeCompare(b.term, "ru"))) {
+        const option = document.createElement("option");
+        option.value = point.term;
+        option.textContent = point.term;
+        termSelect.appendChild(option);
+      }
+      if (!pointByTerm.has(selected)) {
+        selected = pointByTerm.has("человек") ? "человек" : DATA.points[0].term;
+      }
+      termSelect.value = selected;
+    }
+
+    function rebuildDimensionChoices() {
+      syncActiveDataset();
+      dimensionSelect.innerHTML = "";
+      for (const dimension of dimensionsForVocab()) {
+        const option = document.createElement("option");
+        option.value = String(dimension);
+        option.textContent = `${dimension} измерений`;
+        dimensionSelect.appendChild(option);
+      }
+      dimensionSelect.value = String(activeDimension);
+    }
+
+    function rebuildModelChoices() {
+      syncActiveDataset();
+      modelSelect.innerHTML = "";
+      for (const [, record] of modelsForDimension()) {
+        const option = document.createElement("option");
+        option.value = record.model;
+        option.textContent = MODELS[record.model] || record.model;
+        modelSelect.appendChild(option);
+      }
+      modelSelect.value = activeModel;
+    }
+
+    function build() {
+      for (const [key, label] of Object.entries(VOCABULARIES)) {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = label;
+        vocabSelect.appendChild(option);
+      }
+      vocabSelect.value = activeVocab;
+      rebuildDimensionChoices();
+      rebuildModelChoices();
+      refreshMaps();
+      rebuildChoices();
+      updatePanel();
+    }
+
+    function setMode(next) {
+      mode = next;
+      rawMode.classList.toggle("active", mode === "raw");
+      centeredMode.classList.toggle("active", mode === "centered");
+      updatePanel();
+      render();
+    }
+
+    rawMode.addEventListener("click", () => setMode("raw"));
+    centeredMode.addEventListener("click", () => setMode("centered"));
+    linksMode.addEventListener("click", () => {
+      showLinks = !showLinks;
+      linksMode.classList.toggle("active", showLinks);
+      linksMode.textContent = showLinks ? "Соседи вкл" : "Соседи выкл";
+      render();
+    });
+    termSelect.addEventListener("change", () => {
+      chooseTerm(termSelect.value);
+    });
+    vocabSelect.addEventListener("change", () => {
+      activeVocab = vocabSelect.value;
+      rebuildDimensionChoices();
+      rebuildModelChoices();
+      refreshMaps();
+      rebuildChoices();
+      updatePanel();
+      render();
+    });
+    dimensionSelect.addEventListener("change", () => {
+      activeDimension = Number(dimensionSelect.value);
+      rebuildModelChoices();
+      refreshMaps();
+      rebuildChoices();
+      updatePanel();
+      render();
+    });
+    modelSelect.addEventListener("change", () => {
+      activeModel = modelSelect.value;
+      syncActiveDataset();
+      refreshMaps();
+      rebuildChoices();
+      updatePanel();
+      render();
+    });
+    canvas.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const direction = event.deltaY < 0 ? 1 : -1;
+      viewZoom = clamp(viewZoom + direction * 0.08, 0.45, 2.4);
+      render();
+    }, { passive: false });
+    canvas.addEventListener("pointerdown", (event) => {
+      const p = canvasPoint(event);
+      dragState = {
+        id: event.pointerId,
+        startX: p.x,
+        startY: p.y,
+        lastX: p.x,
+        lastY: p.y,
+        moved: 0
+      };
+      autoSpin = false;
+      canvas.classList.add("dragging");
+      canvas.setPointerCapture(event.pointerId);
+    });
+    canvas.addEventListener("pointermove", (event) => {
+      if (!dragState || dragState.id !== event.pointerId) return;
+      const p = canvasPoint(event);
+      const dx = p.x - dragState.lastX;
+      const dy = p.y - dragState.lastY;
+      dragState.lastX = p.x;
+      dragState.lastY = p.y;
+      dragState.moved += Math.abs(dx) + Math.abs(dy);
+      if (dragState.moved > 2) {
+        manualYaw += dx * 0.006;
+        manualPitch = clamp(manualPitch + dy * 0.006, -1.35, 1.35);
+        render();
+      }
+    });
+    canvas.addEventListener("pointerup", (event) => {
+      if (!dragState || dragState.id !== event.pointerId) return;
+      const wasClick = dragState.moved < 7;
+      dragState = null;
+      autoSpin = true;
+      canvas.classList.remove("dragging");
+      canvas.releasePointerCapture(event.pointerId);
+      if (wasClick) pickPoint(event);
+    });
+    canvas.addEventListener("pointercancel", (event) => {
+      if (!dragState || dragState.id !== event.pointerId) return;
+      dragState = null;
+      autoSpin = true;
+      canvas.classList.remove("dragging");
+    });
+    labelDensity.addEventListener("input", render);
+    window.addEventListener("resize", () => {
+      resize();
+      render();
+    });
+    window.addEventListener("lab-theme-change", () => {
+      updatePanel();
+      render();
+    });
+
+    function tick(now) {
+      const dt = lastTick ? Math.min(48, now - lastTick) : 16;
+      lastTick = now;
+      time += dt / 1000;
+      if (autoSpin) {
+        spinYaw += dt * AUTO_SPIN_SPEED;
+      }
+      render();
+      requestAnimationFrame(tick);
+    }
+
+    build();
+    resize();
+    tick();
+  </script>
+</body>
+</html>

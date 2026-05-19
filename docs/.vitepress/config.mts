@@ -1,9 +1,10 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'NOUZ — структурная память для Obsidian и ИИ-агентов',
-  description: 'NOUZ помогает ИИ-агентам работать с Obsidian-базой как со структурой: находить нужные заметки, связи и контекст.',
+  title: 'Семиотроника — инструменты для ИИ-систем',
+  description: 'NOUZ и лаборатория для графов знаний, эмбеддингов и агентной навигации.',
   cleanUrls: true,
+  appearance: true,
   sitemap: {
     hostname: 'https://semiotronika.ru',
   },
@@ -11,11 +12,11 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
-    ['meta', { name: 'keywords', content: 'NOUZ, MCP server, Obsidian MCP, semantic knowledge graph, Markdown knowledge base, AI agents, semantic memory, knowledge graph, embeddings, локальный граф знаний, семантическая память' }],
+    ['meta', { name: 'keywords', content: 'Semiotronika, Семиотроника, NOUZ, AI agents, RAG, MCP, knowledge base, Obsidian MCP, semantic knowledge graph, Markdown knowledge base, embeddings, базы знаний, ИИ-агенты, локальный граф знаний' }],
     ['meta', { name: 'author', content: 'Semiotronika' }],
     ['meta', { name: 'robots', content: 'index, follow' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:site_name', content: 'NOUZ' }],
+    ['meta', { property: 'og:site_name', content: 'Semiotronika' }],
     ['meta', { property: 'og:image', content: 'https://semiotronika.ru/favicon.png' }],
     ['meta', { name: 'twitter:card', content: 'summary' }],
     ['meta', { name: 'twitter:image', content: 'https://semiotronika.ru/favicon.png' }],
@@ -31,8 +32,8 @@ export default defineConfig({
     const canonical = new URL(normalizedPath, 'https://semiotronika.ru').toString()
     const ruSeo: Record<string, { title: string; description: string }> = {
       '/': {
-        title: 'NOUZ — MCP-сервер для Obsidian и ИИ-агентов',
-        description: 'NOUZ превращает Obsidian и Markdown-базу в локальный граф знаний для ИИ-агентов: связи, контекст, YAML-разметка, SQLite-индекс и предложения без автопереписывания.',
+        title: 'Семиотроника — инструменты для ИИ-систем',
+        description: 'NOUZ и лаборатория для графов знаний, эмбеддингов и агентной навигации.',
       },
       '/nouz/quick-start': {
         title: 'Быстрый старт NOUZ — подключить Obsidian к MCP-клиенту',
@@ -65,8 +66,8 @@ export default defineConfig({
     }
     const enSeo: Record<string, { title: string; description: string }> = {
       '/en/': {
-        title: 'NOUZ — MCP server for Obsidian and AI agents',
-        description: 'NOUZ turns an Obsidian or Markdown knowledge base into a local graph for AI agents: links, context, YAML metadata, SQLite index, and reviewed suggestions.',
+        title: 'Semiotronika — tools for AI systems',
+        description: 'NOUZ and a laboratory for knowledge graphs, embeddings, and agent navigation.',
       },
       '/en/nouz/quick-start': {
         title: 'NOUZ Quick Start — connect Obsidian to an MCP client',
@@ -100,28 +101,42 @@ export default defineConfig({
     const seo = (isEnglish ? enSeo : ruSeo)[normalizedPath] || (isEnglish ? enSeo['/en/'] : ruSeo['/'])
     const title = seo.title
     const description = seo.description
-    const jsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'SoftwareApplication',
-      name: 'NOUZ',
-      applicationCategory: 'DeveloperApplication',
-      operatingSystem: 'Windows, macOS, Linux',
-      description,
-      url: canonical,
-      codeRepository: 'https://github.com/Semiotronika/NOUZ-MCP',
-      programmingLanguage: 'Python',
-      license: 'https://github.com/Semiotronika/NOUZ-MCP/blob/main/LICENSE',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-      },
-      author: {
-        '@type': 'Organization',
-        name: 'Semiotronika',
-        url: 'https://semiotronika.ru/',
-      },
-    }
+    const isHome = normalizedPath === '/' || normalizedPath === '/en/'
+    const jsonLd = isHome
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ProfessionalService',
+          name: 'Semiotronika',
+          description,
+          url: canonical,
+          areaServed: 'Worldwide',
+          founder: {
+            '@type': 'Person',
+            name: 'Maria Belkina',
+          },
+        }
+      : {
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: 'NOUZ',
+          applicationCategory: 'DeveloperApplication',
+          operatingSystem: 'Windows, macOS, Linux',
+          description,
+          url: canonical,
+          codeRepository: 'https://github.com/Semiotronika/NOUZ-MCP',
+          programmingLanguage: 'Python',
+          license: 'https://github.com/Semiotronika/NOUZ-MCP/blob/main/LICENSE',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+          },
+          author: {
+            '@type': 'Organization',
+            name: 'Semiotronika',
+            url: 'https://semiotronika.ru/',
+          },
+        }
 
     return [
       ['link', { rel: 'canonical', href: canonical }],
@@ -142,7 +157,7 @@ export default defineConfig({
       .replace(/\.md$/, '')
     const normalizedPath = routePath ? `/${routePath}` : '/'
     const titles: Record<string, string> = {
-      '/': 'NOUZ — MCP-сервер для Obsidian и ИИ-агентов',
+      '/': 'Семиотроника — инструменты для ИИ-систем',
       '/nouz/quick-start': 'Быстрый старт NOUZ — подключить Obsidian к MCP-клиенту',
       '/nouz/for-agents': 'NOUZ для ИИ-агентов — краткий контекст проекта и MCP-сценарии',
       '/nouz/configuration': 'Конфигурация NOUZ — режимы, эталоны, эмбеддинги и переменные окружения',
@@ -150,7 +165,7 @@ export default defineConfig({
       '/nouz/tools': 'Инструменты MCP NOUZ — read_file, suggest_metadata, recalc_signs',
       '/nouz/use-cases': 'Сценарии NOUZ — структурная память для Obsidian, Markdown и командных баз',
       '/nouz/etalon-quality': 'Качество эталонов NOUZ — cosine, mean-centering и разделимость доменов',
-      '/en/': 'NOUZ — MCP server for Obsidian and AI agents',
+      '/en/': 'Semiotronika — tools for AI systems',
       '/en/nouz/quick-start': 'NOUZ Quick Start — connect Obsidian to an MCP client',
       '/en/nouz/for-agents': 'NOUZ for AI Agents — compact project context and MCP scenarios',
       '/en/nouz/configuration': 'NOUZ Configuration — modes, etalons, embeddings, environment variables',
@@ -175,7 +190,7 @@ export default defineConfig({
       .replace(/\.md$/, '')
     const normalizedPath = routePath ? `/${routePath}` : '/'
     const titles: Record<string, string> = {
-      '/': 'NOUZ — MCP-сервер для Obsidian и ИИ-агентов',
+      '/': 'Семиотроника — инструменты для ИИ-систем',
       '/nouz/quick-start': 'Быстрый старт NOUZ — подключить Obsidian к MCP-клиенту',
       '/nouz/for-agents': 'NOUZ для ИИ-агентов — краткий контекст проекта и MCP-сценарии',
       '/nouz/configuration': 'Конфигурация NOUZ — режимы, эталоны, эмбеддинги и переменные окружения',
@@ -183,7 +198,7 @@ export default defineConfig({
       '/nouz/tools': 'Инструменты MCP NOUZ — read_file, suggest_metadata, recalc_signs',
       '/nouz/use-cases': 'Сценарии NOUZ — структурная память для Obsidian, Markdown и командных баз',
       '/nouz/etalon-quality': 'Качество эталонов NOUZ — cosine, mean-centering и разделимость доменов',
-      '/en/': 'NOUZ — MCP server for Obsidian and AI agents',
+      '/en/': 'Semiotronika — tools for AI systems',
       '/en/nouz/quick-start': 'NOUZ Quick Start — connect Obsidian to an MCP client',
       '/en/nouz/for-agents': 'NOUZ for AI Agents — compact project context and MCP scenarios',
       '/en/nouz/configuration': 'NOUZ Configuration — modes, etalons, embeddings, environment variables',
@@ -202,15 +217,16 @@ export default defineConfig({
       lang: 'ru',
       themeConfig: {
         nav: [
-          { text: 'Быстрый старт', link: '/nouz/quick-start' },
-          { text: 'Документация', link: '/nouz/how-it-works' },
-          { text: 'Примеры', link: '/nouz/use-cases' },
+          { text: 'Главная', link: '/' },
+          { text: 'NOUZ', link: '/nouz/use-cases' },
+          { text: 'Лаборатория', link: '/lab/' },
         ],
         sidebar: {
           '/nouz/': [
             {
               text: 'Начало работы',
               items: [
+                { text: 'Сценарии', link: '/nouz/use-cases' },
                 { text: 'Быстрый старт', link: '/nouz/quick-start' },
                 { text: 'Конфигурация', link: '/nouz/configuration' },
               ],
@@ -221,12 +237,6 @@ export default defineConfig({
                 { text: 'Как работает', link: '/nouz/how-it-works' },
                 { text: 'Инструменты MCP', link: '/nouz/tools' },
                 { text: 'Качество эталонов', link: '/nouz/etalon-quality' },
-              ],
-            },
-            {
-              text: 'Практика',
-              items: [
-                { text: 'Примеры и сценарии', link: '/nouz/use-cases' },
               ],
             },
           ],
@@ -244,15 +254,16 @@ export default defineConfig({
       lang: 'en',
       themeConfig: {
         nav: [
-          { text: 'Quick Start', link: '/en/nouz/quick-start' },
-          { text: 'Documentation', link: '/en/nouz/how-it-works' },
-          { text: 'Use Cases', link: '/en/nouz/use-cases' },
+          { text: 'Home', link: '/en/' },
+          { text: 'NOUZ', link: '/en/nouz/use-cases' },
+          { text: 'Lab', link: '/lab/' },
         ],
         sidebar: {
           '/en/nouz/': [
             {
               text: 'Getting Started',
               items: [
+                { text: 'Use Cases', link: '/en/nouz/use-cases' },
                 { text: 'Quick Start', link: '/en/nouz/quick-start' },
                 { text: 'Configuration', link: '/en/nouz/configuration' },
               ],
@@ -263,12 +274,6 @@ export default defineConfig({
                 { text: 'How NOUZ Works', link: '/en/nouz/how-it-works' },
                 { text: 'MCP Tools', link: '/en/nouz/tools' },
                 { text: 'Etalon Quality', link: '/en/nouz/etalon-quality' },
-              ],
-            },
-            {
-              text: 'Practice',
-              items: [
-                { text: 'Use Cases', link: '/en/nouz/use-cases' },
               ],
             },
           ],
@@ -288,6 +293,12 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/Semiotronika/NOUZ-MCP' },
+      {
+        icon: {
+          svg: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.86 4.54 18.65 19.7c-.24 1.07-.87 1.33-1.76.83l-4.86-3.58-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.96 9.03-8.16c.39-.35-.09-.54-.61-.2L6.32 13.4l-4.8-1.5c-1.04-.33-1.06-1.04.22-1.54L20.5 3.13c.87-.32 1.63.21 1.36 1.41Z"/></svg>',
+        },
+        link: 'https://t.me/Masha_Belkina',
+      },
     ],
 
     search: false,
