@@ -24,10 +24,10 @@ pageClass: lab-page
   <section class="lab-soon">
     <div class="lab-soon__main">
       <p class="lab-soon__eyebrow">Coming next</p>
-      <h2>The English lab is being rebuilt with its own data.</h2>
+      <h2>The English lab is being prepared with its own data.</h2>
       <p>
         The current laboratory works with real embeddings and Russian vocabularies.
-        A proper English version needs English word lists, recalculated vectors,
+        A proper version needs its own word lists, recalculated vectors,
         checked nearest neighbors, and the same careful projection notes.
       </p>
       <div class="lab-soon__actions">
@@ -38,14 +38,14 @@ pageClass: lab-page
     <div class="lab-soon__notes" aria-label="What is being prepared">
       <div>
         <strong>Real vectors</strong>
-        <span>English datasets will be generated from embedding models, not drawn by hand.</span>
+        <span>English datasets will be generated from embedding models.</span>
       </div>
       <div>
         <strong>Own vocabularies</strong>
         <span>Word sets, neighbors, and clusters need to fit English language structure.</span>
       </div>
       <div>
-        <strong>Same honesty</strong>
+        <strong>Same care</strong>
         <span>The 3D view will remain a projection, with full-space cosine neighbors shown separately.</span>
       </div>
     </div>

@@ -44,7 +44,7 @@ pageClass: lab-page
         <span>The interface, labels, and teaching cards should speak one language at a time.</span>
       </div>
       <div>
-        <strong>Reusable basis</strong>
+        <strong>Shared shell</strong>
         <span>Once the English data is ready, the same lab shell can host both versions cleanly.</span>
       </div>
     </div>
