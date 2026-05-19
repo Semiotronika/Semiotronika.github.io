@@ -640,20 +640,24 @@
       }
 
       .tabs {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .control-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 92px minmax(0, 1fr) 62px;
       }
 
       .value {
-        text-align: left;
+        text-align: right;
+      }
+
+      .control-hint {
+        display: none;
       }
 
       .visual,
       svg {
-        min-height: 560px;
+        min-height: 420px;
       }
 
     }
@@ -679,9 +683,30 @@
         padding: 14px;
       }
 
+      .controls {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      button {
+        min-height: 38px;
+        padding: 8px 7px;
+        font-size: 13px;
+      }
+
+      .control-row {
+        grid-template-columns: 78px minmax(0, 1fr) 56px;
+        gap: 8px;
+      }
+
+      label,
+      .value {
+        font-size: 12px;
+      }
+
       .visual,
       svg {
-        min-height: 500px;
+        min-height: 340px;
       }
     }
   </style>

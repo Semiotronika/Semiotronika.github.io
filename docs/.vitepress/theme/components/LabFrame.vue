@@ -7,7 +7,7 @@ const props = defineProps<{
   title: string
 }>()
 
-const LAB_ENGINE_VERSION = '20260519-touch-zoom-quiet'
+const LAB_ENGINE_VERSION = '20260519-mobile-zoom-slider'
 const versionedSrc = computed(() => {
   const joiner = props.src.includes('?') ? '&' : '?'
   return `${props.src}${joiner}v=${LAB_ENGINE_VERSION}`

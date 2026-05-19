@@ -473,6 +473,30 @@
       backdrop-filter: blur(8px);
     }
 
+    .mobile-zoom {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 76px;
+      z-index: 3;
+      display: none;
+      grid-template-columns: 78px minmax(0, 1fr) 58px;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid rgba(244, 247, 251, 0.38);
+      background: rgba(27, 27, 31, 0.78);
+      border-radius: 8px;
+      padding: 8px;
+      backdrop-filter: blur(8px);
+    }
+
+    .mobile-zoom label,
+    .mobile-zoom .value {
+      color: rgba(244, 247, 251, 0.84);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
     .dot {
       width: 10px;
       height: 10px;
@@ -1016,6 +1040,10 @@
         font-size: 11.5px;
       }
 
+      .mobile-zoom {
+        display: grid;
+      }
+
       .panel,
       .controls,
       .tables,
@@ -1131,6 +1159,11 @@
           <span class="pill">выбрано: <strong id="selectedHud">человек</strong></span>
         </div>
         <div class="legend" id="legend"></div>
+        <div class="mobile-zoom" aria-label="Масштаб облака">
+          <label for="mobileZoom">Масштаб</label>
+          <input id="mobileZoom" type="range" min="45" max="240" value="100">
+          <div id="mobileZoomValue" class="value">1.00x</div>
+        </div>
       </section>
 
       <aside class="panel">
@@ -1445,6 +1478,8 @@
     const linksMode = document.getElementById("linksMode");
     const labelDensity = document.getElementById("labelDensity");
     const labelValue = document.getElementById("labelValue");
+    const mobileZoom = document.getElementById("mobileZoom");
+    const mobileZoomValue = document.getElementById("mobileZoomValue");
     const selectedTitle = document.getElementById("selectedTitle");
     const selectedText = document.getElementById("selectedText");
     const methodBox = document.getElementById("methodBox");
@@ -1882,6 +1917,18 @@
       return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
     }
 
+    function syncZoomControl() {
+      if (!mobileZoom || !mobileZoomValue) return;
+      mobileZoom.value = String(Math.round(viewZoom * 100));
+      mobileZoomValue.textContent = `${viewZoom.toFixed(2)}x`;
+    }
+
+    function setViewZoom(value) {
+      viewZoom = clamp(value, 0.45, 2.4);
+      syncZoomControl();
+      render();
+    }
+
     function startPinch() {
       if (activePointers.size < 2) return;
       const points = Array.from(activePointers.values()).slice(0, 2);
@@ -2079,6 +2126,7 @@
       refreshMaps();
       rebuildChoices();
       updatePanel();
+      syncZoomControl();
     }
 
     function setMode(next) {
@@ -2128,8 +2176,7 @@
     canvas.addEventListener("wheel", (event) => {
       event.preventDefault();
       const direction = event.deltaY < 0 ? 1 : -1;
-      viewZoom = clamp(viewZoom + direction * 0.08, 0.45, 2.4);
-      render();
+      setViewZoom(viewZoom + direction * 0.08);
     }, { passive: false });
     canvas.addEventListener("pointerdown", (event) => {
       const p = canvasPoint(event);
@@ -2163,8 +2210,7 @@
             startZoom: viewZoom
           };
         }
-        viewZoom = clamp(pinchState.startZoom * (distance / pinchState.startDistance), 0.45, 2.4);
-        render();
+        setViewZoom(pinchState.startZoom * (distance / pinchState.startDistance));
         return;
       }
       if (!dragState || dragState.id !== event.pointerId) return;
@@ -2204,8 +2250,7 @@
       if (event.touches.length < 2 || !touchPinchState) return;
       event.preventDefault();
       const distance = Math.max(1, touchDistance(event.touches));
-      viewZoom = clamp(touchPinchState.startZoom * (distance / touchPinchState.startDistance), 0.45, 2.4);
-      render();
+      setViewZoom(touchPinchState.startZoom * (distance / touchPinchState.startDistance));
     }, { passive: false });
     canvas.addEventListener("touchend", (event) => {
       if (event.touches.length >= 2) return;
@@ -2224,6 +2269,9 @@
       }
     }, { passive: false });
     labelDensity.addEventListener("input", render);
+    mobileZoom?.addEventListener("input", () => {
+      setViewZoom(Number(mobileZoom.value) / 100);
+    });
     window.addEventListener("resize", () => {
       resize();
       render();
