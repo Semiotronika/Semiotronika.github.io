@@ -528,6 +528,118 @@
   overflow: hidden;
 }
 
+.lab-soon {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 18px;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: clamp(24px, 4vw, 48px);
+  background:
+    radial-gradient(circle at 78% 18%, var(--lab-accent-soft), transparent 28%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 44%),
+    var(--vp-c-bg-soft);
+}
+
+.lab-soon::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--lab-accent);
+}
+
+.lab-soon__main,
+.lab-soon__notes {
+  position: relative;
+}
+
+.lab-soon__eyebrow {
+  margin: 0 0 14px;
+  color: var(--vp-c-text-3);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.vp-doc .lab-soon h2 {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  max-width: 780px;
+  font-size: clamp(1.8rem, 4vw, 3.6rem);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.vp-doc .lab-soon p:not(.lab-soon__eyebrow) {
+  max-width: 720px;
+  margin: 20px 0 0;
+  color: var(--vp-c-text-2);
+  font-size: clamp(0.98rem, 1.3vw, 1.08rem);
+  line-height: 1.7;
+}
+
+.lab-soon__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.lab-soon__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 999px;
+  padding: 10px 18px;
+  color: var(--vp-c-text-1);
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+
+.lab-soon__button:hover,
+.lab-soon__button--primary {
+  border-color: var(--lab-accent);
+  color: var(--lab-accent-strong);
+  background: var(--lab-accent-soft);
+  text-decoration: none;
+}
+
+.lab-soon__notes {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.lab-soon__notes div {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 16px;
+  background: color-mix(in srgb, var(--vp-c-bg) 78%, transparent);
+}
+
+.lab-soon__notes strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--vp-c-text-1);
+  font-size: 0.94rem;
+}
+
+.lab-soon__notes span {
+  display: block;
+  color: var(--vp-c-text-2);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
 @media (max-width: 720px) {
   .lab-page .VPDoc .content {
     padding: 0 14px 8px;
@@ -554,6 +666,10 @@
   .lab-vp-badge {
     width: 100%;
     white-space: normal;
+  }
+
+  .lab-soon {
+    grid-template-columns: 1fr;
   }
 }
 

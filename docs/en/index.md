@@ -30,7 +30,7 @@ hero:
       <span>PCA</span>
     </div>
     <div class="portal-links">
-      <a href="/lab/">Open laboratory</a>
+      <a href="/en/lab/">Open laboratory</a>
     </div>
   </div>
 </div>

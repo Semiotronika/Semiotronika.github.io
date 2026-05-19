@@ -10,5 +10,8 @@ const { Layout } = DefaultTheme
     <template #nav-bar-content-after>
       <LocaleSwitch />
     </template>
+    <template #nav-screen-content-after>
+      <LocaleSwitch mobile />
+    </template>
   </Layout>
 </template>

@@ -97,6 +97,14 @@ export default defineConfig({
         title: 'NOUZ Etalon Quality — cosine, mean-centering, domain separation',
         description: 'How to validate NOUZ domain etalons with calibrate_cores: raw cosine, mean-centered cosine, embedding anisotropy, and self-classification.',
       },
+      '/en/lab/': {
+        title: 'Semantic Laboratory — English version in progress',
+        description: 'The English semantic laboratory is being prepared with its own vocabularies and recalculated embedding datasets.',
+      },
+      '/en/lab/cosines': {
+        title: 'Cosine Graph — English version in progress',
+        description: 'The English cosine graph is being prepared as part of the semantic laboratory.',
+      },
     }
     const seo = (isEnglish ? enSeo : ruSeo)[normalizedPath] || (isEnglish ? enSeo['/en/'] : ruSeo['/'])
     const title = seo.title
@@ -173,6 +181,8 @@ export default defineConfig({
       '/en/nouz/tools': 'NOUZ MCP Tools — read_file, suggest_metadata, recalc_signs',
       '/en/nouz/use-cases': 'NOUZ Use Cases — structured memory for Obsidian, Markdown, and team bases',
       '/en/nouz/etalon-quality': 'NOUZ Etalon Quality — cosine, mean-centering, domain separation',
+      '/en/lab/': 'Semantic Laboratory — English version in progress',
+      '/en/lab/cosines': 'Cosine Graph — English version in progress',
     }
     const title = titles[normalizedPath]
     if (!title) return code
@@ -206,6 +216,8 @@ export default defineConfig({
       '/en/nouz/tools': 'NOUZ MCP Tools — read_file, suggest_metadata, recalc_signs',
       '/en/nouz/use-cases': 'NOUZ Use Cases — structured memory for Obsidian, Markdown, and team bases',
       '/en/nouz/etalon-quality': 'NOUZ Etalon Quality — cosine, mean-centering, domain separation',
+      '/en/lab/': 'Semantic Laboratory — English version in progress',
+      '/en/lab/cosines': 'Cosine Graph — English version in progress',
     }
     const title = titles[normalizedPath]
     if (title) return { title }
@@ -256,7 +268,7 @@ export default defineConfig({
         nav: [
           { text: 'Home', link: '/en/' },
           { text: 'NOUZ', link: '/en/nouz/use-cases' },
-          { text: 'Lab', link: '/lab/' },
+          { text: 'Lab', link: '/en/lab/' },
         ],
         sidebar: {
           '/en/nouz/': [
