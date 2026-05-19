@@ -401,12 +401,18 @@
   --lab-accent: var(--vp-c-brand-1);
   --lab-accent-strong: var(--vp-c-brand-1);
   --lab-accent-soft: var(--vp-c-brand-soft);
+  --lab-tab-accent: #9CBF34;
+  --lab-tab-strong: #4F620B;
+  --lab-tab-soft: rgba(196, 255, 123, 0.24);
 }
 
 .dark .lab-page {
   --lab-accent: #C4FF7B;
   --lab-accent-strong: #DFFF9E;
   --lab-accent-soft: rgba(196, 255, 123, 0.14);
+  --lab-tab-accent: #C4FF7B;
+  --lab-tab-strong: #DFFF9E;
+  --lab-tab-soft: rgba(196, 255, 123, 0.14);
 }
 
 .dark .lab-page .VPNavBarMenuLink.active,
@@ -501,20 +507,21 @@
 }
 
 .lab-vp-tabs a {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--lab-tab-accent) 28%, var(--vp-c-divider));
+  border-radius: 999px;
+  padding: 8px 14px;
   color: var(--vp-c-text-2);
   font-size: 14px;
+  font-weight: 650;
   text-decoration: none;
   transition: border-color 0.2s, color 0.2s, background-color 0.2s;
 }
 
 .lab-vp-tabs a:hover,
 .lab-vp-tabs a.active {
-  border-color: var(--lab-accent);
-  color: var(--lab-accent-strong);
-  background: var(--lab-accent-soft);
+  border-color: var(--lab-tab-accent);
+  color: var(--lab-tab-strong);
+  background: var(--lab-tab-soft);
   text-decoration: none;
 }
 
@@ -605,11 +612,10 @@
   transition: border-color 0.2s, color 0.2s, background-color 0.2s;
 }
 
-.lab-soon__button:hover,
-.lab-soon__button--primary {
-  border-color: var(--lab-accent);
-  color: var(--lab-accent-strong);
-  background: var(--lab-accent-soft);
+.lab-soon__button:hover {
+  border-color: var(--vp-c-brand-1);
+  color: #FFFFFF;
+  background: var(--vp-c-brand-1);
   text-decoration: none;
 }
 
