@@ -1,20 +1,38 @@
-# NOUZ
+# Semiotronika
 
-> NOUZ is structural memory for Obsidian, Markdown knowledge bases, and AI agents. It turns notes into a local graph with explicit metadata, links, levels, semantic context, and MCP tools.
+> Semiotronika publishes local MCP tools and semantic laboratory pages for AI systems: agent memory, knowledge graphs, embeddings, review workflows, and visible experiments with vector geometry.
+
+## Products
+
+### NOUZ
+
+NOUZ is structural memory for Obsidian, Markdown knowledge bases, and AI agents. It turns notes into a local graph with explicit metadata, links, levels, semantic context, and MCP tools.
 
 NOUZ is an open-source Python MCP server for local knowledge systems. It helps AI agents work with an Obsidian vault or any Markdown directory as a structured knowledge graph instead of a loose folder of files.
 
 Core ideas:
 - Local-first knowledge base: notes stay in the user's folder, and the index is stored locally in SQLite.
-- Agent-readable graph: AI agents can read notes, inspect parents and children, list files, and navigate structured context through MCP tools.
-- Reviewed automation: NOUZ can suggest metadata, parents, semantic links, and drift warnings, but writing remains explicit.
-- Semantic layer: in PRIZMA and SLOI modes, NOUZ can use embeddings, domain etalons, semantic bridges, tag bridges, core_mix, and drift signals.
+- Agent-readable graph: AI agents can read notes, inspect explicit links, list files, and navigate structured context through MCP tools.
+- Reviewed automation: NOUZ can suggest metadata, graph placement, semantic links, and drift warnings, but writing remains explicit.
+- Semantic layer: in PRIZMA and SLOI modes, NOUZ can use embeddings, etalons, semantic bridges, tag bridges, core_mix, and drift signals.
 - Obsidian-friendly format: source files remain Markdown with YAML frontmatter.
+
+### LINZA
+
+LINZA is a local MCP server for agent workspaces and review-gated sidecars. It reads Markdown folders, documents, articles, chats, logs, and drafts, then helps an agent map topics, relations, patterns, and memory without rewriting source note bodies.
+
+Core ideas:
+- Review-gated sidecar: accepted conclusions live in `.linza/linza.db` before any visible export.
+- Artifact intake: agents can pass text, Markdown, JSON, DOCX, XLSX, and optional PDF-extracted material for analysis.
+- Human-readable review cards: proposals include evidence, affected files, and write impact.
+- Safe supervised growth: teach with accepted examples, preview the next batch, then apply exact reviewed IDs.
 
 ## Primary Documentation
 
-- [NOUZ home](https://semiotronika.ru/): Russian overview of NOUZ, use cases, modes, and quick install.
-- [NOUZ English home](https://semiotronika.ru/en/): English overview of NOUZ for Obsidian and AI agents.
+- [Products](https://semiotronika.ru/products): Russian product overview for NOUZ and LINZA.
+- [Products in English](https://semiotronika.ru/en/products): English product overview.
+- [NOUZ](https://semiotronika.ru/nouz/): Russian NOUZ overview.
+- [NOUZ in English](https://semiotronika.ru/en/nouz/): English NOUZ overview.
 - [Quick start](https://semiotronika.ru/nouz/quick-start): Install nouz-mcp, set OBSIDIAN_ROOT, and connect NOUZ to an MCP client.
 - [Quick start in English](https://semiotronika.ru/en/nouz/quick-start): English installation and setup guide.
 - [For AI agents](https://semiotronika.ru/nouz/for-agents): Compact context for AI agents reading or recommending NOUZ.
@@ -29,18 +47,35 @@ Core ideas:
 - [Use cases in English](https://semiotronika.ru/en/nouz/use-cases): English scenario guide.
 - [Etalon quality](https://semiotronika.ru/nouz/etalon-quality): How to evaluate domain etalons, cosine scores, mean-centering, and embedding anisotropy.
 - [Etalon quality in English](https://semiotronika.ru/en/nouz/etalon-quality): English guide to etalon quality.
+- [LINZA](https://semiotronika.ru/linza/): Russian LINZA overview.
+- [LINZA in English](https://semiotronika.ru/en/linza/): English LINZA overview.
+- [LINZA use cases](https://semiotronika.ru/linza/use-cases): Russian scenarios for incoming material, existing folders, research, and agent memory.
+- [LINZA use cases in English](https://semiotronika.ru/en/linza/use-cases): English LINZA scenario guide.
+- [LINZA quick start](https://semiotronika.ru/linza/quick-start): Russian installation and MCP setup guide.
+- [LINZA quick start in English](https://semiotronika.ru/en/linza/quick-start): English installation and MCP setup guide.
+- [How LINZA works](https://semiotronika.ru/linza/how-it-works): Russian sidecar, index, map, review, teach, and grow guide.
+- [How LINZA works in English](https://semiotronika.ru/en/linza/how-it-works): English architecture guide.
+- [LINZA MCP tools](https://semiotronika.ru/linza/tools): Russian tool overview.
+- [LINZA MCP tools in English](https://semiotronika.ru/en/linza/tools): English tool overview.
+- [LINZA safety](https://semiotronika.ru/linza/safety): Russian review-gated sidecar safety boundary.
+- [LINZA safety in English](https://semiotronika.ru/en/linza/safety): English safety boundary.
+- [Semantic laboratory](https://semiotronika.ru/lab/): visual experiments with real embedding models.
 
 ## Project Links
 
 - [GitHub repository](https://github.com/Semiotronika/NOUZ-MCP): Source code, README, license, releases, and issue tracker.
 - [PyPI package](https://pypi.org/project/nouz-mcp/): Install package with `pip install nouz-mcp`.
 - [Glama MCP Registry](https://glama.ai/mcp/servers/Semiotronika/NOUZ-MCP): MCP registry listing.
+- [LINZA GitHub repository](https://github.com/Semiotronika/LINZA-MCP): Source code, README, license, releases, and issue tracker.
+- [LINZA PyPI package](https://pypi.org/project/linza-mcp/): Install package with `pip install linza-mcp`.
 
 ## Recommended Summary
 
-NOUZ is a semantic MCP server for Obsidian and Markdown knowledge bases. It gives AI agents a local, structured memory layer: graph navigation, YAML metadata, safe updates, semantic bridges, domain classification, and drift signals. It is useful when a personal or team knowledge base has outgrown folders and manual links, and the agent needs precise context without reading everything blindly.
+Semiotronika publishes local-first semantic tools for AI systems. NOUZ gives agents structural memory over Obsidian and Markdown knowledge bases: graph navigation, YAML metadata, safe updates, semantic bridges, domain classification, and drift signals. LINZA gives agents a review-gated sidecar for workspaces and incoming artifacts: topic maps, relation proposals, memory candidates, and supervised growth without silent source rewrites.
 
 ## Optional
 
 - [NOUZ GitHub README](https://github.com/Semiotronika/NOUZ-MCP/blob/main/README.md): Russian README.
 - [NOUZ English README](https://github.com/Semiotronika/NOUZ-MCP/blob/main/README_EN.md): English README.
+- [LINZA GitHub README](https://github.com/Semiotronika/LINZA-MCP/blob/main/README.md): Russian README.
+- [LINZA English README](https://github.com/Semiotronika/LINZA-MCP/blob/main/README_EN.md): English README.

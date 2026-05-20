@@ -250,7 +250,160 @@
   padding-top: 0;
 }
 
-/* === Home portal === */
+/* === Home directions === */
+.vp-doc .home-directions {
+  display: grid;
+  max-width: 1040px;
+  margin: 1.1rem 0 3.4rem;
+  border-top: 1px solid var(--vp-c-divider);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc .home-direction {
+  --direction-accent: var(--kv-core);
+  --direction-accent-strong: var(--kv-core);
+  --direction-glow: color-mix(in srgb, var(--direction-accent) 45%, transparent);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(230px, 0.55fr) minmax(0, 1fr) 240px;
+  column-gap: clamp(28px, 4vw, 48px);
+  row-gap: 14px;
+  align-items: center;
+  min-width: 0;
+  padding: 26px 0;
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+  border-bottom: 1px solid var(--vp-c-divider);
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.dark .vp-doc .home-direction {
+  --direction-accent: var(--kv-pattern);
+  --direction-accent-strong: var(--kv-pattern);
+}
+
+.vp-doc .home-direction::before,
+.vp-doc .home-direction::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  height: 2px;
+  background:
+    linear-gradient(90deg, transparent, var(--direction-accent), transparent);
+  box-shadow: 0 0 18px var(--direction-glow);
+  transform: scaleX(0.26);
+  transform-origin: center;
+}
+
+.vp-doc .home-direction::before {
+  inset: 0 0 auto;
+}
+
+.vp-doc .home-direction::after {
+  inset: auto 0 0;
+}
+
+.vp-doc .home-direction:last-child {
+  border-bottom: 0;
+}
+
+.vp-doc .home-direction:hover {
+  border-bottom-color: var(--vp-c-divider);
+  text-decoration: none;
+}
+
+.vp-doc .home-direction:hover::before,
+.vp-doc .home-direction:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.vp-doc .home-direction--lab {
+  --direction-accent: var(--kv-module);
+  --direction-accent-strong: var(--kv-module);
+}
+
+.dark .vp-doc .home-direction--lab {
+  --direction-accent: var(--kv-artifact);
+  --direction-accent-strong: var(--kv-artifact);
+}
+
+.vp-doc .home-direction__head span {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--direction-accent-strong);
+}
+
+.vp-doc .home-direction h2 {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  font-size: clamp(1.15rem, 2.2vw, 1.75rem);
+  line-height: 1.18;
+  letter-spacing: 0;
+  transition: color 0.2s;
+}
+
+.vp-doc .home-direction--lab:hover h2 {
+  color: var(--direction-accent-strong);
+}
+
+.vp-doc .home-direction p {
+  margin: 0;
+  color: var(--vp-c-text-2);
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.vp-doc .home-direction__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.vp-doc .home-direction__links span {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 999px;
+  padding: 6px 11px;
+  color: var(--vp-c-text-2);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.vp-doc .home-direction:hover .home-direction__links span {
+  border-color: color-mix(in srgb, var(--direction-accent-strong) 45%, var(--vp-c-divider));
+  color: var(--vp-c-text-1);
+}
+
+@media (max-width: 860px) {
+  .vp-doc .home-direction {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .vp-doc .home-direction__links {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .vp-doc .home-directions {
+    width: min(100%, calc(100vw - 48px));
+    max-width: calc(100vw - 48px);
+  }
+}
+
+/* === Portal/product cards === */
 .vp-doc .portal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
@@ -294,6 +447,35 @@
   --portal-accent: var(--vp-c-brand-1);
   --portal-accent-soft: var(--vp-c-brand-soft);
   --portal-strip: #C4FF7B;
+}
+
+.vp-doc .portal-card--linza {
+  --portal-accent: #448CAA;
+  --portal-accent-soft: rgba(68, 140, 170, 0.14);
+  --portal-strip: #448CAA;
+}
+
+.products-page .VPDoc .aside {
+  display: none;
+}
+
+.products-page .VPDoc .container {
+  max-width: 1120px !important;
+}
+
+.products-page .VPDoc .content,
+.products-page .VPDoc .content-container {
+  max-width: none !important;
+}
+
+.products-page .vp-doc .product-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 860px) {
+  .products-page .vp-doc .product-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .vp-doc .portal-label {

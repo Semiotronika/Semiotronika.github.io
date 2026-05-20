@@ -8,7 +8,7 @@
   "vocabulary": {
     "id": "frequency",
     "size": 2500,
-    "source": "C:\\Users\\Мария\\.zeroclaw\\workspace\\assets\\russian-freq-source.csv",
+    "source": "russian-freq-source.csv",
     "filters": "Russian lemmas; no proper names; no function words; body/medical stems excluded",
     "coloring": "nearest human-named semantic lens in centered embedding space"
   },

@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Семиотроника — инструменты для ИИ-систем',
-  description: 'NOUZ и лаборатория для графов знаний, эмбеддингов и агентной навигации.',
+  description: 'NOUZ, LINZA и лаборатория для графов знаний, эмбеддингов и агентной навигации.',
   cleanUrls: true,
   appearance: true,
   sitemap: {
@@ -12,7 +12,7 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
-    ['meta', { name: 'keywords', content: 'Semiotronika, Семиотроника, NOUZ, AI agents, RAG, MCP, knowledge base, Obsidian MCP, semantic knowledge graph, Markdown knowledge base, embeddings, базы знаний, ИИ-агенты, локальный граф знаний' }],
+    ['meta', { name: 'keywords', content: 'Semiotronika, Семиотроника, NOUZ, LINZA, AI agents, RAG, MCP, knowledge base, Obsidian MCP, semantic knowledge graph, Markdown knowledge base, embeddings, review cards, базы знаний, ИИ-агенты, локальный граф знаний' }],
     ['meta', { name: 'author', content: 'Semiotronika' }],
     ['meta', { name: 'robots', content: 'index, follow' }],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -33,7 +33,39 @@ export default defineConfig({
     const ruSeo: Record<string, { title: string; description: string }> = {
       '/': {
         title: 'Семиотроника — инструменты для ИИ-систем',
-        description: 'NOUZ и лаборатория для графов знаний, эмбеддингов и агентной навигации.',
+        description: 'NOUZ, LINZA и лаборатория для графов знаний, эмбеддингов и агентной навигации.',
+      },
+      '/products': {
+        title: 'Продукты Семиотроники — NOUZ и LINZA',
+        description: 'NOUZ и LINZA: локальные MCP-инструменты для агентской памяти, графов знаний, входящих материалов и проверяемого обучения.',
+      },
+      '/nouz/': {
+        title: 'NOUZ — структурная память для Obsidian и Markdown-базы',
+        description: 'NOUZ дает ИИ-агенту графовый контекст: YAML, уровни, связи, локальный SQLite-индекс, эталоны, semantic bridges и сигналы дрифта.',
+      },
+      '/linza/': {
+        title: 'LINZA — локальный MCP-сервер для рабочих папок и проверяемой SQLite-памяти',
+        description: 'LINZA читает Markdown-папки, документы, статьи, чаты и логи, строит карту тем и связей, показывает карточки с доказательствами и хранит подтверждения локально.',
+      },
+      '/linza/use-cases': {
+        title: 'Сценарии LINZA — входящие материалы, карта базы и память агента',
+        description: 'Когда использовать LINZA: входящие документы, старые Markdown-папки, исследовательские материалы, рабочие пространства агента и проверяемый рост памяти.',
+      },
+      '/linza/quick-start': {
+        title: 'Быстрый старт LINZA — подключить Markdown-папку к MCP-клиенту',
+        description: 'Как установить linza-mcp, выбрать папку, подключить локальные эмбеддинги через LM Studio и запустить первые карточки проверки.',
+      },
+      '/linza/how-it-works': {
+        title: 'Как работает LINZA — SQLite-база, index, map, review, teach и grow',
+        description: 'Архитектура LINZA: локальная SQLite-база, индекс, фрагменты, эмбеддинги, карточки проверки, teach/grow и безопасный preview перед применением.',
+      },
+      '/linza/tools': {
+        title: 'Инструменты MCP LINZA — agent_workspace, guide_next_steps, index_all',
+        description: 'MCP-инструменты LINZA: agent_workspace, guide_next_steps, index_all, search, review/apply, explain, context packs и счетчики локальной базы.',
+      },
+      '/linza/safety': {
+        title: 'Безопасность LINZA — локальная база с проверкой и защита исходных файлов',
+        description: 'Границы LINZA: индексация, поиск, карта, импорт и grow preview не переписывают тела исходных заметок; видимые изменения требуют review/apply.',
       },
       '/nouz/quick-start': {
         title: 'Быстрый старт NOUZ — подключить Obsidian к MCP-клиенту',
@@ -67,7 +99,39 @@ export default defineConfig({
     const enSeo: Record<string, { title: string; description: string }> = {
       '/en/': {
         title: 'Semiotronika — tools for AI systems',
-        description: 'NOUZ and a laboratory for knowledge graphs, embeddings, and agent navigation.',
+        description: 'NOUZ, LINZA, and a laboratory for knowledge graphs, embeddings, and agent navigation.',
+      },
+      '/en/products': {
+        title: 'Semiotronika Products — NOUZ and LINZA',
+        description: 'NOUZ and LINZA: local MCP tools for agent memory, knowledge graphs, incoming material, and review-gated learning.',
+      },
+      '/en/nouz/': {
+        title: 'NOUZ — structural memory for Obsidian and Markdown bases',
+        description: 'NOUZ gives an AI agent graph context: YAML, levels, links, a local SQLite index, etalons, semantic bridges, and drift signals.',
+      },
+      '/en/linza/': {
+        title: 'LINZA — local MCP server for agent workspaces and reviewed SQLite sidecars',
+        description: 'LINZA reads Markdown folders, documents, articles, chats, and logs, maps topics and relations, shows review cards, and stores accepted conclusions in a local SQLite sidecar.',
+      },
+      '/en/linza/use-cases': {
+        title: 'LINZA Use Cases — incoming material, base maps, and agent memory',
+        description: 'Use LINZA for incoming documents, old Markdown folders, research material, agent workspaces, and review-gated memory growth.',
+      },
+      '/en/linza/quick-start': {
+        title: 'LINZA Quick Start — connect a Markdown folder to an MCP client',
+        description: 'Install linza-mcp, choose a folder, connect local embeddings through LM Studio, and start with the first review cards.',
+      },
+      '/en/linza/how-it-works': {
+        title: 'How LINZA Works — sidecar, index, map, review, teach, grow',
+        description: 'LINZA architecture: local SQLite sidecar, index, text chunks, embeddings, review cards, teach/grow, and safe preview before apply.',
+      },
+      '/en/linza/tools': {
+        title: 'LINZA MCP Tools — agent_workspace, guide_next_steps, index_all',
+        description: 'LINZA MCP tools: agent_workspace, guide_next_steps, index_all, search, review/apply, explain, context packs, and sidecar counters.',
+      },
+      '/en/linza/safety': {
+        title: 'LINZA Safety Boundary — reviewed sidecar and source file protection',
+        description: 'LINZA boundaries: indexing, search, map, import, and grow preview do not rewrite source note bodies; visible changes require review/apply.',
       },
       '/en/nouz/quick-start': {
         title: 'NOUZ Quick Start — connect Obsidian to an MCP client',
@@ -110,6 +174,9 @@ export default defineConfig({
     const title = seo.title
     const description = seo.description
     const isHome = normalizedPath === '/' || normalizedPath === '/en/'
+    const isProducts = normalizedPath === '/products' || normalizedPath === '/en/products'
+    const isLinza = normalizedPath.startsWith('/linza') || normalizedPath.startsWith('/en/linza')
+    const isLab = normalizedPath.startsWith('/lab') || normalizedPath.startsWith('/en/lab')
     const jsonLd = isHome
       ? {
           '@context': 'https://schema.org',
@@ -123,17 +190,54 @@ export default defineConfig({
             name: 'Maria Belkina',
           },
         }
+      : isProducts
+        ? {
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: title,
+            description,
+            url: canonical,
+            itemListElement: [
+              {
+                '@type': 'SoftwareApplication',
+                position: 1,
+                name: 'NOUZ',
+                url: new URL(isEnglish ? '/en/nouz/' : '/nouz/', 'https://semiotronika.ru').toString(),
+                applicationCategory: 'DeveloperApplication',
+              },
+              {
+                '@type': 'SoftwareApplication',
+                position: 2,
+                name: 'LINZA',
+                url: new URL(isEnglish ? '/en/linza/' : '/linza/', 'https://semiotronika.ru').toString(),
+                applicationCategory: 'DeveloperApplication',
+              },
+            ],
+          }
+        : isLab
+          ? {
+              '@context': 'https://schema.org',
+              '@type': 'CreativeWork',
+              name: title,
+              description,
+              url: canonical,
+              author: {
+                '@type': 'Organization',
+                name: 'Semiotronika',
+                url: 'https://semiotronika.ru/',
+              },
+            }
       : {
           '@context': 'https://schema.org',
           '@type': 'SoftwareApplication',
-          name: 'NOUZ',
+          name: isLinza ? 'LINZA' : 'NOUZ',
           applicationCategory: 'DeveloperApplication',
           operatingSystem: 'Windows, macOS, Linux',
           description,
           url: canonical,
-          codeRepository: 'https://github.com/Semiotronika/NOUZ-MCP',
+          codeRepository: isLinza ? 'https://github.com/Semiotronika/LINZA-MCP' : 'https://github.com/Semiotronika/NOUZ-MCP',
           programmingLanguage: 'Python',
-          license: 'https://github.com/Semiotronika/NOUZ-MCP/blob/main/LICENSE',
+          license: isLinza ? 'https://github.com/Semiotronika/LINZA-MCP/blob/main/LICENSE' : 'https://github.com/Semiotronika/NOUZ-MCP/blob/main/LICENSE',
           offers: {
             '@type': 'Offer',
             price: '0',
@@ -166,6 +270,14 @@ export default defineConfig({
     const normalizedPath = routePath ? `/${routePath}` : '/'
     const titles: Record<string, string> = {
       '/': 'Семиотроника — инструменты для ИИ-систем',
+      '/products': 'Продукты Семиотроники — NOUZ и LINZA',
+      '/nouz/': 'NOUZ — структурная память для Obsidian и Markdown-базы',
+      '/linza/': 'LINZA — локальный MCP-сервер для рабочих папок и проверяемой SQLite-памяти',
+      '/linza/use-cases': 'Сценарии LINZA — входящие материалы, карта базы и память агента',
+      '/linza/quick-start': 'Быстрый старт LINZA — подключить Markdown-папку к MCP-клиенту',
+      '/linza/how-it-works': 'Как работает LINZA — SQLite-база, index, map, review, teach и grow',
+      '/linza/tools': 'Инструменты MCP LINZA — agent_workspace, guide_next_steps, index_all',
+      '/linza/safety': 'Безопасность LINZA — локальная база с проверкой и защита исходных файлов',
       '/nouz/quick-start': 'Быстрый старт NOUZ — подключить Obsidian к MCP-клиенту',
       '/nouz/for-agents': 'NOUZ для ИИ-агентов — краткий контекст проекта и MCP-сценарии',
       '/nouz/configuration': 'Конфигурация NOUZ — режимы, эталоны, эмбеддинги и переменные окружения',
@@ -174,6 +286,14 @@ export default defineConfig({
       '/nouz/use-cases': 'Сценарии NOUZ — структурная память для Obsidian, Markdown и командных баз',
       '/nouz/etalon-quality': 'Качество эталонов NOUZ — cosine, mean-centering и разделимость доменов',
       '/en/': 'Semiotronika — tools for AI systems',
+      '/en/products': 'Semiotronika Products — NOUZ and LINZA',
+      '/en/nouz/': 'NOUZ — structural memory for Obsidian and Markdown bases',
+      '/en/linza/': 'LINZA — local MCP server for agent workspaces and reviewed SQLite sidecars',
+      '/en/linza/use-cases': 'LINZA Use Cases — incoming material, base maps, and agent memory',
+      '/en/linza/quick-start': 'LINZA Quick Start — connect a Markdown folder to an MCP client',
+      '/en/linza/how-it-works': 'How LINZA Works — sidecar, index, map, review, teach, grow',
+      '/en/linza/tools': 'LINZA MCP Tools — agent_workspace, guide_next_steps, index_all',
+      '/en/linza/safety': 'LINZA Safety Boundary — reviewed sidecar and source file protection',
       '/en/nouz/quick-start': 'NOUZ Quick Start — connect Obsidian to an MCP client',
       '/en/nouz/for-agents': 'NOUZ for AI Agents — compact project context and MCP scenarios',
       '/en/nouz/configuration': 'NOUZ Configuration — modes, etalons, embeddings, environment variables',
@@ -201,6 +321,14 @@ export default defineConfig({
     const normalizedPath = routePath ? `/${routePath}` : '/'
     const titles: Record<string, string> = {
       '/': 'Семиотроника — инструменты для ИИ-систем',
+      '/products': 'Продукты Семиотроники — NOUZ и LINZA',
+      '/nouz/': 'NOUZ — структурная память для Obsidian и Markdown-базы',
+      '/linza/': 'LINZA — локальный MCP-сервер для рабочих папок и проверяемой SQLite-памяти',
+      '/linza/use-cases': 'Сценарии LINZA — входящие материалы, карта базы и память агента',
+      '/linza/quick-start': 'Быстрый старт LINZA — подключить Markdown-папку к MCP-клиенту',
+      '/linza/how-it-works': 'Как работает LINZA — SQLite-база, index, map, review, teach и grow',
+      '/linza/tools': 'Инструменты MCP LINZA — agent_workspace, guide_next_steps, index_all',
+      '/linza/safety': 'Безопасность LINZA — локальная база с проверкой и защита исходных файлов',
       '/nouz/quick-start': 'Быстрый старт NOUZ — подключить Obsidian к MCP-клиенту',
       '/nouz/for-agents': 'NOUZ для ИИ-агентов — краткий контекст проекта и MCP-сценарии',
       '/nouz/configuration': 'Конфигурация NOUZ — режимы, эталоны, эмбеддинги и переменные окружения',
@@ -209,6 +337,14 @@ export default defineConfig({
       '/nouz/use-cases': 'Сценарии NOUZ — структурная память для Obsidian, Markdown и командных баз',
       '/nouz/etalon-quality': 'Качество эталонов NOUZ — cosine, mean-centering и разделимость доменов',
       '/en/': 'Semiotronika — tools for AI systems',
+      '/en/products': 'Semiotronika Products — NOUZ and LINZA',
+      '/en/nouz/': 'NOUZ — structural memory for Obsidian and Markdown bases',
+      '/en/linza/': 'LINZA — local MCP server for agent workspaces and reviewed SQLite sidecars',
+      '/en/linza/use-cases': 'LINZA Use Cases — incoming material, base maps, and agent memory',
+      '/en/linza/quick-start': 'LINZA Quick Start — connect a Markdown folder to an MCP client',
+      '/en/linza/how-it-works': 'How LINZA Works — sidecar, index, map, review, teach, grow',
+      '/en/linza/tools': 'LINZA MCP Tools — agent_workspace, guide_next_steps, index_all',
+      '/en/linza/safety': 'LINZA Safety Boundary — reviewed sidecar and source file protection',
       '/en/nouz/quick-start': 'NOUZ Quick Start — connect Obsidian to an MCP client',
       '/en/nouz/for-agents': 'NOUZ for AI Agents — compact project context and MCP scenarios',
       '/en/nouz/configuration': 'NOUZ Configuration — modes, etalons, embeddings, environment variables',
@@ -230,25 +366,54 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Главная', link: '/' },
-          { text: 'NOUZ', link: '/nouz/use-cases' },
+          { text: 'Продукты', link: '/products' },
           { text: 'Лаборатория', link: '/lab/' },
         ],
         sidebar: {
           '/nouz/': [
             {
-              text: 'Начало работы',
+              text: 'Продукты',
               items: [
-                { text: 'Сценарии', link: '/nouz/use-cases' },
-                { text: 'Быстрый старт', link: '/nouz/quick-start' },
-                { text: 'Конфигурация', link: '/nouz/configuration' },
+                { text: 'NOUZ', link: '/nouz/' },
+                { text: 'LINZA', link: '/linza/' },
               ],
             },
             {
-              text: 'Устройство',
+              text: 'NOUZ',
+              items: [
+                { text: 'Обзор', link: '/nouz/' },
+                { text: 'Сценарии', link: '/nouz/use-cases' },
+                { text: 'Быстрый старт', link: '/nouz/quick-start' },
+                { text: 'Для агентов', link: '/nouz/for-agents' },
+              ],
+            },
+            {
+              text: 'Справочник',
               items: [
                 { text: 'Как работает', link: '/nouz/how-it-works' },
                 { text: 'Инструменты MCP', link: '/nouz/tools' },
+                { text: 'Конфигурация', link: '/nouz/configuration' },
                 { text: 'Качество эталонов', link: '/nouz/etalon-quality' },
+              ],
+            },
+          ],
+          '/linza/': [
+            {
+              text: 'Продукты',
+              items: [
+                { text: 'NOUZ', link: '/nouz/' },
+                { text: 'LINZA', link: '/linza/' },
+              ],
+            },
+            {
+              text: 'LINZA',
+              items: [
+                { text: 'Обзор', link: '/linza/' },
+                { text: 'Сценарии', link: '/linza/use-cases' },
+                { text: 'Быстрый старт', link: '/linza/quick-start' },
+                { text: 'Как работает', link: '/linza/how-it-works' },
+                { text: 'Инструменты MCP', link: '/linza/tools' },
+                { text: 'Безопасность', link: '/linza/safety' },
               ],
             },
           ],
@@ -267,25 +432,54 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Home', link: '/en/' },
-          { text: 'NOUZ', link: '/en/nouz/use-cases' },
+          { text: 'Products', link: '/en/products' },
           { text: 'Lab', link: '/en/lab/' },
         ],
         sidebar: {
           '/en/nouz/': [
             {
-              text: 'Getting Started',
+              text: 'Products',
               items: [
-                { text: 'Use Cases', link: '/en/nouz/use-cases' },
-                { text: 'Quick Start', link: '/en/nouz/quick-start' },
-                { text: 'Configuration', link: '/en/nouz/configuration' },
+                { text: 'NOUZ', link: '/en/nouz/' },
+                { text: 'LINZA', link: '/en/linza/' },
               ],
             },
             {
-              text: 'How It Works',
+              text: 'NOUZ',
+              items: [
+                { text: 'Overview', link: '/en/nouz/' },
+                { text: 'Use Cases', link: '/en/nouz/use-cases' },
+                { text: 'Quick Start', link: '/en/nouz/quick-start' },
+                { text: 'For Agents', link: '/en/nouz/for-agents' },
+              ],
+            },
+            {
+              text: 'Reference',
               items: [
                 { text: 'How NOUZ Works', link: '/en/nouz/how-it-works' },
                 { text: 'MCP Tools', link: '/en/nouz/tools' },
+                { text: 'Configuration', link: '/en/nouz/configuration' },
                 { text: 'Etalon Quality', link: '/en/nouz/etalon-quality' },
+              ],
+            },
+          ],
+          '/en/linza/': [
+            {
+              text: 'Products',
+              items: [
+                { text: 'NOUZ', link: '/en/nouz/' },
+                { text: 'LINZA', link: '/en/linza/' },
+              ],
+            },
+            {
+              text: 'LINZA',
+              items: [
+                { text: 'Overview', link: '/en/linza/' },
+                { text: 'Use Cases', link: '/en/linza/use-cases' },
+                { text: 'Quick Start', link: '/en/linza/quick-start' },
+                { text: 'How It Works', link: '/en/linza/how-it-works' },
+                { text: 'MCP Tools', link: '/en/linza/tools' },
+                { text: 'Safety Boundary', link: '/en/linza/safety' },
               ],
             },
           ],
@@ -304,7 +498,7 @@ export default defineConfig({
     siteTitle: 'Σ',
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/Semiotronika/NOUZ-MCP' },
+      { icon: 'github', link: 'https://github.com/Semiotronika' },
       {
         icon: {
           svg: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.86 4.54 18.65 19.7c-.24 1.07-.87 1.33-1.76.83l-4.86-3.58-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.96 9.03-8.16c.39-.35-.09-.54-.61-.2L6.32 13.4l-4.8-1.5c-1.04-.33-1.06-1.04.22-1.54L20.5 3.13c.87-.32 1.63.21 1.36 1.41Z"/></svg>',

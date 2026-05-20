@@ -4,19 +4,20 @@ NOUZ is useful in two different situations: when a knowledge base is just beginn
 
 ## Who It Is For
 
-NOUZ makes sense when a knowledge base has grown beyond a simple folder of notes: it has domains, levels, recurring topics, decisions, logs, project documentation, or working materials.
+NOUZ makes sense when a base needs structure for an agent: levels, links, YAML metadata, navigation, and a local index. The size of the base is not the main criterion.
 
 Good fit:
 
+- a new base from day one, if you want to keep it structured in LUCA mode: Markdown, YAML, parents, children, and navigation without embeddings;
 - developers and teams who need MCP access to living project memory;
 - Obsidian users whose vault already has some links, while many relationships still live only in their head;
-- bases where it matters to distinguish structure from content: what a note was meant to be, and what it actually talks about.
+- large or uneven bases where etalons, drift, semantic bridges, and the gap between metadata and content matter.
 
-Not the best fit:
+May be unnecessary:
 
-- a small vault of 20–30 notes without stable themes;
-- if all you need is full-text search;
-- if you are not ready to define domains once and check etalon quality.
+- a folder that will stay small and simple: 20-30 notes, no graph, no agent workflow, no expected growth;
+- if all you need is full-text search over text;
+- if YAML, links, and minimal structure are not part of the workflow.
 
 ## New Knowledge Base
 
@@ -45,7 +46,7 @@ tags:
 ---
 ```
 
-What the agent gets:
+What the agent can do:
 
 ```text
 suggest_metadata("New Note.md")
@@ -71,7 +72,7 @@ suggest_metadata("New Note.md")
 
 1. Index the base first, without mass rewrites.
 2. Inspect real domains, note types, levels, and the gap between folders and content.
-3. Write etalons for this base, not for an abstract example.
+3. Write etalons for this base, using its real topics and vocabulary.
 4. Run `calibrate_cores` and check raw / mean-centered cosines.
 5. Tune thresholds: `sign_spread`, `pattern_second_sign_threshold`, `semantic_bridge_threshold`, `parent_link_threshold`.
 6. Run `recalc_signs`, `suggest_metadata`, and `process_orphans` in batches, reviewing results.
@@ -91,7 +92,7 @@ bridges:
   - semantic: "Project/Incidents/2026-04.md" (cosine: 0.63)
 ```
 
-**Idea:** NOUZ shows the state of an existing base: lost links, unmarked notes, weak parents, drift between `sign` and `core_mix`. New structure appears through your decisions, not over them.
+**Idea:** NOUZ shows the state of an existing base: lost links, unmarked notes, weak parents, drift between `sign` and `core_mix`. New structure appears through your decisions and is written only where you choose.
 
 ---
 

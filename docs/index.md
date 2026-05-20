@@ -5,32 +5,28 @@ hero:
   text: граф знаний · эмбеддинги · агентная навигация
 ---
 
-<div class="portal-grid">
-  <div class="portal-card portal-card--nouz">
-    <div class="portal-label">открытый MCP-сервер</div>
-    <h2>NOUZ</h2>
-    <p>Локальный граф поверх Obsidian и Markdown-базы: связи, уровни, YAML-разметка, SQLite-индекс и инструменты для ИИ-агента.</p>
-    <div class="portal-tags">
-      <span>Obsidian</span>
-      <span>MCP</span>
-      <span>граф знаний</span>
+<div class="home-directions">
+  <a class="home-direction home-direction--products" href="/products">
+    <div class="home-direction__head">
+      <span>Продукты</span>
+      <h2>Агентская память, контекст и проверяемое обучение.</h2>
     </div>
-    <div class="portal-links">
-      <a href="/nouz/use-cases">Документация NOUZ</a>
+    <p>Локальные MCP-инструменты для баз знаний, входящих материалов и рабочих пространств.</p>
+    <div class="home-direction__links" aria-label="Продукты">
+      <span>NOUZ</span>
+      <span>LINZA</span>
     </div>
-  </div>
+  </a>
 
-  <div class="portal-card portal-card--lab">
-    <div class="portal-label">интерактив</div>
-    <h2>Лаборатория</h2>
-    <p>Визуальные эксперименты с реальными эмбеддингами: облако слов, ближайшие соседи, косинусное сходство, общий фон, центрирование и PCA.</p>
-    <div class="portal-tags">
-      <span>эмбеддинги</span>
-      <span>косинусы</span>
-      <span>PCA</span>
+  <a class="home-direction home-direction--lab" href="/lab/">
+    <div class="home-direction__head">
+      <span>Лаборатория</span>
+      <h2>Геометрия в языковых моделях, показательные эксперименты.</h2>
     </div>
-    <div class="portal-links">
-      <a href="/lab/">Открыть лабораторию</a>
+    <p>Разбираем устройство LLM и анизотропию эмбеддингов.</p>
+    <div class="home-direction__links" aria-label="Разделы лаборатории">
+      <span>Атлас эмбеддингов</span>
+      <span>Косинусы</span>
     </div>
-  </div>
+  </a>
 </div>

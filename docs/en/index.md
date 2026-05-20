@@ -5,32 +5,28 @@ hero:
   text: knowledge graphs · embeddings · agent navigation
 ---
 
-<div class="portal-grid">
-  <div class="portal-card portal-card--nouz">
-    <div class="portal-label">open-source MCP server</div>
-    <h2>NOUZ</h2>
-    <p>A local graph over Obsidian and Markdown bases: links, levels, YAML metadata, a SQLite index, and tools for AI agents.</p>
-    <div class="portal-tags">
-      <span>Obsidian</span>
-      <span>MCP</span>
-      <span>knowledge graph</span>
+<div class="home-directions">
+  <a class="home-direction home-direction--products" href="/en/products">
+    <div class="home-direction__head">
+      <span>Products</span>
+      <h2>Agent memory, context, and reviewed learning.</h2>
     </div>
-    <div class="portal-links">
-      <a href="/en/nouz/use-cases">NOUZ docs</a>
+    <p>Local MCP tools for knowledge bases, incoming material, and workspaces.</p>
+    <div class="home-direction__links" aria-label="Products">
+      <span>NOUZ</span>
+      <span>LINZA</span>
     </div>
-  </div>
+  </a>
 
-  <div class="portal-card portal-card--lab">
-    <div class="portal-label">interactive</div>
-    <h2>Laboratory</h2>
-    <p>Visual experiments with real embeddings: word clouds, nearest neighbors, cosine similarity, common background, centering, and PCA.</p>
-    <div class="portal-tags">
-      <span>embeddings</span>
-      <span>cosines</span>
-      <span>PCA</span>
+  <a class="home-direction home-direction--lab" href="/en/lab/">
+    <div class="home-direction__head">
+      <span>Laboratory</span>
+      <h2>Geometry in language models, visible experiments.</h2>
     </div>
-    <div class="portal-links">
-      <a href="/en/lab/">Open laboratory</a>
+    <p>We examine how LLMs are built and how embedding anisotropy shows up in their vector spaces.</p>
+    <div class="home-direction__links" aria-label="Laboratory sections">
+      <span>Embedding Atlas</span>
+      <span>Cosines</span>
     </div>
-  </div>
+  </a>
 </div>

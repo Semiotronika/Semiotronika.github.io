@@ -11,7 +11,7 @@ Through MCP, an agent can explicitly request a note's place in the graph:
 - level and `sign`;
 - `core_mix`, when PRIZMA or SLOI is enabled.
 
-That lets the agent work with a note as a node in the knowledge graph. Semantic calculations are separate: text is compared with etalons, bridges are found through embeddings, and `core_mix` shows how note content changes the overall picture bottom-up.
+That gives the agent both the note text and the note's position in the base. Semantic calculations are separate: text is compared with etalons, bridges are found through embeddings, and `core_mix` shows how note content changes the overall picture bottom-up.
 
 ### Level 0 (meta_root)
 
@@ -58,7 +58,7 @@ Every domain with percentage ≥ `pattern_second_sign_threshold` (`30.0`) enters
 
 Transformer embeddings have an awkward property: many texts look "somewhat similar" to each other even when their domains are different. Raw cosine can therefore be misleading.
 
-The server handles this through `_mean_center`: before comparison, it subtracts the shared mean vector from the etalons. After that, NOUZ does not trust a single raw cosine. It looks at the gap between domains: how strongly one etalon wins over the others. That is why `spread`, percentages, and thresholds matter more than one similarity number.
+The server handles this through `_mean_center`: before comparison, it subtracts the shared mean vector from the etalons. After that, NOUZ evaluates the gap between domains: how strongly one etalon wins over the others. That is why `spread`, percentages, and thresholds matter. A single raw cosine remains diagnostic, but it is not the final decision.
 
 ## core_mix and Drift
 

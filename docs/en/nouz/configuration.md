@@ -115,7 +115,7 @@ thresholds:
 # material types use lowercase codes (n/c/r/l/u/h/s).
 # You can replace them if codes stay short and do not conflict with domains.
 # If needed, add keywords to any material type: the server will use
-# those words instead of the built-in RU/EN heuristic.
+# those words in place of the built-in RU/EN heuristic.
 artifact_signs:
   - sign: n
     name: Note

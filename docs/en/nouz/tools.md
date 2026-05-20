@@ -1,6 +1,6 @@
 # MCP Tools
 
-Tools are the main interface of NOUZ. Through them an AI agent does not merely read a folder of files; it works with a knowledge base as a structure: nodes, links, levels, domains, bridge candidates, and drift signals.
+Tools are the main interface of NOUZ. Through them an AI agent reads files together with the structure of the base: nodes, links, levels, domains, bridge candidates, and drift signals.
 
 The principle is simple: every action should be explicit. One tool reads a note, another shows its graph position, another suggests metadata, and another recalculates the composition of the base. Automation proposes; you, or an agent following your rules, decide.
 
