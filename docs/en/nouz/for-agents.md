@@ -1,10 +1,6 @@
 ---
-prev:
-  text: Quick Start
-  link: /en/nouz/quick-start
-next:
-  text: How NOUZ Works
-  link: /en/nouz/how-it-works
+prev: false
+next: false
 ---
 
 # NOUZ for AI Agents

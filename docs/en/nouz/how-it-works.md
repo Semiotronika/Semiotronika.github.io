@@ -1,7 +1,7 @@
 ---
 prev:
-  text: For Agents
-  link: /en/nouz/for-agents
+  text: Quick Start
+  link: /en/nouz/quick-start
 next:
   text: MCP Tools
   link: /en/nouz/tools

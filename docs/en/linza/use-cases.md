@@ -19,7 +19,7 @@ LINZA gives the agent a safe intermediate layer: import text as analysis materia
 
 ## Existing Folders
 
-When a vault or working folder has lived for a while, it almost always contains old names, duplicates, implicit relations, and pieces of structure that only the owner understands.
+When a working folder has lived for a while, it almost always contains old names, duplicates, implicit relations, and pieces of structure that only you understand.
 
 LINZA helps start with a calm overview: how many notes are indexed, which areas appear, where bridges, gaps, possible causal links, and memory candidates show up. This is not a migration and not a mass edit. It is a first careful reading of the base.
 
@@ -31,9 +31,9 @@ This is useful before an article, talk, documentation pass, or project review. T
 
 ## Agent Memory
 
-LINZA can store accepted conclusions in the sidecar and use them as a learning layer for future proposals. You accept a few clear examples first; then `teach` and `grow` propose the next small batches from learned rules.
+LINZA can store accepted conclusions in the local SQLite database and use them as a learning layer for future proposals. You accept a few clear examples first; then `teach` and `grow` propose the next small batches from learned rules.
 
-This is not autopilot. A healthy workflow is small: review 3-5 cards, accept the good ones, skip weak ones, then let the agent continue in preview.
+This is not autopilot. A healthy workflow is small: review 3-5 cards, accept the good ones, skip weak ones, then let the agent continue in preview mode.
 
 ## When LINZA Is Not The First Choice
 

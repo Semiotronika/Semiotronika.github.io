@@ -27,9 +27,9 @@ python -m pip install "linza-mcp[pdf]"
 
 ## Папка
 
-LINZA работает с любой Markdown-папкой: Obsidian vault, проектная документация, исследовательская папка или отдельная рабочая директория.
+LINZA работает с любой Markdown-папкой: Obsidian-хранилищем, проектной документацией, исследовательской папкой или отдельной рабочей директорией.
 
-В примерах ниже замените `/absolute/path/to/workspace-or-vault` на свой путь.
+В примерах ниже замените `/absolute/path/to/your-folder` на свой путь.
 
 ## Эмбеддинги
 
@@ -38,7 +38,7 @@ LINZA работает с любой Markdown-папкой: Obsidian vault, пр
 1. Откройте LM Studio.
 2. Скачайте модель эмбеддингов, например `text-embedding-granite-embedding-278m-multilingual`, `nomic-embed-text-v1.5` или другую многоязычную модель.
 3. Запустите Local Server.
-4. Проверьте, что endpoint доступен на `http://127.0.0.1:1234/v1`.
+4. Проверьте, что адрес доступен на `http://127.0.0.1:1234/v1`.
 
 ## MCP-конфигурация
 
@@ -50,7 +50,7 @@ Claude Desktop, Cursor, OpenCode и другие MCP-клиенты обычно
     "linza": {
       "command": "linza-mcp",
       "env": {
-        "LINZA_VAULT": "/absolute/path/to/workspace-or-vault",
+        "LINZA_VAULT": "/absolute/path/to/your-folder",
         "LINZA_EMBED_PROVIDER": "lmstudio",
         "LINZA_EMBED_URL": "http://127.0.0.1:1234/v1",
         "LINZA_EMBED_MODEL": "your-embedding-model-name",
@@ -70,7 +70,7 @@ VS Code / Copilot MCP использует `servers`:
       "type": "stdio",
       "command": "linza-mcp",
       "env": {
-        "LINZA_VAULT": "/absolute/path/to/workspace-or-vault",
+        "LINZA_VAULT": "/absolute/path/to/your-folder",
         "LINZA_EMBED_PROVIDER": "lmstudio",
         "LINZA_EMBED_URL": "http://127.0.0.1:1234/v1",
         "LINZA_EMBED_MODEL": "your-embedding-model-name"
@@ -90,7 +90,7 @@ linza-mcp --version
 
 ```text
 Проверьте LINZA через agent_workspace(action="doctor").
-Проиндексируйте папку и покажите первые 3-5 review-карточек.
+Проиндексируйте папку и покажите первые 3-5 карточек проверки.
 ```
 
 Первый запуск лучше делать небольшим: диагностика, индекс, карта, несколько карточек. Не начинайте с массового применения.

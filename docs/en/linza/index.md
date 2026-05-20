@@ -7,9 +7,9 @@ next:
 
 # LINZA
 
-LINZA is a local lens for notes, documents, articles, chats, logs, and drafts. The agent maps topics and relations; you confirm.
+LINZA is a local MCP server for notes, documents, articles, chats, logs, and drafts. It does not rewrite source files: the agent builds a working map of topics and relations beside them, while you calmly confirm or reject its proposals.
 
-The core idea is simple: **you decide, the agent executes**. LINZA shows small review cards with evidence, then stores accepted conclusions next to your files in a local `.linza/linza.db` SQLite database. Source note bodies stay in place.
+The core idea is simple: **it does not change your data — it changes how you see it**. LINZA shows small review cards with evidence, then stores accepted conclusions in a local `.linza/linza.db` SQLite database. Source note bodies stay in place.
 
 ## What LINZA Does
 
@@ -44,13 +44,13 @@ The core idea is simple: **you decide, the agent executes**. LINZA shows small r
   </div>
 </div>
 
-## Next To NOUZ
+## What Is Inside
 
-LINZA fits material that is not ready to be written into structure yet: articles, exports, chats, logs, working drafts, and old folders without a clear map.
+LINZA is useful when the material exists, but its shape still needs to be seen. It helps the agent rely on text fragments, recurring topics, and examples you have accepted instead of guessing from file names.
 
-NOUZ fits places where structure should already be part of the base: levels, links, metadata, graph context, and regular navigation for an agent.
+A review card answers practical questions: what is being proposed, why the agent thinks so, which fragments count as evidence, and what will change after acceptance. Weak cards can be skipped; that also teaches LINZA what not to repeat.
 
-LINZA and NOUZ cover different stages of the work. LINZA helps inspect and review material; NOUZ helps keep a stable structure.
+After a few confirmations, LINZA starts working more precisely: it remembers useful decisions, carefully proposes similar relations, and keeps the next step small.
 
 ## Where To Go Next
 
@@ -58,6 +58,7 @@ LINZA and NOUZ cover different stages of the work. LINZA helps inspect and revie
 - [Quick Start](/en/linza/quick-start) — installation, embeddings, and MCP configuration.
 - [How It Works](/en/linza/how-it-works) — index, map, review, teach, and grow.
 - [MCP Tools](/en/linza/tools) — what the agent can do through LINZA.
+- [Configuration](/en/linza/configuration) — environment variables, embedding model, and tool set.
 - [Safety Boundary](/en/linza/safety) — the guardrails around source files.
 
 ## Links

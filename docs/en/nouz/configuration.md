@@ -3,8 +3,8 @@ prev:
   text: MCP Tools
   link: /en/nouz/tools
 next:
-  text: Etalon Quality
-  link: /en/nouz/etalon-quality
+  text: Safety Boundary
+  link: /en/nouz/safety
 ---
 
 # Configuration

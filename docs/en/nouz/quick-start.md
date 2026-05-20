@@ -3,8 +3,8 @@ prev:
   text: Use Cases
   link: /en/nouz/use-cases
 next:
-  text: For Agents
-  link: /en/nouz/for-agents
+  text: How NOUZ Works
+  link: /en/nouz/how-it-works
 ---
 
 # Quick Start

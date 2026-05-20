@@ -3,8 +3,8 @@ prev:
   text: Сценарии
   link: /nouz/use-cases
 next:
-  text: Для агентов
-  link: /nouz/for-agents
+  text: Как работает
+  link: /nouz/how-it-works
 ---
 
 # Быстрый старт
@@ -45,7 +45,7 @@ mode: prizma  # luca | prizma | sloi
 
 В терминах NOUZ домен, или ядро, — это крупная область базы: продукт, разработка, процессы, личные заметки или другая ваша рамка. `sign` — короткий код домена, а `artifact_sign` — короткий код типа материала: заметка, лог, источник, спецификация.
 
-### 2. Укажите путь к папке базы (`vault`)
+### 2. Укажите путь к папке базы
 
 ```bash
 export OBSIDIAN_ROOT=/path/to/your/obsidian-vault
@@ -53,7 +53,7 @@ export OBSIDIAN_ROOT=/path/to/your/obsidian-vault
 
 ### 3. Подключите провайдер эмбеддингов (для PRIZMA/SLOI)
 
-Любой OpenAI-совместимый API: LM Studio, Ollama, облачный провайдер.
+Любой OpenAI-совместимый API: LM Studio, Ollama или облачный провайдер.
 
 ```bash
 export EMBED_API_URL=http://127.0.0.1:1234/v1
@@ -136,6 +136,6 @@ mode: luca
 ## Требования
 
 - Python 3.10+
-- Obsidian-база (`vault`) или любая папка с `.md` файлами
+- Obsidian-хранилище или любая папка с `.md` файлами
 - SQLite-сервер не нужен: Python включает `sqlite3`, а пакет ставит `aiosqlite`
 - LM Studio, Ollama или OpenAI-совместимый API (опционально, для PRIZMA/SLOI)

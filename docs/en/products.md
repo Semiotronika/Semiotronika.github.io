@@ -10,7 +10,8 @@ MCP servers, AI systems, and agent memory.
   <div class="portal-card portal-card--nouz">
     <div class="portal-label">MCP server · structural memory</div>
     <h2>NOUZ</h2>
-    <p>A local MCP server for Obsidian and Markdown bases: levels, links, YAML metadata, a local SQLite index, semantic bridges, and drift signals.</p>
+    <p class="portal-motto"><em>Structure emerges from content.</em></p>
+    <p>Turns your folder of Markdown notes into a living, navigable knowledge graph, where links and levels matter as much as the content. For people building complex knowledge bases.</p>
     <div class="portal-tags">
       <span>Obsidian</span>
       <span>Markdown</span>
@@ -25,9 +26,10 @@ MCP servers, AI systems, and agent memory.
   </div>
 
   <div class="portal-card portal-card--linza">
-    <div class="portal-label">MCP server · reviewed SQLite sidecar</div>
+    <div class="portal-label">MCP server · reviewed SQLite memory</div>
     <h2>LINZA</h2>
-    <p>A local lens for notes, documents, articles, chats, logs, and drafts. The agent maps topics and relations; you confirm.</p>
+    <p class="portal-motto"><em>It does not change your data. It changes how you see it.</em></p>
+    <p>Your safe AI companion for exploring incoming material. It helps an agent see structure in the chaos of drafts, while you calmly confirm or reject its proposals.</p>
     <div class="portal-tags">
       <span>review cards</span>
       <span>SQLite</span>

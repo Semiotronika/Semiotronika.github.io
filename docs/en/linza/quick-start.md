@@ -29,7 +29,7 @@ The normal install is enough for Markdown, TXT, JSON, DOCX, and XLSX. `[pdf]` ad
 
 LINZA works with any Markdown folder: an Obsidian vault, project documentation, a research folder, or a standalone working directory.
 
-In the examples below, replace `/absolute/path/to/workspace-or-vault` with your own path.
+In the examples below, replace `/absolute/path/to/your-folder` with your own path.
 
 ## Embeddings
 
@@ -50,7 +50,7 @@ Claude Desktop, Cursor, OpenCode, and other MCP clients usually use `mcpServers`
     "linza": {
       "command": "linza-mcp",
       "env": {
-        "LINZA_VAULT": "/absolute/path/to/workspace-or-vault",
+        "LINZA_VAULT": "/absolute/path/to/your-folder",
         "LINZA_EMBED_PROVIDER": "lmstudio",
         "LINZA_EMBED_URL": "http://127.0.0.1:1234/v1",
         "LINZA_EMBED_MODEL": "your-embedding-model-name",
@@ -70,7 +70,7 @@ VS Code / Copilot MCP uses `servers`:
       "type": "stdio",
       "command": "linza-mcp",
       "env": {
-        "LINZA_VAULT": "/absolute/path/to/workspace-or-vault",
+        "LINZA_VAULT": "/absolute/path/to/your-folder",
         "LINZA_EMBED_PROVIDER": "lmstudio",
         "LINZA_EMBED_URL": "http://127.0.0.1:1234/v1",
         "LINZA_EMBED_MODEL": "your-embedding-model-name"

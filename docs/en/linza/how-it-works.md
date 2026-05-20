@@ -11,9 +11,9 @@ next:
 
 LINZA builds a local working layer around a folder. Source files remain the source of truth; computed conclusions, indexes, and approvals live next to them in `.linza/linza.db`.
 
-## Local SQLite Sidecar
+## Local SQLite Layer
 
-The sidecar is a separate SQLite database beside your files. LINZA stores the index, text chunks, embedding signals, review cards, accepted relations, memory items, calibration lessons, and counters there.
+`.linza/linza.db` is a separate SQLite database beside your files. LINZA stores the index, text chunks, embedding signals, review cards, accepted relations, memory items, calibration lessons, and counters there.
 
 This lets the agent learn from the base without immediate YAML writes or text edits. Visible changes remain a separate, explicit step.
 
@@ -22,7 +22,7 @@ This lets the agent learn from the base without immediate YAML writes or text ed
 <div class="pipeline">
   <div class="step" data-n="1">
     <h4>Doctor</h4>
-    <p>Check the path, folder access, file count, and sidecar state.</p>
+    <p>Check the path, folder access, file count, and local database state.</p>
   </div>
   <div class="step" data-n="2">
     <h4>Index</h4>
@@ -62,6 +62,6 @@ The local LM Studio setup is usually the calmest path: data stays nearby, while 
 
 ## Teach And Grow
 
-`teach` selects seed cards that help LINZA learn which relations and memory items the user considers useful. `grow` uses accepted examples, but starts with a preview and explains the selection rules.
+`teach` selects seed cards that help LINZA learn which relations and memory items you consider useful. `grow` uses accepted examples, but starts with a preview and explains the selection rules.
 
 This boundary matters: LINZA may continue the work, but growth always starts with a small batch and confirmation.

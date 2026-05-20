@@ -536,6 +536,12 @@
   overflow-wrap: anywhere;
 }
 
+.vp-doc .portal-card .portal-motto {
+  margin-bottom: 10px;
+  color: var(--portal-accent);
+  font-weight: 650;
+}
+
 .vp-doc .portal-tags {
   display: flex;
   flex-wrap: wrap;

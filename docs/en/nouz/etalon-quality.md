@@ -1,7 +1,7 @@
 ---
 prev:
-  text: Configuration
-  link: /en/nouz/configuration
+  text: Safety Boundary
+  link: /en/nouz/safety
 next: false
 ---
 
