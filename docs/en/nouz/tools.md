@@ -1,3 +1,12 @@
+---
+prev:
+  text: How NOUZ Works
+  link: /en/nouz/how-it-works
+next:
+  text: Configuration
+  link: /en/nouz/configuration
+---
+
 # MCP Tools
 
 Tools are the main interface of NOUZ. Through them an AI agent reads files together with the structure of the base: nodes, links, levels, domains, bridge candidates, and drift signals.

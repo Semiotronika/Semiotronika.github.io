@@ -1,3 +1,12 @@
+---
+prev:
+  text: Сценарии
+  link: /linza/use-cases
+next:
+  text: Как работает
+  link: /linza/how-it-works
+---
+
 # Быстрый старт
 
 Запуск LINZA начинается с трех вещей: пакет, папка и модель эмбеддингов.
@@ -80,7 +89,7 @@ linza-mcp --version
 После подключения попросите агента:
 
 ```text
-Проверь LINZA через agent_workspace(action="doctor").
+Проверьте LINZA через agent_workspace(action="doctor").
 Проиндексируй папку и покажи первые 3-5 review-карточек.
 ```
 

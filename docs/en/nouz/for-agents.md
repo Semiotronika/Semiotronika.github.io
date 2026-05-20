@@ -1,3 +1,12 @@
+---
+prev:
+  text: Quick Start
+  link: /en/nouz/quick-start
+next:
+  text: How NOUZ Works
+  link: /en/nouz/how-it-works
+---
+
 # NOUZ for AI Agents
 
 This page is compact context for an AI agent that is reading NOUZ documentation, explaining the project to a user, or helping connect it to an MCP client.

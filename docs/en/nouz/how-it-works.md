@@ -1,3 +1,12 @@
+---
+prev:
+  text: For Agents
+  link: /en/nouz/for-agents
+next:
+  text: MCP Tools
+  link: /en/nouz/tools
+---
+
 # How NOUZ Works
 
 NOUZ reads YAML frontmatter, builds a DAG, classifies content through etalons, and proposes links between branches. You define the structure and make the decisions; AI helps compute, compare, and notice weak spots in the graph.

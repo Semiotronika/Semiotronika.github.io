@@ -1,3 +1,12 @@
+---
+prev:
+  text: Use Cases
+  link: /en/linza/use-cases
+next:
+  text: How It Works
+  link: /en/linza/how-it-works
+---
+
 # Quick Start
 
 Starting LINZA needs three things: the package, a folder, and an embedding model.

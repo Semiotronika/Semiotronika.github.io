@@ -1,3 +1,12 @@
+---
+prev:
+  text: How It Works
+  link: /en/linza/how-it-works
+next:
+  text: Safety Boundary
+  link: /en/linza/safety
+---
+
 # MCP Tools
 
 In normal use, you should not need to choose low-level tools by hand. The agent starts with `agent_workspace` or `guide_next_steps`, while LINZA keeps the working route: check the folder, index, show a map, build review cards, learn from accepted examples, and propose the next preview.

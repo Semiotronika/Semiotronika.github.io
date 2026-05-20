@@ -1,3 +1,12 @@
+---
+prev:
+  text: MCP Tools
+  link: /en/nouz/tools
+next:
+  text: Etalon Quality
+  link: /en/nouz/etalon-quality
+---
+
 # Configuration
 
 NOUZ looks for `config.yaml` in this order: `NOUZ_CONFIG`, current working directory, then the installed server directory. For LUCA mode the file is optional — the server starts with default settings.

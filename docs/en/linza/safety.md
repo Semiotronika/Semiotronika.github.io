@@ -1,3 +1,10 @@
+---
+prev:
+  text: MCP Tools
+  link: /en/linza/tools
+next: false
+---
+
 # Safety Boundary
 
 LINZA is designed as a local sidecar with review built in. That means: reading, mapping, and evidence first; then a small review; only then explicit acceptance of selected cards.

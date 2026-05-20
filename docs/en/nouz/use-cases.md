@@ -1,3 +1,12 @@
+---
+prev:
+  text: Overview
+  link: /en/nouz/
+next:
+  text: Quick Start
+  link: /en/nouz/quick-start
+---
+
 # Use Cases
 
 NOUZ is useful in two different situations: when a knowledge base is just beginning, and when it already exists, has history, and contains mixed conventions. These need different workflows.

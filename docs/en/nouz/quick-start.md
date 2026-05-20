@@ -1,3 +1,12 @@
+---
+prev:
+  text: Use Cases
+  link: /en/nouz/use-cases
+next:
+  text: For Agents
+  link: /en/nouz/for-agents
+---
+
 # Quick Start
 
 Get NOUZ running in 5 minutes.

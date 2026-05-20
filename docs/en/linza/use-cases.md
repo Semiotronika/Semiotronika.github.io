@@ -1,3 +1,12 @@
+---
+prev:
+  text: Overview
+  link: /en/linza/
+next:
+  text: Quick Start
+  link: /en/linza/quick-start
+---
+
 # Use Cases
 
 LINZA is useful when there is enough material for an agent to help, but it is too early to let the agent write structure directly.

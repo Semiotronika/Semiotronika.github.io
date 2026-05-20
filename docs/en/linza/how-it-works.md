@@ -1,3 +1,12 @@
+---
+prev:
+  text: Quick Start
+  link: /en/linza/quick-start
+next:
+  text: MCP Tools
+  link: /en/linza/tools
+---
+
 # How LINZA Works
 
 LINZA builds a local working layer around a folder. Source files remain the source of truth; computed conclusions, indexes, and approvals live next to them in `.linza/linza.db`.

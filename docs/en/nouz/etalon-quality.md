@@ -1,4 +1,11 @@
-﻿# Etalon Quality
+---
+prev:
+  text: Configuration
+  link: /en/nouz/configuration
+next: false
+---
+
+# Etalon Quality
 
 Etalons are the foundation of NOUZ classification. If etalons overlap semantically, classification becomes noisy. This page explains how to verify etalon quality using `calibrate_cores`.
 

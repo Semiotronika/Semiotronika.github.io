@@ -1,3 +1,12 @@
+---
+prev:
+  text: Сценарии
+  link: /nouz/use-cases
+next:
+  text: Для агентов
+  link: /nouz/for-agents
+---
+
 # Быстрый старт
 
 Запуск NOUZ за 5 минут.
