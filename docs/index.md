@@ -9,7 +9,7 @@ hero:
   <a class="home-direction home-direction--products" href="/products">
     <div class="home-direction__head">
       <span>Продукты</span>
-      <h2>Агентская память, контекст и проверяемое обучение.</h2>
+      <h2>Память. контекст и проверяемое обучение для агентов</h2>
     </div>
     <p>Локальные MCP-инструменты для баз знаний, входящих материалов и рабочих пространств.</p>
     <div class="home-direction__links" aria-label="Продукты">
