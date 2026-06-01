@@ -29,7 +29,24 @@ const normalizePagePath = (relativePath: string) => {
   return routePath ? `/${routePath}` : '/'
 }
 
-const ruProductSidebar = [
+const ruProductSwitch = {
+  text: 'Продукты',
+  items: [
+    { text: 'NOUZ', link: '/nouz/' },
+    { text: 'LINZA', link: '/linza/' },
+  ],
+}
+
+const enProductSwitch = {
+  text: 'Products',
+  items: [
+    { text: 'NOUZ', link: '/en/nouz/' },
+    { text: 'LINZA', link: '/en/linza/' },
+  ],
+}
+
+const ruNouzSidebar = [
+  ruProductSwitch,
   {
     text: 'NOUZ',
     items: [
@@ -46,9 +63,13 @@ const ruProductSidebar = [
       { text: 'Сценарии', link: '/nouz/use-cases' },
       { text: 'Качество эталонов', link: '/nouz/etalon-quality' },
       { text: 'Быстрый старт', link: '/nouz/quick-start' },
-      { text: 'Справочник MCP-инструментов', link: '/nouz/tools-reference' },
+      { text: 'Инструменты MCP', link: '/nouz/tools-reference' },
     ],
   },
+]
+
+const ruLinzaSidebar = [
+  ruProductSwitch,
   {
     text: 'LINZA',
     items: [
@@ -60,13 +81,18 @@ const ruProductSidebar = [
   },
 ]
 
-const enProductSidebar = [
+const enNouzSidebar = [
+  enProductSwitch,
   {
     text: 'NOUZ',
     items: [
       { text: 'Overview', link: '/en/nouz/' },
     ],
   },
+]
+
+const enLinzaSidebar = [
+  enProductSwitch,
   {
     text: 'LINZA',
     items: [
@@ -144,8 +170,8 @@ export default defineConfig({
         description: 'Технический старт NOUZ-MCP: установка, запуск и интеграция в Claude.',
       },
       '/nouz/tools-reference': {
-        title: 'NOUZ — справочник MCP-инструментов',
-        description: 'Справочник MCP-инструментов NOUZ-MCP для ИИ: чтение, граф, индексация, семантика и безопасные операции.',
+        title: 'Инструменты MCP NOUZ',
+        description: 'Инструменты MCP NOUZ-MCP для ИИ: чтение, граф, индексация, семантика и безопасные операции.',
       },
       '/linza/': {
         title: 'LINZA — локальный MCP-сервер для рабочей памяти агента',
@@ -299,7 +325,7 @@ export default defineConfig({
       '/nouz/use-cases': 'NOUZ — сценарии использования',
       '/nouz/etalon-quality': 'NOUZ — проверка качества эталонов',
       '/nouz/quick-start': 'NOUZ — быстрый старт',
-      '/nouz/tools-reference': 'NOUZ — справочник MCP-инструментов',
+      '/nouz/tools-reference': 'Инструменты MCP NOUZ',
       '/linza/': 'LINZA — локальный MCP-сервер для рабочей памяти агента',
       '/linza/how-it-works': 'Устройство LINZA — сайдкар, ревью, контекст и trace-записи',
       '/linza/quick-start': 'Быстрый старт LINZA — подключить рабочий материал к MCP-клиенту',
@@ -336,7 +362,7 @@ export default defineConfig({
       '/nouz/use-cases': 'NOUZ — сценарии использования',
       '/nouz/etalon-quality': 'NOUZ — проверка качества эталонов',
       '/nouz/quick-start': 'NOUZ — быстрый старт',
-      '/nouz/tools-reference': 'NOUZ — справочник MCP-инструментов',
+      '/nouz/tools-reference': 'Инструменты MCP NOUZ',
       '/linza/': 'LINZA — локальный MCP-сервер для рабочей памяти агента',
       '/linza/how-it-works': 'Устройство LINZA — сайдкар, ревью, контекст и trace-записи',
       '/linza/quick-start': 'Быстрый старт LINZA — подключить рабочий материал к MCP-клиенту',
@@ -367,8 +393,8 @@ export default defineConfig({
           { text: 'Лаборатория', link: '/lab/' },
         ],
         sidebar: {
-          '/nouz/': ruProductSidebar,
-          '/linza/': ruProductSidebar,
+          '/nouz/': ruNouzSidebar,
+          '/linza/': ruLinzaSidebar,
         },
         footer: {
           message: '<span class="footer-brand"><span>{</span>Семиотроника<span>}</span></span><br><a href="https://t.me/Masha_Belkina">Telegram</a> · <a href="mailto:belkinamariaigorevna@yandex.ru">Email</a>',
@@ -388,8 +414,8 @@ export default defineConfig({
           { text: 'Lab', link: '/en/lab/' },
         ],
         sidebar: {
-          '/en/nouz/': enProductSidebar,
-          '/en/linza/': enProductSidebar,
+          '/en/nouz/': enNouzSidebar,
+          '/en/linza/': enLinzaSidebar,
         },
         footer: {
           message: '<span class="footer-brand"><span>{</span>Semiotronika<span>}</span></span><br><a href="https://t.me/Masha_Belkina">Telegram</a> · <a href="mailto:belkinamariaigorevna@yandex.ru">Email</a>',

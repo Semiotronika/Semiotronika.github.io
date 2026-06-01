@@ -3,7 +3,7 @@ prev:
   text: Проверка качества эталонов
   link: /nouz/etalon-quality
 next:
-  text: Справочник MCP-инструментов
+  text: Инструменты MCP
   link: /nouz/tools-reference
 ---
 
