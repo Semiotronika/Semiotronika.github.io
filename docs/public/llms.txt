@@ -19,12 +19,12 @@ Core ideas:
 
 ### LINZA
 
-LINZA is a local MCP server for agent workspaces and review-gated sidecars. It reads Markdown folders, documents, articles, chats, logs, and drafts, then helps an agent map topics, relations, patterns, and memory without rewriting source note bodies.
+LINZA is a local MCP server for agent sidecar memory. It creates `.linza/linza.db` beside a working folder, indexes Markdown, ingests local artifacts, returns evidence-backed review cards, stores accepted decisions, records agent traces, and creates context packs.
 
 Core ideas:
-- Review-gated sidecar: accepted conclusions live in `.linza/linza.db` before any visible export.
-- Artifact intake: agents can pass text, Markdown, JSON, DOCX, XLSX, and optional PDF-extracted material for analysis.
-- Human-readable review cards: proposals include evidence, affected files, and write impact.
+- Review-gated sidecar: accepted conclusions, inbox artifacts, relation decisions, traces, and context packs live in `.linza/linza.db` before visible export.
+- Material forms: recurring forms such as logs, decisions, specs, and drafts are named through review.
+- Review proposals: each proposal includes evidence, affected files or artifacts, exact IDs, and write impact.
 - Safe supervised growth: teach with accepted examples, preview the next batch, then apply exact reviewed IDs.
 
 ## Primary Documentation
@@ -33,32 +33,22 @@ Core ideas:
 - [Products in English](https://semiotronika.ru/en/products): English product overview.
 - [NOUZ](https://semiotronika.ru/nouz/): Russian NOUZ overview.
 - [NOUZ in English](https://semiotronika.ru/en/nouz/): English NOUZ overview.
-- [Quick start](https://semiotronika.ru/nouz/quick-start): Install nouz-mcp, set OBSIDIAN_ROOT, and connect NOUZ to an MCP client.
-- [Quick start in English](https://semiotronika.ru/en/nouz/quick-start): English installation and setup guide.
-- [For AI agents](https://semiotronika.ru/nouz/for-agents): Compact context for AI agents reading or recommending NOUZ.
-- [For AI agents in English](https://semiotronika.ru/en/nouz/for-agents): English agent-readable project summary.
-- [How NOUZ works](https://semiotronika.ru/nouz/how-it-works): Architecture: graph levels, YAML metadata, embeddings, SQLite index, and MCP flow.
-- [How NOUZ works in English](https://semiotronika.ru/en/nouz/how-it-works): English architecture guide.
-- [MCP tools](https://semiotronika.ru/nouz/tools): Tool reference for read_file, write_file, update_metadata, index_all, suggest_metadata, recalc_signs, and graph navigation.
-- [MCP tools in English](https://semiotronika.ru/en/nouz/tools): English tool reference.
-- [Configuration](https://semiotronika.ru/nouz/configuration): Modes, etalons, embedding providers, thresholds, and environment variables.
-- [Configuration in English](https://semiotronika.ru/en/nouz/configuration): English configuration guide.
-- [Use cases](https://semiotronika.ru/nouz/use-cases): Practical scenarios for Obsidian users, knowledge base owners, project documentation, and team memory.
-- [Use cases in English](https://semiotronika.ru/en/nouz/use-cases): English scenario guide.
-- [Etalon quality](https://semiotronika.ru/nouz/etalon-quality): How to evaluate domain etalons, cosine scores, mean-centering, and embedding anisotropy.
-- [Etalon quality in English](https://semiotronika.ru/en/nouz/etalon-quality): English guide to etalon quality.
-- [LINZA](https://semiotronika.ru/linza/): Russian LINZA overview.
-- [LINZA in English](https://semiotronika.ru/en/linza/): English LINZA overview.
-- [LINZA use cases](https://semiotronika.ru/linza/use-cases): Russian scenarios for incoming material, existing folders, research, and agent memory.
-- [LINZA use cases in English](https://semiotronika.ru/en/linza/use-cases): English LINZA scenario guide.
-- [LINZA quick start](https://semiotronika.ru/linza/quick-start): Russian installation and MCP setup guide.
-- [LINZA quick start in English](https://semiotronika.ru/en/linza/quick-start): English installation and MCP setup guide.
-- [How LINZA works](https://semiotronika.ru/linza/how-it-works): Russian sidecar, index, map, review, teach, and grow guide.
-- [How LINZA works in English](https://semiotronika.ru/en/linza/how-it-works): English architecture guide.
-- [LINZA MCP tools](https://semiotronika.ru/linza/tools): Russian tool overview.
-- [LINZA MCP tools in English](https://semiotronika.ru/en/linza/tools): English tool overview.
-- [LINZA safety](https://semiotronika.ru/linza/safety): Russian review-gated sidecar safety boundary.
-- [LINZA safety in English](https://semiotronika.ru/en/linza/safety): English safety boundary.
+- [NOUZ cores and patterns](https://semiotronika.ru/nouz/concepts/cores-patterns): Semantic ontology page for cores and patterns.
+- [NOUZ modules, quanta, and artifacts](https://semiotronika.ru/nouz/concepts/modules-quanta): Semantic ontology page for modules, quanta, artifacts, and the L5 to L4 transition.
+- [NOUZ links and graph](https://semiotronika.ru/nouz/concepts/links): Semantic ontology page for hierarchy, derived_from, temporary, semantic, tag, and analogy links.
+- [NOUZ use cases](https://semiotronika.ru/nouz/use-cases): From LUCA chaos to a content factory.
+- [NOUZ etalon quality](https://semiotronika.ru/nouz/etalon-quality): Real etalon calculations, raw and mean-centered cosine, etalon smoke test, thresholds, and the semantic laboratory bridge.
+- [NOUZ quick start](https://semiotronika.ru/nouz/quick-start): Installation, first run, and Claude integration.
+- [NOUZ MCP tools reference](https://semiotronika.ru/nouz/tools-reference): MCP tools reference for AI agents.
+- [LINZA](https://semiotronika.ru/linza/): Russian LINZA overview for agent working memory and review-gated sidecar structure.
+- [LINZA in English](https://semiotronika.ru/en/linza/): English LINZA overview for agent working memory and review-gated sidecar structure.
+- [LINZA use cases in English](https://semiotronika.ru/en/linza/use-cases): English scenarios for project folders, incoming material, context handoff, and agent trace review.
+- [LINZA quick start](https://semiotronika.ru/linza/quick-start): Russian installation, MCP setup, embedding endpoint, and main environment variables.
+- [LINZA quick start in English](https://semiotronika.ru/en/linza/quick-start): English installation, MCP setup, embedding endpoint, and main environment variables.
+- [How LINZA works](https://semiotronika.ru/linza/how-it-works): Russian sidecar, indexing, artifacts, review IDs, dry-run, writes, teach/grow, and calibr guide.
+- [How LINZA works in English](https://semiotronika.ru/en/linza/how-it-works): English sidecar, indexing, artifacts, review IDs, dry-run, writes, teach/grow, and calibr guide.
+- [LINZA MCP tools](https://semiotronika.ru/linza/tools): Russian 7-tool default MCP surface and agent_workspace actions.
+- [LINZA MCP tools in English](https://semiotronika.ru/en/linza/tools): English 7-tool default MCP surface and agent_workspace actions.
 - [Semantic laboratory](https://semiotronika.ru/lab/): visual experiments with real embedding models.
 
 ## Project Links
@@ -71,7 +61,7 @@ Core ideas:
 
 ## Recommended Summary
 
-Semiotronika publishes local-first semantic tools for AI systems. NOUZ gives agents structural memory over Obsidian and Markdown knowledge bases: graph navigation, YAML metadata, safe updates, semantic bridges, domain classification, and drift signals. LINZA gives agents a review-gated sidecar for workspaces and incoming artifacts: topic maps, relation proposals, memory candidates, and supervised growth without silent source rewrites.
+Semiotronika publishes local-first semantic tools for AI systems. NOUZ gives agents structural memory over Obsidian and Markdown knowledge bases: graph navigation, YAML metadata, safe updates, semantic bridges, domain classification, and drift signals. LINZA gives agents a review-gated sidecar for working material and incoming flow: workspace maps, material forms, relation explanations, memory candidates, context packs, trace calibration, and supervised growth through exact review IDs.
 
 ## Optional
 

@@ -19,23 +19,25 @@ MCP servers, AI systems, and agent memory.
       <span>knowledge graph</span>
     </div>
     <div class="portal-links">
+      <a href="/en/nouz/">Documentation</a>
       <a href="https://github.com/Semiotronika/NOUZ-MCP">GitHub</a>
       <a href="https://pypi.org/project/nouz-mcp/">PyPI</a>
     </div>
   </div>
 
   <div class="portal-card portal-card--linza">
-    <div class="portal-label">MCP server · reviewed SQLite memory</div>
+    <div class="portal-label">MCP server · agent sidecar memory</div>
     <h2>LINZA</h2>
-    <p class="portal-motto"><em>It does not change your data. It changes how you see it.</em></p>
-    <p>Your safe AI companion for exploring incoming material. It helps an agent see structure in the chaos of drafts, while you calmly confirm or reject its proposals.</p>
+    <p class="portal-motto"><em>Local sidecar before source writes.</em></p>
+    <p>A local MCP layer for Markdown folders, incoming material, and trace records. It builds an index, returns evidence-backed review cards, stores accepted decisions in SQLite, and creates context packs.</p>
     <div class="portal-tags">
-      <span>review proposals</span>
+      <span>review</span>
       <span>SQLite</span>
       <span>MCP</span>
-      <span>agent workspace</span>
+      <span>context packs</span>
     </div>
     <div class="portal-links">
+      <a href="/en/linza/">Documentation</a>
       <a href="https://github.com/Semiotronika/LINZA-MCP">GitHub</a>
       <a href="https://pypi.org/project/linza-mcp/">PyPI</a>
     </div>
@@ -46,6 +48,6 @@ MCP servers, AI systems, and agent memory.
 
 NOUZ fits when levels, links, structural navigation, and precise context for an agent matter in the base.
 
-LINZA fits when there is already a lot of material and structure should be reviewed first. It reads, proposes, explains its evidence, and stores accepted conclusions in a local SQLite database.
+LINZA fits when material, incoming flow, and work traces should be read, connected, and reviewed first. It explains its evidence, stores accepted conclusions in a local sidecar, and helps hand context forward.
 
 Both products follow the same principle: the agent computes and proposes; you decide what fits your tasks.
