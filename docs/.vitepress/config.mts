@@ -29,6 +29,56 @@ const normalizePagePath = (relativePath: string) => {
   return routePath ? `/${routePath}` : '/'
 }
 
+const ruProductSidebar = [
+  {
+    text: 'NOUZ',
+    items: [
+      { text: 'Обзор', link: '/nouz/' },
+      {
+        text: 'Семантическая онтология',
+        collapsed: false,
+        items: [
+          { text: 'Ядра и Паттерны', link: '/nouz/concepts/cores-patterns' },
+          { text: 'Модули, Кванты и Артефакты', link: '/nouz/concepts/modules-quanta' },
+          { text: 'Связи и Граф', link: '/nouz/concepts/links' },
+        ],
+      },
+      { text: 'Сценарии', link: '/nouz/use-cases' },
+      { text: 'Качество эталонов', link: '/nouz/etalon-quality' },
+      { text: 'Быстрый старт', link: '/nouz/quick-start' },
+      { text: 'Справочник MCP-инструментов', link: '/nouz/tools-reference' },
+    ],
+  },
+  {
+    text: 'LINZA',
+    items: [
+      { text: 'Обзор', link: '/linza/' },
+      { text: 'Устройство', link: '/linza/how-it-works' },
+      { text: 'Быстрый старт', link: '/linza/quick-start' },
+      { text: 'Инструменты MCP', link: '/linza/tools' },
+    ],
+  },
+]
+
+const enProductSidebar = [
+  {
+    text: 'NOUZ',
+    items: [
+      { text: 'Overview', link: '/en/nouz/' },
+    ],
+  },
+  {
+    text: 'LINZA',
+    items: [
+      { text: 'Overview', link: '/en/linza/' },
+      { text: 'Use Cases', link: '/en/linza/use-cases' },
+      { text: 'How It Works', link: '/en/linza/how-it-works' },
+      { text: 'Quick Start', link: '/en/linza/quick-start' },
+      { text: 'MCP Tools', link: '/en/linza/tools' },
+    ],
+  },
+]
+
 export default defineConfig({
   title: 'Семиотроника — инструменты для ИИ-систем',
   description: 'NOUZ, LINZA и лаборатория для графов знаний, эмбеддингов и агентной навигации.',
@@ -110,8 +160,8 @@ export default defineConfig({
         description: 'Как LINZA хранит сайдкар, индексирует Markdown, принимает артефакты, выдает ID ревью, показывает dry-run и ограничивает записи.',
       },
       '/linza/tools': {
-        title: 'Инструменты MCP LINZA — 7 публичных входов и agent_workspace',
-        description: 'Публичные MCP-инструменты LINZA: guide_next_steps, agent_workspace, index_all, search, read_file, get_stats и scan_vault.',
+        title: 'Инструменты MCP LINZA — 7 основных инструментов и agent_workspace',
+        description: 'Основные MCP-инструменты LINZA: guide_next_steps, agent_workspace, index_all, search, read_file, get_stats и scan_vault.',
       },
     }
     const enSeo: Record<string, { title: string; description: string }> = {
@@ -144,8 +194,8 @@ export default defineConfig({
         description: 'How LINZA stores the sidecar, indexes Markdown, ingests artifacts, returns review IDs, uses dry-run, and restricts writes.',
       },
       '/en/linza/tools': {
-        title: 'LINZA MCP Tools — 7 public entry points and agent_workspace',
-        description: 'LINZA public MCP tools: guide_next_steps, agent_workspace, index_all, search, read_file, get_stats, and scan_vault.',
+        title: 'LINZA MCP Tools — 7 main tools and agent_workspace',
+        description: 'LINZA main MCP tools: guide_next_steps, agent_workspace, index_all, search, read_file, get_stats, and scan_vault.',
       },
       '/en/lab/': {
         title: 'Semantic Laboratory — English version in progress',
@@ -253,7 +303,7 @@ export default defineConfig({
       '/linza/': 'LINZA — локальный MCP-сервер для рабочей памяти агента',
       '/linza/how-it-works': 'Устройство LINZA — сайдкар, ревью, контекст и trace-записи',
       '/linza/quick-start': 'Быстрый старт LINZA — подключить рабочий материал к MCP-клиенту',
-      '/linza/tools': 'Инструменты MCP LINZA — 7 публичных входов и agent_workspace',
+      '/linza/tools': 'Инструменты MCP LINZA — 7 основных инструментов и agent_workspace',
       '/en/': 'Semiotronika — tools for AI systems',
       '/en/products': 'Semiotronika Products — NOUZ and LINZA',
       '/en/nouz/': 'NOUZ — structural memory for Obsidian and Markdown',
@@ -261,7 +311,7 @@ export default defineConfig({
       '/en/linza/use-cases': 'LINZA — use cases',
       '/en/linza/how-it-works': 'How LINZA Works — sidecar, review, context, and traces',
       '/en/linza/quick-start': 'LINZA Quick Start — connect working material to an MCP client',
-      '/en/linza/tools': 'LINZA MCP Tools — 7 public entry points and agent_workspace',
+      '/en/linza/tools': 'LINZA MCP Tools — 7 main tools and agent_workspace',
       '/en/lab/': 'Semantic Laboratory — English version in progress',
       '/en/lab/cosines': 'Cosine Graph — English version in progress',
     }
@@ -290,7 +340,7 @@ export default defineConfig({
       '/linza/': 'LINZA — локальный MCP-сервер для рабочей памяти агента',
       '/linza/how-it-works': 'Устройство LINZA — сайдкар, ревью, контекст и trace-записи',
       '/linza/quick-start': 'Быстрый старт LINZA — подключить рабочий материал к MCP-клиенту',
-      '/linza/tools': 'Инструменты MCP LINZA — 7 публичных входов и agent_workspace',
+      '/linza/tools': 'Инструменты MCP LINZA — 7 основных инструментов и agent_workspace',
       '/en/': 'Semiotronika — tools for AI systems',
       '/en/products': 'Semiotronika Products — NOUZ and LINZA',
       '/en/nouz/': 'NOUZ — structural memory for Obsidian and Markdown',
@@ -298,7 +348,7 @@ export default defineConfig({
       '/en/linza/use-cases': 'LINZA — use cases',
       '/en/linza/how-it-works': 'How LINZA Works — sidecar, review, context, and traces',
       '/en/linza/quick-start': 'LINZA Quick Start — connect working material to an MCP client',
-      '/en/linza/tools': 'LINZA MCP Tools — 7 public entry points and agent_workspace',
+      '/en/linza/tools': 'LINZA MCP Tools — 7 main tools and agent_workspace',
       '/en/lab/': 'Semantic Laboratory — English version in progress',
       '/en/lab/cosines': 'Cosine Graph — English version in progress',
     }
@@ -317,38 +367,8 @@ export default defineConfig({
           { text: 'Лаборатория', link: '/lab/' },
         ],
         sidebar: {
-          '/nouz/': [
-            {
-              text: 'NOUZ',
-              items: [
-                { text: 'Обзор', link: '/nouz/' },
-                {
-                  text: 'Семантическая онтология',
-                  collapsed: false,
-                  items: [
-                    { text: 'Ядра и Паттерны', link: '/nouz/concepts/cores-patterns' },
-                    { text: 'Модули, Кванты и Артефакты', link: '/nouz/concepts/modules-quanta' },
-                    { text: 'Связи и Граф', link: '/nouz/concepts/links' },
-                  ],
-                },
-                { text: 'Сценарии', link: '/nouz/use-cases' },
-                { text: 'Качество эталонов', link: '/nouz/etalon-quality' },
-                { text: 'Быстрый старт', link: '/nouz/quick-start' },
-                { text: 'Справочник MCP-инструментов', link: '/nouz/tools-reference' },
-              ],
-            },
-          ],
-          '/linza/': [
-            {
-              text: 'LINZA',
-              items: [
-                { text: 'Обзор', link: '/linza/' },
-                { text: 'Устройство', link: '/linza/how-it-works' },
-                { text: 'Быстрый старт', link: '/linza/quick-start' },
-                { text: 'Инструменты MCP', link: '/linza/tools' },
-              ],
-            },
-          ],
+          '/nouz/': ruProductSidebar,
+          '/linza/': ruProductSidebar,
         },
         footer: {
           message: '<span class="footer-brand"><span>{</span>Семиотроника<span>}</span></span><br><a href="https://t.me/Masha_Belkina">Telegram</a> · <a href="mailto:belkinamariaigorevna@yandex.ru">Email</a>',
@@ -368,26 +388,8 @@ export default defineConfig({
           { text: 'Lab', link: '/en/lab/' },
         ],
         sidebar: {
-          '/en/nouz/': [
-            {
-              text: 'NOUZ',
-              items: [
-                { text: 'Overview', link: '/en/nouz/' },
-              ],
-            },
-          ],
-          '/en/linza/': [
-            {
-              text: 'LINZA',
-              items: [
-                { text: 'Overview', link: '/en/linza/' },
-                { text: 'Use Cases', link: '/en/linza/use-cases' },
-                { text: 'How It Works', link: '/en/linza/how-it-works' },
-                { text: 'Quick Start', link: '/en/linza/quick-start' },
-                { text: 'MCP Tools', link: '/en/linza/tools' },
-              ],
-            },
-          ],
+          '/en/nouz/': enProductSidebar,
+          '/en/linza/': enProductSidebar,
         },
         footer: {
           message: '<span class="footer-brand"><span>{</span>Semiotronika<span>}</span></span><br><a href="https://t.me/Masha_Belkina">Telegram</a> · <a href="mailto:belkinamariaigorevna@yandex.ru">Email</a>',

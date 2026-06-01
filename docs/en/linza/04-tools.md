@@ -7,11 +7,13 @@ next: false
 
 # MCP Tools
 
-By default, LINZA exposes 7 MCP tools. The main facade for agents is `agent_workspace`.
+By default, LINZA exposes 7 main MCP tools. The main facade for agents is `agent_workspace`.
 
-The normal user path stays on the default surface: check readiness, index the folder, search, read exact files, inspect counters, and run work through one workflow facade.
+The normal user path stays in the default mode: check readiness, index the folder, search, read exact files, inspect counters, and run work through one workflow facade.
 
-## Public Tools
+In practice, you can ask LINZA in ordinary language: check the folder, show the map, find related material, or prepare a context pack. The names below are a reference for what the MCP client calls during the work.
+
+## Main Tools
 
 | Tool | Purpose |
 | --- | --- |
@@ -46,17 +48,17 @@ The normal user path stays on the default surface: check readiness, index the fo
 | `analyze_trace` | Trace metrics |
 | `review_calibr` | calibr cards for review |
 
-## Choosing A Tool
+## How To Ask LINZA
 
-If the path is unknown, start with `search`, then open the exact result through `read_file`.
+If the path is unknown, ask LINZA to find material on the topic. Under the hood, this usually starts with `search`, then opens an exact file through `read_file`.
 
-If you need the folder state, use `agent_workspace(action="doctor")`, then `agent_workspace(action="map")`.
+If you need the folder state, ask LINZA to check the folder and show the map. This corresponds to `agent_workspace(action="doctor")` and `agent_workspace(action="map")`.
 
-For any sidecar or compact YAML write, ask for `review_next`, then call `apply_review_items` with `dry_run=true`. A real write needs exact IDs and explicit `dry_run=false`.
+For any sidecar or compact YAML write, ask for review cards and a preview first. Internally, this is `review_next`, then `apply_review_items` with `dry_run=true`. A real write needs exact IDs and explicit `dry_run=false`.
 
-For a handoff to a new session, use `agent_workspace(action="export_context")`. Context packs are saved in `.linza/context-packs`.
+For a handoff to a new session, ask LINZA to prepare a context pack. Context packs are saved in `.linza/context-packs`.
 
-## Advanced Surface
+## Additional Mode
 
 For development and audit, enable the full tool list:
 
@@ -66,6 +68,6 @@ $env:LINZA_TOOL_SURFACE="advanced"
 
 It adds low-level operations: `index_file`, `write_file`, `patch_properties`, search profiles, tag audit, reports, `build_review_apply_queue`, `approve_review_queue_items`, `show_flow`, `create_context_pack`, and diagnostics.
 
-`write_file` on the advanced surface writes Markdown only and requires explicit `allow_overwrite=true` to replace an existing file. The normal LINZA path uses review cards and sidecar records.
+`write_file` in this mode writes Markdown only and requires explicit `allow_overwrite=true` to replace an existing file. The normal LINZA path uses review cards and sidecar records.
 
 If the next step is a dedicated semantic ontology for a knowledge base, open [NOUZ](/en/nouz/).

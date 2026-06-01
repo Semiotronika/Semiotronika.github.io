@@ -45,7 +45,7 @@ After reviewed apply, LINZA can write compact `role` or `domains` YAML into Mark
 
 Accepted material types, hierarchy links, causal links, memory items, quant candidates, and calibr cards are stored in the sidecar. Reports are restricted to `.linza/reports`; context packs are restricted to `.linza/context-packs`.
 
-The low-level `write_file` tool exists only in the advanced surface. It creates Markdown or overwrites a file only with explicit `allow_overwrite=true`.
+The low-level `write_file` tool exists only in the additional mode. It creates Markdown or overwrites a file only with explicit `allow_overwrite=true`.
 
 ## Teach And Grow
 
