@@ -72,6 +72,11 @@
   margin-left: 0;
 }
 
+.VPNavBarTitle .title::before,
+.VPNavBarTitle .title::after {
+  content: none;
+}
+
 .VPNavBarTranslations,
 .VPNavScreenTranslations {
   display: none !important;

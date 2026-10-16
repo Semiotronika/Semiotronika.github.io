@@ -123,9 +123,9 @@ export default defineConfig({
     ['meta', { name: 'robots', content: 'index, follow' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'Semiotronika' }],
-    ['meta', { property: 'og:image', content: 'https://semiotronika.ru/favicon.png' }],
+    ['meta', { property: 'og:image', content: 'https://semiotronika.ru/og-semiotronika-brand-a.png' }],
     ['meta', { name: 'twitter:card', content: 'summary' }],
-    ['meta', { name: 'twitter:image', content: 'https://semiotronika.ru/favicon.png' }],
+    ['meta', { name: 'twitter:image', content: 'https://semiotronika.ru/og-semiotronika-brand-a.png' }],
   ],
 
   transformHead({ pageData }) {
@@ -428,7 +428,8 @@ export default defineConfig({
   },
 
   themeConfig: {
-    siteTitle: 'Σ',
+    logo: '/mark-semiotronika.svg',
+    siteTitle: '',
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/Semiotronika' },
